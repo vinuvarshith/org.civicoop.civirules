@@ -127,6 +127,12 @@
     <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/action/contact/subtype</path>
+    <page_callback>CRM_CivirulesActions_Contact_Form_Subtype</page_callback>
+    <title>Set contact subtype</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/action/activity</path>
     <page_callback>CRM_CivirulesActions_Activity_Form_Activity</page_callback>
     <title>Activity</title>
