@@ -10,7 +10,7 @@ class CRM_CivirulesConditions_Form_Contribution_TotalContributedAmount extends C
   public function buildQuickForm() {
     parent::buildQuickForm();
 
-    $this->add('select', 'period', ts('Period'), array('' => ts('All time')) + CRM_CivirulesConditions_Utils_Period::Options());
+    CRM_CivirulesConditions_Utils_Period::buildQuickForm($this);
   }
 
   /**
@@ -21,11 +21,16 @@ class CRM_CivirulesConditions_Form_Contribution_TotalContributedAmount extends C
    */
   public function setDefaultValues() {
     $defaultValues = parent::setDefaultValues();
+
     $data = unserialize($this->ruleCondition->condition_params);
-    if (!empty($data['period'])) {
-      $defaultValues['period'] = $data['period'];
-    }
+    $defaultValues = CRM_CivirulesConditions_Utils_Period::setDefaultValues($defaultValues, $data);
+
     return $defaultValues;
+  }
+
+  public function addRules()
+  {
+    CRM_CivirulesConditions_Utils_Period::addRules($this);
   }
 
   /**
@@ -37,7 +42,8 @@ class CRM_CivirulesConditions_Form_Contribution_TotalContributedAmount extends C
   public function postProcess()
   {
     $data = unserialize($this->ruleCondition->condition_params);
-    $data['period'] = $this->_submitValues['period'];
+    $data = CRM_CivirulesConditions_Utils_Period::getConditionParams($this->_submitValues, $data);
+
     $this->ruleCondition->condition_params = serialize($data);
     $this->ruleCondition->save();
 

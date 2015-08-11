@@ -49,8 +49,8 @@ FROM civicrm_contribution WHERE contact_id = %1 AND civicrm_contribution.contrib
       1 => array($contact_id, 'Positive'),
       2 => array(CRM_Civirules_Utils::getContributionStatusIdWithName('Completed'), 'Positive'));
 
-    $periodStartDate = CRM_CivirulesConditions_Utils_Period::convertPeriodToStartDate($this->conditionParams['period']);
-    $periodEndDate = CRM_CivirulesConditions_Utils_Period::convertPeriodToEndDate($this->conditionParams['period']);
+    $periodStartDate = CRM_CivirulesConditions_Utils_Period::convertPeriodToStartDate($this->conditionParams);
+    $periodEndDate = CRM_CivirulesConditions_Utils_Period::convertPeriodToEndDate($this->conditionParams);
     if ($periodStartDate) {
       $query .= " AND DATE(`receive_date`) >= '".$periodStartDate->format('Y-m-d')."'";
     }
@@ -141,12 +141,7 @@ FROM civicrm_contribution WHERE contact_id = %1 AND civicrm_contribution.contrib
         break;
     }
 
-    $periods = CRM_CivirulesConditions_Utils_Period::Options();
-    if (isset($periods[$this->conditionParams['period']])) {
-      $period = ts('in the ').$periods[$this->conditionParams['period']];
-    } else {
-      $period = ts('all time');
-    }
+    $period = CRM_CivirulesConditions_Utils_Period::userFriendlyConditionParams($this->conditionParams);
 
     return 'Distinct number of contributing days '.$operator.' '.$this->conditionParams['no_of_days'].' '.$period;
   }

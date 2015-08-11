@@ -27,7 +27,7 @@ class CRM_CivirulesConditions_Form_Contribution_DistinctContributingDay extends 
     $this->addRule('no_of_days','Number of Days must be a whole number','numeric');
     $this->addRule('no_of_days','Number of Days must be a whole number','nopunctuation');
 
-    $this->add('select', 'period', ts('Period'), array('' => ts('All time')) + CRM_CivirulesConditions_Utils_Period::Options());
+    CRM_CivirulesConditions_Utils_Period::buildQuickForm($this);
 
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
@@ -49,11 +49,15 @@ class CRM_CivirulesConditions_Form_Contribution_DistinctContributingDay extends 
     if (!empty($data['no_of_days'])) {
       $defaultValues['no_of_days'] = $data['no_of_days'];
     }
-    if (!empty($data['period'])) {
-      $defaultValues['period'] = $data['period'];
-    }
+
+    $defaultValues = CRM_CivirulesConditions_Utils_Period::setDefaultValues($defaultValues, $data);
 
     return $defaultValues;
+  }
+
+  public function addRules()
+  {
+    CRM_CivirulesConditions_Utils_Period::addRules($this);
   }
 
   /**
@@ -65,7 +69,9 @@ class CRM_CivirulesConditions_Form_Contribution_DistinctContributingDay extends 
   public function postProcess() {
     $data['operator'] = $this->_submitValues['operator'];
     $data['no_of_days'] = $this->_submitValues['no_of_days'];
-    $data['period'] = $this->_submitValues['period'];
+
+    $data = CRM_CivirulesConditions_Utils_Period::getConditionParams($this->_submitValues, $data);
+
     $this->ruleCondition->condition_params = serialize($data);
     $this->ruleCondition->save();
 

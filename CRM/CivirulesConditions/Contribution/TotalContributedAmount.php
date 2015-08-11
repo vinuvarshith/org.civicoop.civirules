@@ -20,8 +20,8 @@ class CRM_CivirulesConditions_Contribution_TotalContributedAmount extends CRM_Ci
     $params[1] = array($completed_status_id, 'Integer');
     $params[2] = array($contact_id, 'Integer');
 
-    $periodStartDate = CRM_CivirulesConditions_Utils_Period::convertPeriodToStartDate($this->conditionParams['period']);
-    $periodEndDate = CRM_CivirulesConditions_Utils_Period::convertPeriodToEndDate($this->conditionParams['period']);
+    $periodStartDate = CRM_CivirulesConditions_Utils_Period::convertPeriodToStartDate($this->conditionParams);
+    $periodEndDate = CRM_CivirulesConditions_Utils_Period::convertPeriodToEndDate($this->conditionParams);
     if ($periodStartDate) {
       $sql .= " AND DATE(`receive_date`) >= '".$periodStartDate->format('Y-m-d')."'";
     }
@@ -56,13 +56,7 @@ class CRM_CivirulesConditions_Contribution_TotalContributedAmount extends CRM_Ci
    */
   public function userFriendlyConditionParams() {
     $userFriendlyConditionParams = parent::userFriendlyConditionParams();
-    $periods = CRM_CivirulesConditions_Utils_Period::Options();
-    if (isset($periods[$this->conditionParams['period']])) {
-      $period = $periods[$this->conditionParams['period']];
-    } else {
-      $period = ts('all time');
-    }
-
+    $period = CRM_CivirulesConditions_Utils_Period::userFriendlyConditionParams($this->conditionParams);
 
     return ts('Total amount').' '.$period.' '.$userFriendlyConditionParams;
   }

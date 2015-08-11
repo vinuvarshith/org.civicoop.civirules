@@ -1,10 +1,6 @@
 <h3>{$ruleConditionHeader}</h3>
 <div class="crm-block crm-form-block crm-civirule-rule_condition-block-contribution_distinctcontributingday">
-  <div class="crm-section">
-    <div class="label">{$form.period.label}</div>
-    <div class="content">{$form.period.html}</div>
-    <div class="clear"></div>
-  </div>
+  {include file="CRM/CivirulesConditions/Form/Utils/Period.tpl"}
   <div class="crm-section">
     <div class="label">{$form.operator.label}</div>
     <div class="content">{$form.operator.html}</div>
