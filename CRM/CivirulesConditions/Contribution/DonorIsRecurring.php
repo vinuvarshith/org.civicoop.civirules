@@ -34,19 +34,38 @@ class CRM_CivirulesConditions_Contribution_DonorIsRecurring extends CRM_Civirule
    * @access public
    */
   public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
-    $isConditionValid = FALSE;
     $contactId = $eventData->getContactId();
+    $donorHasAny = FALSE;
     $recurringParams = array(
       'contact_id' => $contactId,
       'is_test' => 0);
     try {
       $foundRecurring = civicrm_api3('ContributionRecur', 'Get', $recurringParams);
       foreach ($foundRecurring['values'] as $recurring) {
-        if (CRM_Civirules_Utils::endDateLaterThanToday($recurring['end_date']) == TRUE) {
+        if (CRM_Civirules_Utils::endDateLaterThanToday($recurring['end_date']) == TRUE || !isset($recurring['end_date'])) {
+          $donorHasAny = TRUE;
+        }
+      }
+      if ($donorHasAny) {
+        if ($this->conditionParams['has_recurring']) {
+          $isConditionValid = TRUE;
+        } else {
+          $isConditionValid = FALSE;
+        }
+      } else {
+        if ($this->conditionParams['has_recurring']) {
+          $isConditionValid = FALSE;
+        } else {
           $isConditionValid = TRUE;
         }
       }
-    } catch (CiviCRM_API3_Exception $ex) {}
+    } catch (CiviCRM_API3_Exception $ex) {
+      if ($this->conditionParams['has_recurring']) {
+        $isConditionValid = FALSE;
+      } else {
+        $isConditionValid = TRUE;
+      }
+    }
     return $isConditionValid;
   }
 
