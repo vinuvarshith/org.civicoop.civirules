@@ -16,9 +16,23 @@ class CRM_CivirulesActions_Contribution_ThankYouDate extends CRM_Civirules_Actio
   public function processAction(CRM_Civirules_EventData_EventData $eventData) {
     $contribution = $eventData->getEntityData('Contribution');
     $actionParams = $this->getActionParameters();
+    switch ($actionParams['thank_you_radio']) {
+      case 1:
+        if (!empty($actionParams['number_of_days'])) {
+          $thankYouDate = new DateTime();
+          $thankYouDate->modify('+'.$actionParams['number_of_days']. ' day');
+          }
+        break;
+      case 2:
+        $thankYouDate = new DateTime($actionParams['thank_you_date']);
+        break;
+      default:
+        $thankYouDate = new DateTime();
+        break;
+    }
     $params = array(
       'id' => $contribution['id'],
-      'thankyou_date' => date('Ymd', strtotime($actionParams['thank_you_date']))
+      'thankyou_date' => $thankYouDate->format('Ymd')
     );
     try {
       civicrm_api3('Contribution', 'Create', $params);
@@ -46,10 +60,24 @@ class CRM_CivirulesActions_Contribution_ThankYouDate extends CRM_Civirules_Actio
    * @access public
    */
   public function userFriendlyConditionParams() {
-    $return = '';
+    $return = "";
+    $dateString = "";
     $params = $this->getActionParameters();
-    if (!empty($params['thank_you_date'])) {
-      $return = 'Thank You Date for Contribution will be set to : '.date('d M Y', strtotime($params['thank_you_date']));
+    if (isset($params['thank_you_radio'])) {
+      switch ($params['thank_you_radio']) {
+        case 0:
+          $dateString = "date action executes";
+          break;
+        case 1:
+          $dateString = $params['number_of_days']." days after action executes";
+          break;
+        case 2:
+          $dateString = date('d M Y', strtotime($params['thank_you_date']));
+          break;
+      }
+    }
+    if (!empty($dateString)) {
+      $return = 'Thank You Date for Contribution will be set to : ' . $dateString;
     }
     return $return;
   }

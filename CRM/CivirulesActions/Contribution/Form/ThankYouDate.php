@@ -15,6 +15,9 @@ class CRM_CivirulesActions_Contribution_Form_ThankYouDate extends CRM_CivirulesA
    */
   public function buildQuickForm() {
     $this->add('hidden', 'rule_action_id');
+    $radioOptions = array('Date of Action Execution', 'xxx days after Action Execution', 'Specific Date');
+    $this->addRadio('thank_you_radio', ts('Thank You Date will be set to : '), $radioOptions);
+    $this->add('text', 'number_of_days', ts('Number of Days after Action Execution'));
     $this->addDate('thank_you_date', ts('Thank You Date'), FALSE, array('formatType' => 'custom'));
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
@@ -33,6 +36,14 @@ class CRM_CivirulesActions_Contribution_Form_ThankYouDate extends CRM_CivirulesA
     if (!empty($this->ruleAction->action_params)) {
       $data = unserialize($this->ruleAction->action_params);
     }
+    if (!empty($data['number_of_days'])) {
+      $defaultValues['number_of_days'] = $data['number_of_days'];
+    }
+    if (empty($data['thank_you_radio'])) {
+      $defaultValues['thank_you_radio'] = 0;
+    } else {
+      $defaultValues['thank_you_radio'] = $data['thank_you_radio'];
+    }
     if (empty($data['thank_you_date'])) {
       list($defaultValues['thank_you_date']) = CRM_Utils_Date::setDateDefaults(date('Y-m-d'));
     } else {
@@ -47,7 +58,17 @@ class CRM_CivirulesActions_Contribution_Form_ThankYouDate extends CRM_CivirulesA
    * @access public
    */
   public function postProcess() {
-    $data['thank_you_date'] = $this->_submitValues['thank_you_date'];
+    $data['thank_you_radio'] = $this->_submitValues['thank_you_radio'];
+    if ($this->_submitValues['thank_you_radio'] == 2) {
+      $data['thank_you_date'] = $this->_submitValues['thank_you_date'];
+    } else {
+      $data['thank_you_date'] = null;
+    }
+    if ($this->_submitValues['thank_you_radio'] == 1) {
+      $data['number_of_days'] = $this->_submitValues['number_of_days'];
+    } else {
+      $data['number_of_days'] = 0;
+    }
     $this->ruleAction->action_params = serialize($data);
     $this->ruleAction->save();
     parent::postProcess();
