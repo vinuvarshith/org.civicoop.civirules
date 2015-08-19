@@ -134,7 +134,7 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
-    <path>civicrm/civirule/form/action/thankyoudate</path>
+    <path>civicrm/civirule/form/action/contribution/thankyoudate</path>
     <page_callback>CRM_CivirulesActions_Contribution_Form_ThankYouDate</page_callback>
     <title>Contribution Thank You Date</title>
     <access_arguments>access CiviCRM</access_arguments>
