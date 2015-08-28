@@ -22,7 +22,8 @@ class CRM_Civirules_Utils_PreData {
    *
    */
   public static function pre($op, $objectName, $objectId, $params) {
-    if ($op != 'edit') {
+    $nonPreEntities = array('GroupContact', 'EntityTag');
+    if ($op != 'edit' || in_array($objectName, $nonPreEntities)) {
       return;
     }
 
