@@ -12,7 +12,7 @@ class CRM_Queue_Queue_Civirules extends CRM_Queue_Queue_Sql {
       SELECT count(*)
       FROM civicrm_queue_item
       WHERE queue_name = %1
-      and (release_time is null OR release_time <= curdate())
+      and (release_time is null OR release_time <= NOW())
     ", array(
       1 => array($this->getName(), 'String'),
     ));
