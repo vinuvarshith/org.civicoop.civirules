@@ -40,7 +40,7 @@ class CRM_CivirulesActions_GroupContact_Remove extends CRM_CivirulesActions_Grou
       $group_ids = $action_params['group_ids'];
     }
     foreach($group_ids as $group_id) {
-      if (CRM_Contact_BAO_GroupContact::isContactInGroup($contactId, $group_id)) {
+      if (CRM_CivirulesConditions_Utils_GroupContact::isContactInGroup($contactId, $group_id)) {
         $params = array();
         $params['group_id'] = $group_id;
 

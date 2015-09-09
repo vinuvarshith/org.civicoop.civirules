@@ -52,7 +52,7 @@ class CRM_CivirulesConditions_Contact_InGroup extends CRM_Civirules_Condition {
   protected function contactIsNotMemberOfGroup($contact_id, $group_ids) {
     $isValid = true;
     foreach($group_ids as $gid) {
-      if (CRM_Contact_BAO_GroupContact::isContactInGroup($contact_id, $gid)) {
+      if (CRM_CivirulesConditions_Utils_GroupContact::isContactInGroup($contact_id, $gid)) {
         $isValid = false;
         break;
       }
@@ -63,7 +63,7 @@ class CRM_CivirulesConditions_Contact_InGroup extends CRM_Civirules_Condition {
   protected function contactIsMemberOfOneGroup($contact_id, $group_ids) {
     $isValid = false;
     foreach($group_ids as $gid) {
-      if (CRM_Contact_BAO_GroupContact::isContactInGroup($contact_id, $gid)) {
+      if (CRM_CivirulesConditions_Utils_GroupContact::isContactInGroup($contact_id, $gid)) {
         $isValid = true;
         break;
       }
@@ -74,7 +74,7 @@ class CRM_CivirulesConditions_Contact_InGroup extends CRM_Civirules_Condition {
   protected function contactIsMemberOfAllGroups($contact_id, $group_ids) {
     $isValid = 0;
     foreach($group_ids as $gid) {
-      if (CRM_Contact_BAO_GroupContact::isContactInGroup($contact_id, $gid)) {
+      if (CRM_CivirulesConditions_Utils_GroupContact::isContactInGroup($contact_id, $gid)) {
         $isValid++;
       }
     }
