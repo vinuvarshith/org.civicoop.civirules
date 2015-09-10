@@ -37,7 +37,7 @@ class CRM_CivirulesConditions_FieldValueComparison extends CRM_CivirulesConditio
   }
 
   protected function normalizeValue($value) {
-    if (value === null) {
+    if ($value === null) {
       return null;
     }
 

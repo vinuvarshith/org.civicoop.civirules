@@ -13,7 +13,7 @@ class CRM_Civirules_Delay_XWeekDay extends CRM_Civirules_Delay_Delay {
   public function delayTo(DateTime $date) {
     $d = clone $date;
     $d->modify('-30 minutes');
-    $mod = $this->day.' of this week';
+    $mod = $this->day.' this week';
     $date->modify($mod);
     $date->setTime((int) $this->time_hour, (int) $this->time_minute);
     if ($date <= $d) {
