@@ -119,7 +119,8 @@ class CRM_Civirules_Utils {
     $activityTypeOptionGroupId = self::getOptionGroupIdWithName('activity_type');
     $params = array(
       'option_group_id' => $activityTypeOptionGroupId,
-      'is_active' => 1);
+      'is_active' => 1,
+      'options' => array('limit' => 0));
     $activityTypes = civicrm_api3('OptionValue', 'Get', $params);
     foreach ($activityTypes['values'] as $optionValue) {
       $activityTypeList[$optionValue['value']] = $optionValue['label'];
