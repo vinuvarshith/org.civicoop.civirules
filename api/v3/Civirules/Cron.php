@@ -24,6 +24,9 @@ function _civicrm_api3_civirules_cron_spec(&$spec) {
 function civicrm_api3_civirules_cron($params) {
   $returnValues = array();
 
+  //prevent from crashing with a max execution time error
+  set_time_limit(0);
+
   $rules = CRM_Civirules_BAO_Rule::findRulesForCron();
   foreach($rules as $rule) {
     $return = $rule->process();

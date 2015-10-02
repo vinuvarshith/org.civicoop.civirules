@@ -252,7 +252,7 @@ class CRM_CivirulesConditions_Utils_Period {
    */
   public static function convertPeriodToStartDate($condition_params) {
     $period = $condition_params['period'];
-    $replaceParameters = $condition_params['replaceParameters'];
+    $replaceParameters = isset($condition_params['replaceParameters']) ? $condition_params['replaceParameters'] : array();
     $date = new DateTime();
     switch ($period) {
       case 'this month':
@@ -317,7 +317,7 @@ class CRM_CivirulesConditions_Utils_Period {
    */
   public static function convertPeriodToEndDate($condition_params) {
     $period = $condition_params['period'];
-    $replaceParameters = $condition_params['replaceParameters'];
+    $replaceParameters = isset($condition_params['replaceParameters']) ? $condition_params['replaceParameters'] : array();
     $date = new DateTime();
     switch ($period) {
       case 'this month':
