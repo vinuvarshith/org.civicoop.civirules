@@ -39,6 +39,12 @@ class CRM_CivirulesPostEvent_Activity extends CRM_Civirules_Event_Post {
       $data = array();
       CRM_Core_DAO::storeValues($activityContact, $data);
       $eventData->setEntityData('ActivityContact', $data);
+      $contactObject = new CRM_Contact_BAO_Contact();
+      $contactObject->id = $data['contact_id'];
+      $contactObject->find(true);
+      $contactData = array();
+      CRM_Core_DAO::storeValues($contactObject, $contactData);
+      $eventData->setEntityData('Contact', $contactData);
 
       CRM_Civirules_Engine::triggerRule($this, clone $eventData);
     }
@@ -52,6 +58,7 @@ class CRM_CivirulesPostEvent_Activity extends CRM_Civirules_Event_Post {
   protected function getAdditionalEntities() {
     return array(
       new CRM_Civirules_EventData_EntityDefinition('ActivityContact', 'ActivityContact', 'CRM_Activity_DAO_ActivityContact' , 'ActivityContact'),
+      new CRM_Civirules_EventData_EntityDefinition('Contact', 'Contact', 'CRM_Contact_DAO_Contact' , 'Contact'),
     );
   }
 
