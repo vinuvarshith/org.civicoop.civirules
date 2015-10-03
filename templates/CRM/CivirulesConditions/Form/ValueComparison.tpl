@@ -5,12 +5,12 @@
         <div class="content">{$form.operator.html}</div>
         <div class="clear"></div>
     </div>
-    <div class="crm-section">
+    <div class="crm-section" id="value_parent">
         <div class="label">{$form.value.label}</div>
         <div class="content">{$form.value.html}</div>
         <div class="clear"></div>
     </div>
-    <div class="crm-section">
+    <div class="crm-section" id="multi_value_parent">
         <div class="label">{$form.multi_value.label}</div>
         <div class="content">
             {$form.multi_value.html}

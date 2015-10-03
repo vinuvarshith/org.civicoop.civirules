@@ -6,16 +6,15 @@
            switch (val) {
                case 'is one of':
                case 'is not one of':
-                   cj('#multi_value').parent().parent().parent().parent().removeClass('hiddenElement');
-                   cj('#value').parent().parent().addClass('hiddenElement');
+                   cj('#multi_value_parent').removeClass('hiddenElement');
+                   cj('#value_parent').addClass('hiddenElement');
                    break;
                default:
-                   cj('#multi_value').parent().parent().parent().parent().addClass('hiddenElement');
-                   cj('#value').parent().parent().removeClass('hiddenElement');
+                   cj('#multi_value_parent').addClass('hiddenElement');
+                   cj('#value_parent').removeClass('hiddenElement');
                    break;
            }
        });
-
         cj('#operator').trigger('change');
     });
 </script>
