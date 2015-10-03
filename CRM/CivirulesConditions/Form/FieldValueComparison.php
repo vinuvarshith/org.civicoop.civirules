@@ -54,13 +54,6 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_CivirulesCon
 
     $this->add('select', 'entity', ts('Entity'), $this->getEntities(), true);
     $this->add('select', 'field', ts('Field'), $this->getFields(), true);
-    /*$this->add('select', 'operator', ts('Operator'), $this->conditionClass->getOperators(), true);
-    $this->add('text', 'value', ts('Compare value'));
-    $this->add('textarea', 'multi_value', ts('Compare values'));
-
-    $this->addButtons(array(
-      array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
-      array('type' => 'cancel', 'name' => ts('Cancel'))));*/
   }
 
   /**
@@ -84,29 +77,6 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_CivirulesCon
     }
     return true;
   }
-
-  /*public static function validateOperatorAndComparisonValue($fields) {
-    $operator = $fields['operator'];
-    switch ($operator) {
-      case '=':
-      case '!=':
-      case '>':
-      case '>=':
-      case '<':
-      case '<=':
-        if (empty($fields['value'])) {
-          return array('value' => ts('Compare value is required'));
-        }
-        break;
-      case 'is one of':
-      case 'is not one of':
-        if (empty($fields['multi_value'])) {
-          return array('multi_value' => 'Compare values is a required field');
-        }
-        break;
-    }
-    return true;
-  }*/
 
   /**
    * Overridden parent method to set default values
