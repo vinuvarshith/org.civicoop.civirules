@@ -7,14 +7,22 @@
     </div>
     <div class="crm-section" id="value_parent">
         <div class="label">{$form.value.label}</div>
-        <div class="content">{$form.value.html}</div>
+        <div class="content">
+            {$form.value.html}
+            <select id="value_options" class="hiddenElement">
+
+            </select>
+        </div>
         <div class="clear"></div>
     </div>
     <div class="crm-section" id="multi_value_parent">
         <div class="label">{$form.multi_value.label}</div>
-        <div class="content">
+        <div class="content textarea">
             {$form.multi_value.html}
             <p class="description">{ts}Seperate each value on a new line{/ts}</p>
+        </div>
+        <div id="multi_value_options" class="hiddenElement content">
+
         </div>
         <div class="clear"></div>
     </div>

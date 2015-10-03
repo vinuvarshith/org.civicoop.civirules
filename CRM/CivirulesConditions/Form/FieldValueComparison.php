@@ -8,11 +8,21 @@
 
 class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_CivirulesConditions_Form_ValueComparison {
 
-  protected function getEntities() {
+  protected function getEntityOptions() {
     $return = array();
     foreach($this->eventClass->getProvidedEntities() as $entityDef) {
       if (!empty($entityDef->daoClass) && class_exists($entityDef->daoClass)) {
         $return[$entityDef->entity] = $entityDef->label;
+      }
+    }
+    return $return;
+  }
+
+  protected function getEntities() {
+    $return = array();
+    foreach($this->eventClass->getProvidedEntities() as $entityDef) {
+      if (!empty($entityDef->daoClass) && class_exists($entityDef->daoClass)) {
+        $return[$entityDef->entity] = $entityDef->entity;
       }
     }
     return $return;
@@ -96,8 +106,10 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_CivirulesCon
 
     $this->add('hidden', 'rule_condition_id');
 
-    $this->add('select', 'entity', ts('Entity'), $this->getEntities(), true);
+    $this->add('select', 'entity', ts('Entity'), $this->getEntityOptions(), true);
     $this->add('select', 'field', ts('Field'), $this->getFields(), true);
+
+    $this->assign('entities', $this->getEntities());
   }
 
   /**
