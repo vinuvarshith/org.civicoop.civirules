@@ -42,8 +42,23 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
    * @access protected
    */
   protected function getComparisonValue() {
-    if (!empty($this->conditionParams['value'])) {
-      return $this->conditionParams['value'];
+    switch ($this->getOperator()) {
+      case '=':
+      case '!=':
+      case '>':
+      case '>=':
+      case '<':
+      case '<=':
+        $key = 'value';
+        break;
+      case 'is one of':
+      case 'is not one of':
+        $key = 'multi_value';
+        break;
+    }
+
+    if (!empty($this->conditionParams[$key])) {
+      return $this->conditionParams[$key];
     } else {
       return '';
     }
@@ -138,11 +153,42 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
           return false;
         }
         break;
+      case 'is one of':
+        $rightArray = $this->convertValueToArray($rightValue);
+        if (in_array($leftValue, $rightArray)) {
+          return true;
+        }
+        return false;
+        break;
+      case 'is not one of':
+        $rightArray = $this->convertValueToArray($rightValue);
+        if (!in_array($leftValue, $rightArray)) {
+          return true;
+        }
+        return false;
+        break;
       default:
         return false;
         break;
     }
     return false;
+  }
+
+  /**
+   * Converts a string to an array, the delimeter is the CRM_Core_DAO::VALUE_SEPERATOR
+   *
+   * This function could be overriden by child classes to define their own array
+   * seperator
+   *
+   * @param $value
+   * @return array
+   */
+  protected function convertValueToArray($value) {
+    if (is_array($value)) {
+      return $value;
+    }
+    //split on new lines
+    return explode(CRM_Core_DAO::VALUE_SEPARATOR, $value);
   }
 
   /**
@@ -182,6 +228,8 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
       '<' => ts('Is less than'),
       '>=' => ts('Is greater than or equal to'),
       '<=' => ts('Is less than or equal to'),
+      'is one of' => ts('Is one of'),
+      'is not one of' => ts('Is not one of'),
     );
   }
 

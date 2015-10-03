@@ -6,62 +6,7 @@
  * @license AGPL-3.0
  */
 
-class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_Core_Form {
-
-  protected $ruleConditionId = false;
-
-  protected $ruleCondition;
-
-  protected $condition;
-
-  protected $rule;
-
-  protected $event;
-
-  /**
-   * @var CRM_Civirules_Event
-   */
-  protected $eventClass;
-
-  /**
-   * Overridden parent method to perform processing before form is build
-   *
-   * @access public
-   */
-  public function preProcess() {
-    $this->ruleConditionId = CRM_Utils_Request::retrieve('rule_condition_id', 'Integer');
-
-    $this->ruleCondition = new CRM_Civirules_BAO_RuleCondition();
-    $this->ruleCondition->id = $this->ruleConditionId;
-
-    $this->condition = new CRM_Civirules_BAO_Condition();
-    $this->rule = new CRM_Civirules_BAO_Rule();
-    $this->event = new CRM_Civirules_BAO_Event();
-
-    if (!$this->ruleCondition->find(true)) {
-      throw new Exception('Civirules could not find ruleCondition');
-    }
-
-    $this->condition->id = $this->ruleCondition->condition_id;
-    if (!$this->condition->find(true)) {
-      throw new Exception('Civirules could not find condition');
-    }
-
-    $this->rule->id = $this->ruleCondition->rule_id;
-    if (!$this->rule->find(true)) {
-      throw new Exception('Civirules could not find rule');
-    }
-
-    $this->event->id = $this->rule->event_id;
-    if (!$this->event->find(true)) {
-      throw new Exception('Civirules could not find event');
-    }
-
-    $this->eventClass = CRM_Civirules_BAO_Event::getPostEventObjectByClassName($this->event->class_name, true);
-    $this->eventClass->setEventId($this->event->id);
-
-    parent::preProcess();
-  }
+class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_CivirulesConditions_Form_ValueComparison {
 
   protected function getEntities() {
     $return = array();
@@ -102,27 +47,20 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_Core_Form {
    * @access public
    */
   public function buildQuickForm() {
-    $this->setFormTitle();
+    parent::buildQuickForm();
+
 
     $this->add('hidden', 'rule_condition_id');
 
     $this->add('select', 'entity', ts('Entity'), $this->getEntities(), true);
-
     $this->add('select', 'field', ts('Field'), $this->getFields(), true);
-
-    $this->add('select', 'operator', ts('Operator'), array(
-      '=' => ts('Is equal to'),
-      '!=' => ts('Is not equal to'),
-      '>' => ts('Is more than'),
-      '<' => ts('Is less than'),
-      '>=' => ts('Is more than or equal to'),
-      '<=' => ts('Is less than or equal to'),
-    ), true);
-    $this->add('text', 'value', ts('Compare value'), true);
+    /*$this->add('select', 'operator', ts('Operator'), $this->conditionClass->getOperators(), true);
+    $this->add('text', 'value', ts('Compare value'));
+    $this->add('textarea', 'multi_value', ts('Compare values'));
 
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
-      array('type' => 'cancel', 'name' => ts('Cancel'))));
+      array('type' => 'cancel', 'name' => ts('Cancel'))));*/
   }
 
   /**
@@ -132,6 +70,7 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_Core_Form {
    */
   public function addRules()
   {
+    parent::addRules();
     $this->addFormRule(array('CRM_CivirulesConditions_Form_FieldValueComparison', 'validateEntityAndField'));
   }
 
@@ -146,6 +85,29 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_Core_Form {
     return true;
   }
 
+  /*public static function validateOperatorAndComparisonValue($fields) {
+    $operator = $fields['operator'];
+    switch ($operator) {
+      case '=':
+      case '!=':
+      case '>':
+      case '>=':
+      case '<':
+      case '<=':
+        if (empty($fields['value'])) {
+          return array('value' => ts('Compare value is required'));
+        }
+        break;
+      case 'is one of':
+      case 'is not one of':
+        if (empty($fields['multi_value'])) {
+          return array('multi_value' => 'Compare values is a required field');
+        }
+        break;
+    }
+    return true;
+  }*/
+
   /**
    * Overridden parent method to set default values
    *
@@ -154,16 +116,8 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_Core_Form {
    */
   public function setDefaultValues() {
     $data = array();
+    $defaultValues = parent::setDefaultValues();
     $defaultValues['rule_condition_id'] = $this->ruleConditionId;
-    if (!empty($this->ruleCondition->condition_params)) {
-      $data = unserialize($this->ruleCondition->condition_params);
-    }
-    if (!empty($data['operator'])) {
-      $defaultValues['operator'] = $data['operator'];
-    }
-    if (!empty($data['value'])) {
-      $defaultValues['value'] = $data['value'];
-    }
     if (!empty($data['entity'])) {
       $defaultValues['entity'] = $data['entity'];
     }
@@ -182,6 +136,7 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_Core_Form {
   public function postProcess() {
     $data['operator'] = $this->_submitValues['operator'];
     $data['value'] = $this->_submitValues['value'];
+    $data['multi_value'] = explode("\r\n", $this->_submitValues['multi_value']);
     $data['entity'] = $this->_submitValues['entity'];
     $data['field'] = substr($this->_submitValues['field'], strlen($data['entity'].'_'));
 

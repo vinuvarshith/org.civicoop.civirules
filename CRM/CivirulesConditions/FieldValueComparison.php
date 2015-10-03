@@ -29,8 +29,9 @@ class CRM_CivirulesConditions_FieldValueComparison extends CRM_CivirulesConditio
    * @access protected
    */
   protected function getComparisonValue() {
-    if (!empty($this->conditionParams['value'])) {
-      return $this->normalizeValue($this->conditionParams['value']);
+    $value = parent::getComparisonValue();
+    if (!empty($value)) {
+      return $this->normalizeValue($value);
     } else {
       return null;
     }
@@ -66,7 +67,11 @@ class CRM_CivirulesConditions_FieldValueComparison extends CRM_CivirulesConditio
    * @access public
    */
   public function userFriendlyConditionParams() {
-    return htmlentities($this->conditionParams['entity'].'.'.$this->conditionParams['field'].' '.($this->getOperator())).' '.htmlentities($this->getComparisonValue());
+    $value = $this->getComparisonValue();
+    if (is_array($value)) {
+      $value = implode(", ", $value);
+    }
+    return htmlentities($this->conditionParams['entity'].'.'.$this->conditionParams['field'].' '.($this->getOperator())).' '.htmlentities($value);
   }
 
 }

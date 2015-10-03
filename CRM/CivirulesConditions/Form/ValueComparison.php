@@ -22,6 +22,39 @@ class CRM_CivirulesConditions_Form_ValueComparison extends CRM_CivirulesConditio
   }
 
   /**
+   * Function to add validation condition rules (overrides parent function)
+   *
+   * @access public
+   */
+  public function addRules()
+  {
+    $this->addFormRule(array('CRM_CivirulesConditions_Form_ValueComparison', 'validateOperatorAndComparisonValue'));
+  }
+
+  public static function validateOperatorAndComparisonValue($fields) {
+    $operator = $fields['operator'];
+    switch ($operator) {
+      case '=':
+      case '!=':
+      case '>':
+      case '>=':
+      case '<':
+      case '<=':
+        if (empty($fields['value'])) {
+          return array('value' => ts('Compare value is required'));
+        }
+        break;
+      case 'is one of':
+      case 'is not one of':
+        if (empty($fields['multi_value'])) {
+          return array('multi_value' => 'Compare values is a required field');
+        }
+        break;
+    }
+    return true;
+  }
+
+  /**
    * Overridden parent method to build form
    *
    * @access public
@@ -33,6 +66,7 @@ class CRM_CivirulesConditions_Form_ValueComparison extends CRM_CivirulesConditio
 
     $this->add('select', 'operator', ts('Operator'), $this->conditionClass->getOperators(), true);
     $this->add('text', 'value', ts('Compare value'), true);
+    $this->add('textarea', 'multi_value', ts('Compare values'));
 
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
@@ -60,6 +94,9 @@ class CRM_CivirulesConditions_Form_ValueComparison extends CRM_CivirulesConditio
     if (!empty($data['value'])) {
       $defaultValues['value'] = $data['value'];
     }
+    if (!empty($data['multi_value'])) {
+      $defaultValues['multi_value'] = implode("\r\n", $data['multi_value']);
+    }
     return $defaultValues;
   }
 
@@ -73,6 +110,7 @@ class CRM_CivirulesConditions_Form_ValueComparison extends CRM_CivirulesConditio
     $data = unserialize($this->ruleCondition->condition_params);
     $data['operator'] = $this->_submitValues['operator'];
     $data['value'] = $this->_submitValues['value'];
+    $data['multi_value'] = explode("\r\n", $this->_submitValues['multi_value']);
     $this->ruleCondition->condition_params = serialize($data);
     $this->ruleCondition->save();
 
