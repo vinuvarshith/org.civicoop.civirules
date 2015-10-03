@@ -36,10 +36,54 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_CivirulesCon
           }
           $return[$fieldKey] = $label;
         }
+        $customFields = $this->getCustomfieldsForEntity($entityDef->entity);
+        foreach($customFields as $customFieldKey => $customFieldLabel) {
+          $return[$key.$customFieldKey] = $customFieldLabel;
+        }
       }
     }
     return $return;
   }
+
+  protected function getCustomfieldsForEntity($entity) {
+    $extends = array($entity);
+    if ($entity == 'Contact') {
+      $contact_types = civicrm_api3('ContactType', 'get', array());
+      foreach($contact_types['values'] as $type) {
+        $extends[] = $type['name'];
+      }
+    }
+
+    $return = array();
+    $processedGroups = array();
+    foreach($extends as $extend) {
+      $customGroups = civicrm_api3('CustomGroup', 'get', array('extends' => $extend));
+      foreach($customGroups['values'] as $customGroup) {
+        if (in_array($customGroup['id'], $processedGroups)) {
+          continue;
+        }
+        if ($customGroup['is_multiple']) {
+          //do not include multiple custom groups
+          continue;
+        }
+        $return = $return + $this->getCustomFieldPerGroup($customGroup['id'], $customGroup['title']);
+        $processedGroups[] = $customGroup['id'];
+      }
+    }
+
+    return $return;
+  }
+
+  protected function getCustomFieldPerGroup($group_id, $group_label) {
+    $fields = civicrm_api3('CustomField', 'get', array('custom_group_id' => $group_id));
+    $return = array();
+    foreach($fields['values'] as $field) {
+      $key = 'custom_'.$field['id'];
+      $return[$key] = $group_label.': '.$field['label'];
+    }
+    return $return;
+  }
+
 
   /**
    * Overridden parent method to build form
@@ -87,7 +131,9 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_CivirulesCon
   public function setDefaultValues() {
     $data = array();
     $defaultValues = parent::setDefaultValues();
-    $defaultValues['rule_condition_id'] = $this->ruleConditionId;
+    if ($this->ruleCondition->find(true)) {
+      $data = unserialize($this->ruleCondition->condition_params);
+    }
     if (!empty($data['entity'])) {
       $defaultValues['entity'] = $data['entity'];
     }

@@ -41,6 +41,7 @@
 
         cj('#entity').change(function() {
            var val = cj('#entity').val();
+            cj('#field').html(all_fields);
             cj('#field option').each(function(index, el) {
                 if (cj(el).val().indexOf(val+'_') != 0) {
                     cj(el).remove();

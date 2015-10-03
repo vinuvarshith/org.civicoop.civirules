@@ -19,6 +19,20 @@ class CRM_CivirulesConditions_FieldValueComparison extends CRM_CivirulesConditio
     if (isset($data[$field])) {
       return $this->normalizeValue($data[$field]);
     }
+
+    if (strpos($field, 'custom_')===0) {
+      try {
+        $params['entityID'] = $data['id'];
+        $params[$field] = 1;
+        $values = CRM_Core_BAO_CustomValueTable::getValues($params);
+        if (!empty($values[$field])) {
+          return $this->normalizeValue($values[$field]);
+        }
+      } catch (Exception $e) {
+        //do nothing
+      }
+    }
+
     return null;
   }
 
