@@ -46,6 +46,10 @@ class CRM_CivirulesConditions_Form_ValueComparison extends CRM_CivirulesConditio
         break;
       case 'is one of':
       case 'is not one of':
+      case 'contains one of':
+      case 'not contains one of':
+      case 'contains all of':
+      case 'not contains all of':
         if (empty($fields['multi_value'])) {
           return array('multi_value' => 'Compare values is a required field');
         }
@@ -67,6 +71,9 @@ class CRM_CivirulesConditions_Form_ValueComparison extends CRM_CivirulesConditio
     $this->add('select', 'operator', ts('Operator'), $this->conditionClass->getOperators(), true);
     $this->add('text', 'value', ts('Compare value'), true);
     $this->add('textarea', 'multi_value', ts('Compare values'));
+
+    $this->assign('field_options', $this->conditionClass->getFieldOptions());
+    $this->assign('is_field_option_multiple', $this->conditionClass->isMultiple());
 
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),

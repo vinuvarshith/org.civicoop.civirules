@@ -25,6 +25,31 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
   }
 
   /**
+   * Returns an array with all possible options for the field, in
+   * case the field is a select field, e.g. gender, or financial type
+   * Return false when the field is a select field
+   *
+   * This method could be overriden by child classes to return the option
+   *
+   * The return is an array with the field option value as key and the option label as value
+   *
+   * @return bool
+   */
+  public function getFieldOptions() {
+    return false;
+  }
+
+  /**
+   * Returns true when the field is a select option with multiple select
+   *
+   * @see getFieldOptions
+   * @return bool
+   */
+  public function isMultiple() {
+    return false;
+  }
+
+  /**
    * Returns the value of the field for the condition
    * For example: I want to check if age > 50, this function would return the 50
    *
@@ -53,6 +78,10 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
         break;
       case 'is one of':
       case 'is not one of':
+      case 'contains one of':
+      case 'not contains one of':
+      case 'contains all of':
+      case 'not contains all of':
         $key = 'multi_value';
         break;
     }
@@ -167,11 +196,74 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
         }
         return false;
         break;
+      case 'contains one of':
+        $leftArray = $this->convertValueToArray($leftValue);
+        $rightArray = $this->convertValueToArray($rightValue);
+        if ($this->containsOneOf($leftArray, $rightArray)) {
+          return true;
+        }
+        return false;
+        break;
+      case 'not contains one of':
+        $leftArray = $this->convertValueToArray($leftValue);
+        $rightArray = $this->convertValueToArray($rightValue);
+        if (!$this->containsOneOf($leftArray, $rightArray)) {
+          return true;
+        }
+        return false;
+        break;
+      case 'contains all of':
+        $leftArray = $this->convertValueToArray($leftValue);
+        $rightArray = $this->convertValueToArray($rightValue);
+        if ($this->containsAllOf($leftArray, $rightArray)) {
+          return true;
+        }
+        return false;
+        break;
+      case 'not contains all of':
+        $leftArray = $this->convertValueToArray($leftValue);
+        $rightArray = $this->convertValueToArray($rightValue);
+        if ($this->notContainsAllOf($leftArray, $rightArray)) {
+          return true;
+        }
+        return false;
+        break;
       default:
         return false;
         break;
     }
     return false;
+  }
+
+  protected function containsOneOf($leftValues, $rightValues) {
+    foreach($leftValues as $leftvalue) {
+      if (in_array($leftvalue, $rightValues)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  protected function containsAllOf($leftValues, $rightValues) {
+    $foundValues = array();
+    foreach($leftValues as $leftVaue) {
+      if (in_array($leftVaue, $rightValues)) {
+        $foundValues[] = $leftVaue;
+      }
+    }
+    if (count($foundValues) > 0 && count($foundValues) == count($rightValues)) {
+      return true;
+    }
+    return false;
+  }
+
+  protected function notContainsAllOf($leftValues, $rightValues) {
+    foreach($rightValues as $rightValue) {
+      if (in_array($rightValue, $leftValues)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**
@@ -230,6 +322,10 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
       '<=' => ts('Is less than or equal to'),
       'is one of' => ts('Is one of'),
       'is not one of' => ts('Is not one of'),
+      'contains one of' => ts('Does contain one of'),
+      'not contains one of' => ts('Does not contain one of'),
+      'contains all of' => ts('Does contain all of'),
+      'not contains all of' => ts('Does not contain all of'),
     );
   }
 

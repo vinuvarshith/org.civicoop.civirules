@@ -31,3 +31,24 @@
     {include file="CRM/common/formButtons.tpl" location="bottom"}
 </div>
 {include file="CRM/CivirulesConditions/Form/ValueComparisonJs.tpl"}
+
+{literal}
+<script type="text/javascript">
+    var options = new Array();
+    {/literal}
+    {if ($field_options)}
+        {foreach from=$field_options item=value key=key}
+    options[options.length] = {'key': key, 'value': value};
+        {/foreach}
+    {/if}
+    {if ($is_field_option_multiple)}
+        var multiple = true;
+    {else}
+        var multiple = false;
+    {/if}
+    {literal}
+    cj(function() {
+        CRM_civirules_conidtion_form_updateOptionValues(options, multiple);
+    });
+</script>
+{/literal}

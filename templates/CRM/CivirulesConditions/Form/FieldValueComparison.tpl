@@ -73,5 +73,31 @@
         });
         cj('#entity').trigger('change');
     });
+
+    function retrieveOptionsForEntityAndField(entity, field) {
+        var options = new Array();
+        var multiple = false;
+        CRM_civirules_conidtion_form_updateOptionValues(options, multiple);
+        if (field.indexOf('custom_') == 0) {
+            var custom_field_id = field.replace('custom_', '');
+            CRM.api3('CustomField', 'getsingle', {'sequential': 1, 'id': custom_field_id}, true)
+            .done(function(data) {
+                switch(data.html_type) {
+                    case 'Multi-Select':
+                    case 'AdvMulti-Select':
+                        multiple = true;
+                        CRM_civirules_conidtion_form_updateOptionValues(options, multiple);
+                        break;
+                }
+            });
+        }
+        CRM.api3(entity, 'getoptions', {'sequential': 1, 'field': field}, true)
+        .done(function (data) {
+            if (data.values) {
+                options = data.values;
+            }
+            CRM_civirules_conidtion_form_updateOptionValues(options, multiple);
+        });
+    }
 </script>
 {/literal}

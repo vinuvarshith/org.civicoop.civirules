@@ -6,6 +6,10 @@
            switch (val) {
                case 'is one of':
                case 'is not one of':
+               case 'contains one of':
+               case 'not contains one of':
+               case 'contains all of':
+               case 'not contains all of':
                    cj('#multi_value_parent').removeClass('hiddenElement');
                    cj('#value_parent').addClass('hiddenElement');
                    break;
@@ -18,96 +22,116 @@
         cj('#operator').trigger('change');
     });
 
+    var CRM_civirules_condition_form_initialOperator;
 
-    function retrieveOptionsForEntityAndField(entity, field) {
+    function CRM_civirules_condition_form_updateOperator (options, multiple) {
+        if (!CRM_civirules_condition_form_initialOperator) {
+            CRM_civirules_condition_form_initialOperator = cj('#operator').val();
+        }
+        cj('#operator option').removeClass('hiddenElement');
+        if (options.length) {
+            cj('#operator option[value=">"').addClass('hiddenElement');
+            cj('#operator option[value=">="').addClass('hiddenElement');
+            cj('#operator option[value="<"').addClass('hiddenElement');
+            cj('#operator option[value="<="').addClass('hiddenElement');
+        }
+        if (options.length && multiple) {
+            cj('#operator option[value="="').addClass('hiddenElement');
+            cj('#operator option[value="!="').addClass('hiddenElement');
+            cj('#operator option[value="is one of"').addClass('hiddenElement');
+            cj('#operator option[value="is not one of"').addClass('hiddenElement');
+        } else {
+            cj('#operator option[value="contains one of"').addClass('hiddenElement');
+            cj('#operator option[value="not contains one of"').addClass('hiddenElement');
+            cj('#operator option[value="contains all of"').addClass('hiddenElement');
+            cj('#operator option[value="not contains all of"').addClass('hiddenElement');
+        }
+        if (cj('#operator option:selected').hasClass('hiddenElement')) {
+            if (!cj('#operator option[value="'+CRM_civirules_condition_form_initialOperator+'"]').hasClass('hiddenElement')) {
+                cj('#operator option[value="'+CRM_civirules_condition_form_initialOperator+'"]').attr('selected', 'selected');
+            } else {
+                cj('#operator option:not(.hiddenElement)').first().attr('selected', 'selected');
+            }
+            cj('#operator').trigger('change');
+        }
+    }
+
+    function CRM_civirules_condition_form_resetOptions () {
         cj('#multi_value_options').html('');
         cj('#value_options').html('');
         cj('#multi_value_options').addClass('hiddenElement');
         cj('#multi_value_parent .content.textarea').removeClass('hiddenElement');
         cj('#value_options').addClass('hiddenElement');
         cj('#value').removeClass('hiddenElement');
-        cj('#operator option').removeClass('hiddenElement');
+    }
 
-        CRM.api3(entity, 'getoptions', {'sequential': 1, 'field': field}, true)
-        .done(function(data) {
-            if (data.is_error) {
-                return;
-            }
+    function CRM_civirules_conidtion_form_updateOptionValues(options, multiple) {
+        CRM_civirules_condition_form_resetOptions();
+        CRM_civirules_condition_form_updateOperator(options, multiple);
+        if (options && options.length > 0) {
+            var select_options = '';
+            var multi_select_options = '';
 
-            cj('#operator option[value=">"').addClass('hiddenElement');
-            cj('#operator option[value=">="').addClass('hiddenElement');
-            cj('#operator option[value="<"').addClass('hiddenElement');
-            cj('#operator option[value="<="').addClass('hiddenElement');
-            if (cj('#operator option:selected').hasClass('hiddenElement')) {
-                cj('#operator').val('=');
-            }
-
-            var select_html = '';
-            var html = '';
-            var currentOptions = cj('#multi_value').val().match(/[^\r\n]+/g);
+            var currentSelectedOptions = cj('#multi_value').val().match(/[^\r\n]+/g);
+            var currentSelectedOption = cj('#value').val();
             var selectedOptions = new Array();
-            var currentSelect = cj('#value').val();
-            var newValueValue = '';
-            if (!currentOptions) {
-                currentOptions = new Array();
+            var selectedOption = '';
+            if (!currentSelectedOptions) {
+                currentSelectedOptions = new Array();
             }
-            cj.each(data.values, function(key, value) {
+
+            for(var i=0; i < options.length; i++) {
                 var selected = '';
                 var checked = '';
-                if (currentOptions.indexOf(value.key) >= 0) {
+                if (currentSelectedOptions.indexOf(options[i].key) >= 0) {
                     checked = 'checked="checked"';
-                    selectedOptions[selectedOptions.length] = value.key;
+                    selectedOptions[selectedOptions.length] = options[i].key;
                 }
-                if (value.key == currentSelect) {
+                if (value.key == currentSelectedOption) {
                     selected='selected="selected"';
-                    newValueValue = value.key;
+                    selectedOption = options[i].key;
                 }
-                var option = '<input type="checkbox" value="'+value.key+'" '+checked+'>'+value.value+'<br>';
-                var select_option = '<option value="'+value.key+'" '+selected+'>'+value.value+'</option>';
-                html = html + option;
-                select_html = select_html + select_option;
-            });
-            if (html.length > 0) {
-                cj('#multi_value').val(selectedOptions.join('\r\n'));
-                cj('#multi_value_options').html(html);
-                cj('#multi_value_options').removeClass('hiddenElement');
-                cj('#multi_value_options input[type="checkbox"]').change(function() {
-                    var currentOptions = cj('#multi_value').val().match(/[^\r\n]+/g);
-                    if (!currentOptions) {
-                        currentOptions = new Array();
-                    }
-                    var value = cj(this).val();
-                    var index = currentOptions.indexOf(value);
-                    if (this.checked) {
-                        if (index < 0) {
-                            currentOptions[currentOptions.length] = value;
-                            cj('#multi_value').val(currentOptions.join('\r\n'));
-                        }
-                   } else {
+                multi_select_options = multi_select_options + '<input type="checkbox" value="'+options[i].key+'" '+checked+'>'+options[i].value+'<br>';
+                select_options = select_options + '<option value="'+value.key+'" '+selected+'>'+options[i].value+'</option>';
+            }
 
-                        if (index >= 0) {
-                            currentOptions.splice(index, 1);
-                            cj('#multi_value').val(currentOptions.join('\r\n'));
-                        }
+            cj('#value').val(selectedOption);
+            cj('#value').addClass('hiddenElement');
+            cj('#value_options').html(select_options);
+            cj('#value_options').removeClass('hiddenElement');
+            cj('#value_options').change(function() {
+                var value = cj(this).val();
+                cj('#value').val(value);
+            });
+
+            cj('#multi_value').val(selectedOptions.join('\r\n'));
+            cj('#multi_value_parent .content.textarea').addClass('hiddenElement');
+            cj('#multi_value_options').html(multi_select_options);
+            cj('#multi_value_options').removeClass('hiddenElement');
+            cj('#multi_value_options input[type="checkbox"]').change(function() {
+                var currentOptions = cj('#multi_value').val().match(/[^\r\n]+/g);
+                if (!currentOptions) {
+                    currentOptions = new Array();
+                }
+                var value = cj(this).val();
+                var index = currentOptions.indexOf(value);
+                if (this.checked) {
+                    if (index < 0) {
+                        currentOptions[currentOptions.length] = value;
+                        cj('#multi_value').val(currentOptions.join('\r\n'));
                     }
-                });
-                cj('#multi_value_parent .content.textarea').addClass('hiddenElement');
-            } else {
-                cj('#multi_value_parent .content.textarea').removeClass('hiddenElement');
-            }
-            if (select_html.length > 0) {
-                cj('#value').val(newValueValue);
-                cj('#value_options').html(select_html);
-                cj('#value_options').removeClass('hiddenElement');
-                cj('#value_options').change(function() {
-                    var value = cj(this).val();
-                    cj('#value').val(value);
-                });
-                cj('#value').addClass('hiddenElement');
-            } else {
-                cj('#value').removeClass('hiddenElement');
-            }
-        });
+                } else {
+                    if (index >= 0) {
+                        currentOptions.splice(index, 1);
+                        cj('#multi_value').val(currentOptions.join('\r\n'));
+                    }
+                }
+            });
+        } else {
+            cj('#multi_value_parent .content.textarea').removeClass('hiddenElement');
+            cj('#value').removeClass('hiddenElement');
+        }
     }
+
 </script>
 {/literal}
