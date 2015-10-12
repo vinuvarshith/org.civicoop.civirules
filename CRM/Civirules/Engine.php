@@ -22,13 +22,17 @@ class CRM_Civirules_Engine {
    * @static
    */
   public static function triggerRule(CRM_Civirules_Event $event, CRM_Civirules_EventData_EventData $eventData) {
-    $eventData->setEvent($event);
-    $isRuleValid = self::areConditionsValid($eventData);
+    try {
+      $eventData->setEvent($event);
+      $isRuleValid = self::areConditionsValid($eventData);
 
-    if ($isRuleValid) {
-      self::logRule($eventData);
-      self::executeActions($eventData);
-      return true;
+      if ($isRuleValid) {
+        self::logRule($eventData);
+        self::executeActions($eventData);
+        return true;
+      }
+    } catch (Exception $e) {
+      CRM_Civirules_Utils_LoggerFactory::logError("Failed to execute rule",  $e->getMessage(), $eventData);
     }
     return false;
   }
@@ -120,7 +124,11 @@ class CRM_Civirules_Engine {
    * @return bool
    */
   public static function executeDelayedAction(CRM_Queue_TaskContext $ctx, CRM_Civirules_Action $action, CRM_Civirules_EventData_EventData $eventData) {
-    $action->processAction($eventData);
+    try {
+      $action->processAction($eventData);
+    } catch (Exception $e) {
+      CRM_Civirules_Utils_LoggerFactory::logError("Failed to execute delayed action",  $e->getMessage(), $eventData);
+    }
     return true;
   }
 
@@ -248,6 +256,9 @@ class CRM_Civirules_Engine {
   /**
    * This function writes a record to the log table to indicate that this rule for this event is triggered
    *
+   * The data this function stores is required by the cron type events.
+   * @todo: think of a better handling for cron type events
+   *
    * @param CRM_Civirules_EventData_EventData $eventData
    */
   protected static function logRule(CRM_Civirules_EventData_EventData $eventData) {
@@ -256,4 +267,5 @@ class CRM_Civirules_Engine {
     $params[2] = array($eventData->getContactId(), 'Integer');
     CRM_Core_DAO::executeQuery($sql, $params);
   }
+
 }

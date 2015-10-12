@@ -8,6 +8,11 @@ abstract class CRM_Civirules_Event {
 
   protected $eventParams;
 
+  /**
+   * @var string
+   */
+  protected $ruleTitle;
+
   public function setRuleId($ruleId) {
     $this->ruleId = $ruleId;
   }
@@ -26,6 +31,17 @@ abstract class CRM_Civirules_Event {
 
   public function getEventId() {
     return $this->eventId;
+  }
+
+  public function getRuleTitle() {
+    if (empty($this->ruleTitle) && !empty($this->ruleId)) {
+      $rule = new CRM_Civirules_BAO_Rule();
+      $rule->id = $this->ruleId;
+      if ($rule->find(true)) {
+        $this->ruleTitle = $rule->label;
+      }
+    }
+    return $this->ruleTitle;
   }
 
   /**
