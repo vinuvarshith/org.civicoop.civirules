@@ -70,10 +70,10 @@ abstract class CRM_Civirules_Condition {
    * Logs a message to the logger
    *
    * @param $message
-   * @param \CRM_Civirules_EventData_EventData|NULL $eventData
+   * @param \CRM_Civirules_TriggerData_TriggerData|NULL $triggerData
    * @param string $level Should be one of \Psr\Log\LogLevel
    */
-  protected function logCondition($message, CRM_Civirules_EventData_EventData $eventData=null, $level=\Psr\Log\LogLevel::INFO) {
+  protected function logCondition($message, CRM_Civirules_TriggerData_TriggerData $triggerData=null, $level=\Psr\Log\LogLevel::INFO) {
     $context = array();
     $context['message'] = $message;
     $context['rule_id'] = $this->ruleCondition['rule_id'];
@@ -86,7 +86,7 @@ abstract class CRM_Civirules_Condition {
     $context['rule_condition_id'] = $this->ruleCondition['id'];
     $context['condition_label'] = CRM_Civirules_BAO_Condition::getConditionLabelWithId($this->ruleCondition['condition_id']);
     $context['condition_parameters'] = $this->userFriendlyConditionParams();
-    $context['contact_id'] = $eventData ? $eventData->getContactId() : - 1;
+    $context['contact_id'] = $triggerData ? $triggerData->getContactId() : - 1;
     $msg = "{condition_label} (ID: {rule_condition_id})\r\n\r\n{message}\r\n\r\nRule: '{rule_title}' with id {rule_id}";
     if ($context['contact_id'] > 0) {
       $msg .= "\r\nFor contact: {contact_id}";
