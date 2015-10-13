@@ -40,7 +40,11 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_CivirulesCon
         $fields = call_user_func(array($className, 'fields'));
         foreach ($fields as $field) {
           $fieldKey = $key . $field['name'];
-          $label = $field['title'];
+          if (isset($field['title'])) {
+            $label = $field['title'];
+          } else {
+            $label = "";
+          }
           if (empty($label)) {
             $label = $field['name'];
           }
