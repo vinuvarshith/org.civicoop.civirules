@@ -11,12 +11,12 @@ class CRM_CivirulesConditions_Contact_AgeComparison extends CRM_CivirulesConditi
   /**
    * Returns value of the field
    *
-   * @param object CRM_Civirules_EventData_EventData $eventData
+   * @param object CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return mixed
    * @access protected
    */
-  protected function getFieldValue(CRM_Civirules_EventData_EventData $eventData) {
-    $sourceBirthDate = civicrm_api3('Contact', 'getvalue', array('id' => $eventData->getContactId(), 'return' => 'birth_date'));
+  protected function getFieldValue(CRM_Civirules_TriggerData_TriggerData $triggerData) {
+    $sourceBirthDate = civicrm_api3('Contact', 'getvalue', array('id' => $triggerData->getContactId(), 'return' => 'birth_date'));
     if ($sourceBirthDate) {
       $birthDate = new DateTime($sourceBirthDate);
       return $birthDate->diff(new DateTime('now'))->y;

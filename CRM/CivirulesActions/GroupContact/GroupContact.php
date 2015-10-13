@@ -12,39 +12,39 @@ abstract class CRM_CivirulesActions_GroupContact_GroupContact extends CRM_Civiru
    * Returns an array with parameters used for processing an action
    *
    * @param array $params
-   * @param object CRM_Civirules_EventData_EventData $eventData
+   * @param object CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return array $params
    * @access protected
    */
-  protected function alterApiParameters($params, CRM_Civirules_EventData_EventData $eventData) {
-    //this function could be overridden in subclasses to alter parameters to meet certain criteraia
-    $params['contact_id'] = $eventData->getContactId();
+  protected function alterApiParameters($params, CRM_Civirules_TriggerData_TriggerData $triggerData) {
+    //this function could be overridden in subclasses to alter parameters to meet certain criteria
+    $params['contact_id'] = $triggerData->getContactId();
     return $params;
   }
 
   /**
    * Process the action
    *
-   * @param CRM_Civirules_EventData_EventData $eventData
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    * @access public
    */
-  public function processAction(CRM_Civirules_EventData_EventData $eventData) {
+  public function processAction(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $entity = $this->getApiEntity();
     $action = $this->getApiAction();
 
-    $action_params = $this->getActionParameters();
-    $group_ids = array();
-    if (!empty($action_params['group_id'])) {
-      $group_ids = array($action_params['group_id']);
-    } elseif (!empty($action_params['group_ids']) && is_array($action_params['group_ids'])) {
-      $group_ids = $action_params['group_ids'];
+    $actionParams = $this->getActionParameters();
+    $groupIds = array();
+    if (!empty($actionParams['group_id'])) {
+      $groupIds = array($actionParams['group_id']);
+    } elseif (!empty($actionParams['group_ids']) && is_array($actionParams['group_ids'])) {
+      $groupIds = $actionParams['group_ids'];
     }
-    foreach($group_ids as $group_id) {
+    foreach($groupIds as $groupId) {
       $params = array();
-      $params['group_id'] = $group_id;
+      $params['group_id'] = $groupId;
 
       //alter parameters by subclass
-      $params = $this->alterApiParameters($params, $eventData);
+      $params = $this->alterApiParameters($params, $triggerData);
 
       //execute the action
       $this->executeApiAction($entity, $action, $params);

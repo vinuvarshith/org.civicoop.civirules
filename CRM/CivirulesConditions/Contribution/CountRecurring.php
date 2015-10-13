@@ -30,13 +30,13 @@ class CRM_CivirulesConditions_Contribution_CountRecurring extends CRM_Civirules_
   /**
    * Method to determine if the condition is valid
    *
-   * @param CRM_Civirules_EventData_EventData $eventData
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return bool
    */
 
-  public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
+  public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $isConditionValid = FALSE;
-    $contribution = $eventData->getEntityData('Contribution');
+    $contribution = $triggerData->getEntityData('Contribution');
     /*
      * retrieve count of completed contributions for donor where recurring_contribution_id is not empty
      */

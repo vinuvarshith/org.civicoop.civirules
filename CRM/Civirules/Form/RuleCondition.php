@@ -135,20 +135,20 @@ class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
     $rule = new CRM_Civirules_BAO_Rule();
     $rule->id = $fields['rule_id'];
     $rule->find(true);
-    $event = new CRM_Civirules_BAO_Event();
-    $event->id = $rule->event_id;
-    $event->find(true);
+    $trigger = new CRM_Civirules_BAO_Trigger();
+    $trigger->id = $rule->trigger_id;
+    $trigger->find(true);
 
-    $eventObject = CRM_Civirules_BAO_Event::getPostEventObjectByClassName($event->class_name, true);
-    $eventObject->setEventId($event->id);
+    $triggerObject = CRM_Civirules_BAO_Trigger::getPostTriggerObjectByClassName($trigger->class_name, true);
+    $triggerObject->setTriggerId($trigger->id);
     $availableEntities = array();
-    foreach($eventObject->getProvidedEntities() as $entityDef) {
+    foreach($triggerObject->getProvidedEntities() as $entityDef) {
       $availableEntities[] = strtolower($entityDef->entity);
     }
 
     foreach($requiredEntities as $entity) {
       if (!in_array(strtolower($entity), $availableEntities)) {
-        $errors['rule_condition_select'] = ts('This condition is not available with event %1', array(1 => $event->label));
+        $errors['rule_condition_select'] = ts('This condition is not available with trigger %1', array(1 => $trigger->label));
         return $errors;
       }
     }

@@ -18,8 +18,8 @@ class CRM_CivirulesConditions_Contribution_Status extends CRM_Civirules_Conditio
     }
   }
 
-  public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
-    $contribution = $eventData->getEntityData('Contribution');
+  public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
+    $contribution = $triggerData->getEntityData('Contribution');
     if ($contribution['contribution_status_id'] == $this->conditionParams['contribution_status_id']) {
       return true;
     }

@@ -11,12 +11,12 @@ class CRM_CivirulesConditions_Form_Form extends CRM_Core_Form
 
   protected $rule;
 
-  protected $event;
+  protected $trigger;
 
   /**
-   * @var CRM_Civirules_Event
+   * @var CRM_Civirules_Trigger
    */
-  protected $eventClass;
+  protected $triggerClass;
 
   /**
    * @var CRM_Civirules_Condition
@@ -39,7 +39,7 @@ class CRM_CivirulesConditions_Form_Form extends CRM_Core_Form
 
     $this->condition = new CRM_Civirules_BAO_Condition();
     $this->rule = new CRM_Civirules_BAO_Rule();
-    $this->event = new CRM_Civirules_BAO_Event();
+    $this->trigger = new CRM_Civirules_BAO_Trigger();
 
     if (!$this->ruleCondition->find(true)) {
       throw new Exception('Civirules could not find ruleCondition');
@@ -55,9 +55,9 @@ class CRM_CivirulesConditions_Form_Form extends CRM_Core_Form
       throw new Exception('Civirules could not find rule');
     }
 
-    $this->event->id = $this->rule->event_id;
-    if (!$this->event->find(true)) {
-      throw new Exception('Civirules could not find event');
+    $this->trigger->id = $this->rule->trigger_id;
+    if (!$this->trigger->find(true)) {
+      throw new Exception('Civirules could not find trigger');
     }
 
     $this->conditionClass = CRM_Civirules_BAO_Condition::getConditionObjectById($this->condition->id, false);
@@ -65,9 +65,9 @@ class CRM_CivirulesConditions_Form_Form extends CRM_Core_Form
       $this->conditionClass->setRuleConditionData($ruleConditionData);
     }
 
-    $this->eventClass = CRM_Civirules_BAO_Event::getEventObjectByEventId($this->event->id, true);
-    $this->eventClass->setEventId($this->event->id);
-    $this->eventClass->setEventParams($this->rule->event_params);
+    $this->triggerClass = CRM_Civirules_BAO_Trigger::getTriggerObjectByTriggerId($this->trigger->id, true);
+    $this->triggerClass->setTriggerId($this->trigger->id);
+    $this->triggerClass->setTriggerParams($this->rule->trigger_params);
 
     parent::preProcess();
 

@@ -53,12 +53,12 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
    * Returns the value of the field for the condition
    * For example: I want to check if age > 50, this function would return the 50
    *
-   * @param object CRM_Civirules_EventData_EventData $eventData
+   * @param object CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return
    * @access protected
    * @abstract
    */
-  abstract protected function getFieldValue(CRM_Civirules_EventData_EventData $eventData);
+  abstract protected function getFieldValue(CRM_Civirules_TriggerData_TriggerData $triggerData);
 
   /**
    * Returns the value for the data comparison
@@ -118,13 +118,13 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
   /**
    * Mandatory method to return if the condition is valid
    *
-   * @param object CRM_Civirules_EventData_EventData $eventData
+   * @param object CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return bool
    * @access public
    */
 
-  public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
-    $value = $this->getFieldValue($eventData);
+  public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
+    $value = $this->getFieldValue($triggerData);
     $compareValue = $this->getComparisonValue();
     return $this->compare($value, $compareValue, $this->getOperator());
   }

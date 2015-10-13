@@ -29,12 +29,12 @@ class CRM_CivirulesConditions_Contribution_DonorIsRecurring extends CRM_Civirule
   /**
    * Method is mandatory and checks if the condition is met
    *
-   * @param CRM_Civirules_EventData_EventData $eventData
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return bool
    * @access public
    */
-  public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
-    $contactId = $eventData->getContactId();
+  public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
+    $contactId = $triggerData->getContactId();
     $donorHasAny = FALSE;
     $recurringParams = array(
       'contact_id' => $contactId,

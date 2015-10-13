@@ -27,14 +27,14 @@ class CRM_CivirulesConditions_Contact_InGroup extends CRM_Civirules_Condition {
   /**
    * This method returns true or false when an condition is valid or not
    *
-   * @param CRM_Civirules_EventData_EventData $eventData
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return bool
    * @access public
    * @abstract
    */
-  public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
+  public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $isConditionValid = false;
-    $contact_id = $eventData->getContactId();
+    $contact_id = $triggerData->getContactId();
     switch($this->conditionParams['operator']) {
       case 'in one of':
         $isConditionValid = $this->contactIsMemberOfOneGroup($contact_id, $this->conditionParams['group_ids']);

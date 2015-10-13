@@ -2,8 +2,8 @@ CREATE TABLE IF NOT EXISTS civirule_rule (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   name VARCHAR(80) NULL,
   label VARCHAR(128) NULL,
-  event_id INT UNSIGNED NULL,
-  event_params TEXT NULL,
+  trigger_id INT UNSIGNED NULL,
+  trigger_params TEXT NULL,
   is_active TINYINT NULL DEFAULT 1,
   created_date DATE NULL,
   created_user_id INT NULL,
@@ -11,10 +11,10 @@ CREATE TABLE IF NOT EXISTS civirule_rule (
   modified_user_id INT NULL,
   PRIMARY KEY (id),
   UNIQUE INDEX id_UNIQUE (id ASC),
-  INDEX fk_rule_event_idx (event_id ASC),
-  CONSTRAINT fk_rule_event
-    FOREIGN KEY (event_id)
-    REFERENCES civirule_event (id)
+  INDEX fk_rule_trigger_idx (trigger_id ASC),
+  CONSTRAINT fk_rule_trigger
+    FOREIGN KEY (trigger_id)
+    REFERENCES civirule_trigger (id)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB

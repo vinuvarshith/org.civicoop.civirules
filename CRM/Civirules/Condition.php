@@ -26,12 +26,12 @@ abstract class CRM_Civirules_Condition {
   /**
    * This method returns true or false when an condition is valid or not
    *
-   * @param CRM_Civirules_EventData_EventData $eventData
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return bool
    * @access public
    * @abstract
    */
-  public abstract function isConditionValid(CRM_Civirules_EventData_EventData $eventData);
+  public abstract function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData);
 
   /**
    * Returns a redirect url to extra data input from the user after adding a condition

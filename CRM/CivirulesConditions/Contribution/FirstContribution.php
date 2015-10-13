@@ -11,13 +11,13 @@ class CRM_CivirulesConditions_Contribution_FirstContribution extends CRM_Civirul
   /**
    * Method is mandatory and checks if the condition is met
    *
-   * @param CRM_Civirules_EventData_EventData $eventData
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return bool
    * @access public
    */
-  public function isConditionValid(CRM_Civirules_EventData_EventData $eventData)
+  public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData)
   {
-    $contactId = $eventData->getContactId();
+    $contactId = $triggerData->getContactId();
     $contributionParams = array('contact_id' => $contactId);
     $countContributions = civicrm_api3('Contribution', 'getcount', $contributionParams);
     switch ($countContributions) {
@@ -26,8 +26,8 @@ class CRM_CivirulesConditions_Contribution_FirstContribution extends CRM_Civirul
         break;
       case 1:
         $existingContribution = civicrm_api3('Contribution', 'Getsingle', array('contact_id' => $contactId));
-        $eventContribution = $eventData->getEntityData('Contribution');
-        if ($eventContribution['contribution_id'] == $existingContribution['contribution_id']) {
+        $triggerContribution = $triggerData->getEntityData('Contribution');
+        if ($triggerContribution['contribution_id'] == $existingContribution['contribution_id']) {
           return TRUE;
         }
       break;

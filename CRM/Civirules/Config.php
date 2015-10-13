@@ -12,17 +12,17 @@ class CRM_Civirules_Config
    */
   static private $_singleton = NULL;
   /*
-   * properties to hold the valid entities and actions for civirule event
+   * properties to hold the valid entities and actions for civirule trigger
    */
-  protected $validEventObjectNames = NULL;
-  protected $validEventOperations = NULL;
+  protected $validTriggerObjectNames = NULL;
+  protected $validTriggerOperations = NULL;
 
   /**
    * Constructor
    */
   function __construct()
   {
-    $this->setEventProperties();
+    $this->setTriggerProperties();
   }
 
   /**
@@ -41,35 +41,35 @@ class CRM_Civirules_Config
   }
 
   /**
-   * Function to get the valid event entities
+   * Function to get the valid trigger entities
    *
    * @return int
    * @access public
    */
-  public function getValidEventObjectNames()
+  public function getValidTriggerObjectNames()
   {
-    return $this->validEventObjectNames;
+    return $this->validTriggerObjectNames;
   }
 
   /**
-   * Function to get the valid event actions
+   * Function to get the valid trigger actions
    *
    * @return int
    * @access public
    */
-  public function getValidEventOperations()
+  public function getValidTriggerOperations()
   {
-    return $this->validEventOperations;
+    return $this->validTriggerOperations;
   }
-  protected function setEventProperties() {
-    $this->validEventOperations = array(
+  protected function setTriggerProperties() {
+    $this->validTriggerOperations = array(
       'create',
       'edit',
       'delete',
       'restore',
       'trash');
 
-    $this->validEventObjectNames = array(
+    $this->validTriggerObjectNames = array(
       'Activity',
       'Address',
       'Case',

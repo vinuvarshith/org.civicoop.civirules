@@ -12,13 +12,13 @@ abstract class CRM_CivirulesActions_Tag_Tag extends CRM_CivirulesActions_Generic
    * Returns an array with parameters used for processing an action
    *
    * @param array $params
-   * @param object CRM_Civirules_EventData_EventData $eventData
+   * @param object CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return array $params
    * @access protected
    */
-  protected function alterApiParameters($params, CRM_Civirules_EventData_EventData $eventData) {
+  protected function alterApiParameters($params, CRM_Civirules_TriggerData_TriggerData $triggerData) {
     //this function could be overridden in subclasses to alter parameters to meet certain criteraia
-    $params['entity_id'] = $eventData->getContactId();
+    $params['entity_id'] = $triggerData->getContactId();
     $params['entity_table'] = 'civicrm_contact';
     return $params;
   }
@@ -26,10 +26,10 @@ abstract class CRM_CivirulesActions_Tag_Tag extends CRM_CivirulesActions_Generic
   /**
    * Process the action
    *
-   * @param CRM_Civirules_EventData_EventData $eventData
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    * @access public
    */
-  public function processAction(CRM_Civirules_EventData_EventData $eventData) {
+  public function processAction(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $entity = $this->getApiEntity();
     $action = $this->getApiAction();
 
@@ -45,7 +45,7 @@ abstract class CRM_CivirulesActions_Tag_Tag extends CRM_CivirulesActions_Generic
       $params['tag_id'] = $tag_id;
 
       //alter parameters by subclass
-      $params = $this->alterApiParameters($params, $eventData);
+      $params = $this->alterApiParameters($params, $triggerData);
 
       //execute the action
       $this->executeApiAction($entity, $action, $params);

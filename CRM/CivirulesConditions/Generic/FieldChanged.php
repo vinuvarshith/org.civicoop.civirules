@@ -29,23 +29,23 @@ abstract class CRM_CivirulesConditions_Generic_FieldChanged extends CRM_Civirule
   /**
    * Method to check if the condition is valid
    *
-   * @param object CRM_Civirules_EventData_EventData $eventData
+   * @param object CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return bool
    * @access public
    */
-  public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
-    //not the right event. The event data should contain also
-    if (!$eventData instanceof CRM_Civirules_EventData_Interface_OriginalData) {
+  public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
+    //not the right trigger. The trigger data should contain also
+    if (!$triggerData instanceof CRM_Civirules_TriggerData_Interface_OriginalData) {
       return false;
     }
 
     $entity = $this->getEntity();
-    if ($entity != $eventData->getOriginalEntity()) {
+    if ($entity != $triggerData->getOriginalEntity()) {
       return false;
     }
 
-    $fieldData = $this->getFieldData($eventData);
-    $originalData = $this->getOriginalFieldData($eventData);
+    $fieldData = $this->getFieldData($triggerData);
+    $originalData = $this->getOriginalFieldData($triggerData);
 
     if (empty($fieldData) && empty($originalData)) {
       return false; //both original and new data are null so assume not changed
@@ -87,13 +87,13 @@ abstract class CRM_CivirulesConditions_Generic_FieldChanged extends CRM_Civirule
   /**
    * Method to get the field data
    *
-   * @param object CRM_Civirules_EventData_EventData $eventData
+   * @param object CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return mixed|null
    * @access protected
    */
-  protected function getFieldData(CRM_Civirules_EventData_EventData $eventData) {
+  protected function getFieldData(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $entity = $this->getEntity();
-    $data = $eventData->getEntityData($entity);
+    $data = $triggerData->getEntityData($entity);
     $field = $this->getField();
     if (isset($data[$field])) {
       return $this->transformFieldData($data[$field]);
@@ -104,17 +104,17 @@ abstract class CRM_CivirulesConditions_Generic_FieldChanged extends CRM_Civirule
   /**
    * Method to get the original field data
    *
-   * @param object CRM_Civirules_EventData_Interface_OriginalData $eventData
+   * @param object CRM_Civirules_TriggerData_Interface_OriginalData $triggerData
    * @return mixed|null
    * @access protected
    */
-  protected function getOriginalFieldData(CRM_Civirules_EventData_Interface_OriginalData $eventData) {
+  protected function getOriginalFieldData(CRM_Civirules_TriggerData_Interface_OriginalData $triggerData) {
     $entity = $this->getEntity();
-    if ($eventData->getOriginalEntity() != $entity) {
+    if ($triggerData->getOriginalEntity() != $entity) {
       return null;
     }
 
-    $data = $eventData->getOriginalData();
+    $data = $triggerData->getOriginalData();
     $field = $this->getField();
     if (isset($data[$field])) {
       return $this->transformFieldData($data[$field]);

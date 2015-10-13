@@ -6,16 +6,16 @@ class CRM_CivirulesConditions_FieldValueComparison extends CRM_CivirulesConditio
    * Returns the value of the field for the condition
    * For example: I want to check if age > 50, this function would return the 50
    *
-   * @param object CRM_Civirules_EventData_EventData $eventData
+   * @param object CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return
    * @access protected
    * @abstract
    */
-  protected function getFieldValue(CRM_Civirules_EventData_EventData $eventData) {
+  protected function getFieldValue(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $entity = $this->conditionParams['entity'];
     $field = $this->conditionParams['field'];
 
-    $data = $eventData->getEntityData($entity);
+    $data = $triggerData->getEntityData($entity);
     if (isset($data[$field])) {
       return $this->normalizeValue($data[$field]);
     }
