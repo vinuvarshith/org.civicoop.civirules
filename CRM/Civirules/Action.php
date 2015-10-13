@@ -118,7 +118,7 @@ abstract class CRM_Civirules_Action {
     $context['action_label'] = CRM_Civirules_BAO_Action::getActionLabelWithId($this->ruleAction['action_id']);
     $context['action_parameters'] = $this->userFriendlyConditionParams();
     $context['contact_id'] = $eventData ? $eventData->getContactId() : - 1;
-    $msg = "{action_label} ({rule_action_id}\r\n\r\n{message}\r\n\r\nRule: '{rule_title}' with id {rule_id}";
+    $msg = "{action_label} (ID: {rule_action_id})\r\n\r\n{message}\r\n\r\nRule: '{rule_title}' with id {rule_id}";
     if ($context['contact_id'] > 0) {
       $msg .= "\r\nFor contact: {contact_id}";
     }

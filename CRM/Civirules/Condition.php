@@ -87,7 +87,7 @@ abstract class CRM_Civirules_Condition {
     $context['condition_label'] = CRM_Civirules_BAO_Condition::getConditionLabelWithId($this->ruleCondition['condition_id']);
     $context['condition_parameters'] = $this->userFriendlyConditionParams();
     $context['contact_id'] = $eventData ? $eventData->getContactId() : - 1;
-    $msg = "{condition_label} ({rule_condition_id}\r\n\r\n{message}\r\n\r\nRule: '{rule_title}' with id {rule_id}";
+    $msg = "{condition_label} (ID: {rule_condition_id})\r\n\r\n{message}\r\n\r\nRule: '{rule_title}' with id {rule_id}";
     if ($context['contact_id'] > 0) {
       $msg .= "\r\nFor contact: {contact_id}";
     }

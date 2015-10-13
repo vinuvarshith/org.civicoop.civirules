@@ -17,6 +17,8 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
 
   protected $event;
 
+  protected $postRuleBlock = '';
+
   /**
    * @var CRM_Civirules_Event
    */
@@ -30,7 +32,29 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
   function buildQuickForm() {
     $this->setFormTitle();
     $this->createFormElements();
+    $this->assign('postRuleBlock', $this->postRuleBlock);
     parent::buildQuickForm();
+  }
+
+  /**
+   * Post rule details are shown on the form just between the rule name and the
+   * linked trigger
+   *
+   * @return string
+   */
+  public function getPostRuleBlock() {
+    return $this->postRuleBlock;
+  }
+
+  /**
+   * Post rule details are shown on the form just between the rule name and the
+   * linked trigger
+   *
+   * @param $postRuleDetails
+   */
+  public function setPostRuleBlock($postRuleBlock) {
+    $this->postRuleBlock = $postRuleBlock;
+    $this->assign('postRuleBlock', $this->postRuleBlock);
   }
 
   /**

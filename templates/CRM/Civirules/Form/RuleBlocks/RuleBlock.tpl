@@ -20,5 +20,6 @@
     <div class="label">{$form.rule_created_contact.label}</div>
     <div class="content">{$form.rule_created_contact.value}</div>
     <div class="clear"></div>
-  </div>      
+  </div>
+  {$postRuleBlock}
 </div>

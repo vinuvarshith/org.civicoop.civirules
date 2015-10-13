@@ -14,7 +14,7 @@ class CRM_CivirulesConditions_FieldValueComparison extends CRM_CivirulesConditio
   protected function getFieldValue(CRM_Civirules_EventData_EventData $eventData) {
     $entity = $this->conditionParams['entity'];
     $field = $this->conditionParams['field'];
-    
+
     $data = $eventData->getEntityData($entity);
     if (isset($data[$field])) {
       return $this->normalizeValue($data[$field]);
