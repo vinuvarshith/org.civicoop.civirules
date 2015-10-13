@@ -117,7 +117,9 @@ class CRM_CivirulesConditions_Form_ValueComparison extends CRM_CivirulesConditio
     $data = unserialize($this->ruleCondition->condition_params);
     $data['operator'] = $this->_submitValues['operator'];
     $data['value'] = $this->_submitValues['value'];
-    $data['multi_value'] = explode("\r\n", $this->_submitValues['multi_value']);
+    if (isset($this->_submitValues['multi_value'])) {
+      $data['multi_value'] = explode("\r\n", $this->_submitValues['multi_value']);
+    }
     $this->ruleCondition->condition_params = serialize($data);
     $this->ruleCondition->save();
 

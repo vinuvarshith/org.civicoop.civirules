@@ -3,3 +3,4 @@ UPDATE `civirule_trigger` SET `class_name`='CRM_CivirulesPostTrigger_Contact' WH
 UPDATE `civirule_trigger` SET `class_name`='CRM_CivirulesPostTrigger_GroupContact' WHERE `class_name` = 'CRM_CivirulesPostEvent_GroupContact';
 UPDATE `civirule_trigger` SET `class_name`='CRM_CivirulesCronTrigger_Birthday' WHERE `class_name` = 'CRM_CivirulesCronEvent_Birthday';
 UPDATE `civirule_trigger` SET `class_name`='CRM_CivirulesCronTrigger_GroupMembership' WHERE `class_name` = 'CRM_CivirulesCronTrigger_GroupMembership';
+UPDATE `civirule_trigger` SET `class_name`='CRM_CivirulesCronTrigger_GroupMembership' WHERE `class_name` = 'CRM_CivirulesCronEvent_GroupMembership';
