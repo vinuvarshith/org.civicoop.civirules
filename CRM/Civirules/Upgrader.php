@@ -58,4 +58,16 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     }
     return true;
   }
+
+  /**
+   * Executes upgrade 1003
+   *
+   * Changes the class names in civirule_trigger table becasue those have been changed as well
+   *
+   * @return bool
+   */
+  public function upgrade_1003() {
+    $this->executeSqlFile('sql/update_1003.sql');
+    return true;
+  }
 }
