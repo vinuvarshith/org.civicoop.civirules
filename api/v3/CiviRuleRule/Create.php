@@ -11,7 +11,7 @@ function _civicrm_api3_civi_rule_rule_create_spec(&$spec) {
   $spec['id']['api_required'] = 0;
   $spec['label']['api_required'] = 0;
   $spec['name']['api_required'] = 0;
-  $spec['event_id']['api_required'] = 1;
+  $spec['trigger_id']['api_required'] = 1;
 }
 
 /**
@@ -28,8 +28,8 @@ function civicrm_api3_civi_rule_rule_create($params) {
   if (!isset($params['id']) && empty($params['label'])) {
     return civicrm_api3_create_error('Label can not be empty when adding a new CiviRule');
   }
-  if (empty($params['event_id'])) {
-    return civicrm_api3_create_error('Event_id can not be empty');
+  if (empty($params['trigger_id'])) {
+    return civicrm_api3_create_error('Trigger_id can not be empty');
   }
   /*
    * set created or modified date and user_id

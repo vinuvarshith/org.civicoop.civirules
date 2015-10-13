@@ -1,13 +1,13 @@
 <?php
 /**
- * CiviRuleEvent.Create API specification (optional)
+ * CiviRuleTrigger.Create API specification (optional)
  * This is used for documentation and validation.
  *
  * @param array $spec description of fields supported by this API call
  * @return void
  * @see http://wiki.civicrm.org/confluence/display/CRM/API+Architecture+Standards
  */
-function _civicrm_api3_civi_rule_event_create_spec(&$spec) {
+function _civicrm_api3_civi_rule_trigger_create_spec(&$spec) {
   $spec['label']['api_required'] = 0;
   $spec['name']['api_required'] = 0;
   $spec['object_name']['api_required'] = 0;
@@ -16,14 +16,14 @@ function _civicrm_api3_civi_rule_event_create_spec(&$spec) {
 }
 
 /**
- * CiviRuleEvent.Create API
+ * CiviRuleTrigger.Create API
  *
  * @param array $params
  * @return array API result descriptor
  * @see civicrm_api3_create_success
  * @see civicrm_api3_create_error
  */
-function civicrm_api3_civi_rule_event_create($params) {
+function civicrm_api3_civi_rule_trigger_create($params) {
   $errorMessage = _validateParams($params);
   if (!empty($errorMessage)) {
     return civicrm_api3_create_error($errorMessage);
@@ -37,8 +37,8 @@ function civicrm_api3_civi_rule_event_create($params) {
     $params['created_date'] = date('Ymd');
     $params['created_user_id'] = $userId;
   }
-  $returnValues = CRM_Civirules_BAO_Event::add($params);
-  return civicrm_api3_create_success($returnValues, $params, 'CiviRuleEvent', 'Create');
+  $returnValues = CRM_Civirules_BAO_Trigger::add($params);
+  return civicrm_api3_create_success($returnValues, $params, 'CiviRuleTrigger', 'Create');
 }
 
 /**
@@ -50,7 +50,7 @@ function civicrm_api3_civi_rule_event_create($params) {
 function _validateParams($params) {
   $errorMessage = '';
   if (!isset($params['id']) && empty($params['label'])) {
-    return ts('Label can not be empty when adding a new CiviRule Event');
+    return ts('Label can not be empty when adding a new CiviRule Trigger');
   }
   if (_checkClassNameObjectNameOperation($params) == FALSE) {
     return ts('Either class_name or a combination of object_name and op is mandatory');
@@ -59,25 +59,25 @@ function _validateParams($params) {
     $params['object_name'] = null;
     $params['op'] = null;
     if (!isset($params['class_name']) || empty($params['class_name'])) {
-      return ts('For a cron type event the class_name is mandatory');
+      return ts('For a cron type trigger the class_name is mandatory');
     }
   }
   if (isset($params['object_name']) && !empty($params['object_name'])) {
     $extensionConfig = CRM_Civirules_Config::singleton();
-    if (!in_array($params['object_name'], $extensionConfig->getValidEventObjectNames())) {
+    if (!in_array($params['object_name'], $extensionConfig->getValidTriggerObjectNames())) {
       return ts('ObjectName passed in parameters ('.$params['object_name']
-        .')is not a valid object for a CiviRule Event');
+        .')is not a valid object for a CiviRule Trigger');
     }
   }
   if (isset($params['op']) && !empty($params['op'])) {
     $extensionConfig = CRM_Civirules_Config::singleton();
-    if (!in_array($params['op'], $extensionConfig->getValidEventOperations())) {
+    if (!in_array($params['op'], $extensionConfig->getValidTriggerOperations())) {
       return ts('Operation passed in parameters ('.$params['op']
-        .')is not a valid operation for a CiviRule Event');
+        .')is not a valid operation for a CiviRule Trigger');
     }
   }
-  if (CRM_Civirules_BAO_Event::eventExists($params) == TRUE) {
-    return ts('There is already an event for this class_name or combination of object_name and op');
+  if (CRM_Civirules_BAO_Trigger::triggerExists($params) == TRUE) {
+    return ts('There is already a trigger for this class_name or combination of object_name and op');
   }
 
   return $errorMessage;
