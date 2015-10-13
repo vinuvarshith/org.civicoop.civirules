@@ -31,7 +31,7 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
       CRM_Core_DAO::executeQuery("
         INSERT INTO civirule_event (name, label, object_name, op, cron, class_name, created_date, created_user_id)
         VALUES
-          ('groupmembership', 'Daily trigger for group members', NULL, NULL, 1, 'CRM_CivirulesCronEvent_GroupMembership',  CURDATE(), 1);
+          ('groupmembership', 'Daily trigger for group members', NULL, NULL, 1, 'CRM_CivirulesCronTrigger_GroupMembership',  CURDATE(), 1);
         ");
     }
     return true;
