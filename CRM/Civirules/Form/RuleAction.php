@@ -71,7 +71,6 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
    * @access public
    */
   function postProcess() {
-
     $saveParams = array(
       'rule_id' => $this->_submitValues['rule_id'],
       'action_id' => $this->_submitValues['rule_action_select'],

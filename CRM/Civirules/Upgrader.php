@@ -54,11 +54,7 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     }
     // rename columns event_id and event_params in civirule_rule
     if (CRM_Core_DAO::checkTableExists("civirule_rule")) {
-      CRM_Core_DAO::executeQuery("ALTER TABLE civirule_rule CHANGE event_id trigger_id INT");
-      CRM_Core_DAO::executeQuery("ALTER TABLE civirule_rule CHANGE event_params trigger_params TEXT");
+      $this->executeSqlFile('sql/upgrade1002.sql');
     }
-    // remove index on event_id and add one on trigger_id
-    CRM_Core_DAO("ALTER TABLE civirule_rule ADD INDEX fk_rule_trigger_idx (trigger_id),
-      DROP INDEX fk_rule_event_idx");
   }
 }
