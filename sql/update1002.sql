@@ -1,3 +1,4 @@
+ALTER TABLE civirule_rule DROP FOREIGN KEY fk_rule_event;
 ALTER TABLE civirule_rule DROP INDEX fk_rule_event_idx;
 ALTER TABLE civirule_rule CHANGE event_id trigger_id INT UNSIGNED;
 ALTER TABLE civirule_rule CHANGE event_params trigger_params TEXT;
