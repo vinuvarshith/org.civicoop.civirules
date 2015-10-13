@@ -9,12 +9,12 @@ class CRM_CivirulesActions_Contribution_ThankYouDate extends CRM_Civirules_Actio
   /**
    * Method processAction to execute the action
    *
-   * @param CRM_Civirules_EventData_EventData $eventData
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    * @access public
    *
    */
-  public function processAction(CRM_Civirules_EventData_EventData $eventData) {
-    $contribution = $eventData->getEntityData('Contribution');
+  public function processAction(CRM_Civirules_TriggerData_TriggerData $triggerData) {
+    $contribution = $triggerData->getEntityData('Contribution');
     $actionParams = $this->getActionParameters();
     switch ($actionParams['thank_you_radio']) {
       case 1:

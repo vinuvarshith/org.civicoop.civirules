@@ -21,13 +21,13 @@ class CRM_CivirulesConditions_Contribution_FinancialType extends CRM_Civirules_C
   /**
    * Method to determine if the condition is valid
    *
-   * @param CRM_Civirules_EventData_EventData $eventData
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return bool
    */
 
-  public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
+  public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $isConditionValid = FALSE;
-    $contribution = $eventData->getEntityData('Contribution');
+    $contribution = $triggerData->getEntityData('Contribution');
     switch ($this->conditionParams['operator']) {
       case 0:
         if ($contribution['financial_type_id'] == $this->conditionParams['financial_type_id']) {

@@ -21,13 +21,13 @@ class CRM_CivirulesConditions_Contribution_PaidBy extends CRM_Civirules_Conditio
   /**
    * Method to determine if the condition is valid
    *
-   * @param CRM_Civirules_EventData_EventData $eventData
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return bool
    */
 
-  public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
+  public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $isConditionValid = FALSE;
-    $contribution = $eventData->getEntityData('Contribution');
+    $contribution = $triggerData->getEntityData('Contribution');
     switch ($this->conditionParams['operator']) {
       case 0:
         if ($contribution['payment_instrument_id'] == $this->conditionParams['payment_instrument_id']) {

@@ -10,7 +10,7 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_CivirulesCon
 
   protected function getEntityOptions() {
     $return = array();
-    foreach($this->eventClass->getProvidedEntities() as $entityDef) {
+    foreach($this->triggerClass->getProvidedEntities() as $entityDef) {
       if (!empty($entityDef->daoClass) && class_exists($entityDef->daoClass)) {
         $return[$entityDef->entity] = $entityDef->label;
       }
@@ -20,7 +20,7 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_CivirulesCon
 
   protected function getEntities() {
     $return = array();
-    foreach($this->eventClass->getProvidedEntities() as $entityDef) {
+    foreach($this->triggerClass->getProvidedEntities() as $entityDef) {
       if (!empty($entityDef->daoClass) && class_exists($entityDef->daoClass)) {
         $return[$entityDef->entity] = $entityDef->entity;
       }
@@ -30,7 +30,7 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_CivirulesCon
 
   protected function getFields() {
     $return = array();
-    foreach($this->eventClass->getProvidedEntities() as $entityDef) {
+    foreach($this->triggerClass->getProvidedEntities() as $entityDef) {
       if (!empty($entityDef->daoClass) && class_exists($entityDef->daoClass)) {
         $key = $entityDef->entity . '_';
         $className = $entityDef->daoClass;

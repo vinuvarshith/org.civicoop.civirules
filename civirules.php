@@ -127,5 +127,5 @@ function civirules_civicrm_pre($op, $objectName, $objectId, &$params) {
 }
 
 function civirules_civicrm_post( $op, $objectName, $objectId, &$objectRef ) {
-  CRM_Civirules_Event_Post::post($op, $objectName, $objectId, $objectRef);
+  CRM_Civirules_Trigger_Post::post($op, $objectName, $objectId, $objectRef);
 }

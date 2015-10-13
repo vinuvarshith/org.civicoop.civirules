@@ -12,7 +12,7 @@
       <thead>
         <tr>
           <th class="sorting-disabled" rowspan="1" colspan="1">{ts}Name{/ts}</th>
-          <th class="sorting-disabled" rowspan="1" colspan="1">{ts}Event{/ts}</th>
+          <th class="sorting-disabled" rowspan="1" colspan="1">{ts}Trigger{/ts}</th>
           <th class="sorting-disabled" rowspan="1" colspan="1">{ts}Active{/ts}</th>
           <th class="sorting-disabled" rowspan="1" colspan="1">{ts}Date Created{/ts}</th>
           <th class="sorting-disabled" rowspan="1" colspan="1">{ts}Created By{/ts}</th>
@@ -24,7 +24,7 @@
           {foreach from=$rules key=rule_id item=rule}
           <tr id="row1" class={$row_class}>
             <td>{$rule.label}</td>
-            <td>{$rule.event_label}</td>
+            <td>{$rule.trigger_label}</td>
             <td>{$rule.is_active}</td>
             <td>{$rule.created_date|crmDate}</td>
             <td>{$rule.created_contact_name}</td>

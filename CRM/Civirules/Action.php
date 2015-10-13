@@ -15,10 +15,10 @@ abstract class CRM_Civirules_Action {
   /**
    * Process the action
    *
-   * @param CRM_Civirules_EventData_EventData $eventData
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    * @access public
    */
-  abstract public function processAction(CRM_Civirules_EventData_EventData $eventData);
+  abstract public function processAction(CRM_Civirules_TriggerData_TriggerData $triggerData);
 
   /**
    * You could override this method to create a delay for your action

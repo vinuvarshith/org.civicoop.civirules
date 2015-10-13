@@ -12,14 +12,14 @@ class CRM_CivirulesActions_Activity_Add extends CRM_CivirulesActions_Generic_Api
    * Returns an array with parameters used for processing an action
    *
    * @param array $params
-   * @param object CRM_Civirules_EventData_EventData $eventData
+   * @param object CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return array $params
    * @access protected
    */
-  protected function alterApiParameters($params, CRM_Civirules_EventData_EventData $eventData) {
+  protected function alterApiParameters($params, CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $action_params = $this->getActionParameters();
     //this function could be overridden in subclasses to alter parameters to meet certain criteraia
-    $params['target_contact_id'] = $eventData->getContactId();
+    $params['target_contact_id'] = $triggerData->getContactId();
     $params['activity_type_id'] = $action_params['activity_type_id'];
     $params['status_id'] = $action_params['status_id'];
     $params['subject'] = $action_params['subject'];

@@ -157,59 +157,59 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
   }
 
   /**
-   * Returns an array with rules which should be triggered imeditaly
+   * Returns an array with rules which should be triggered immediately
    *
-   * @param $objectName ObjectName in the Post hook
-   * @param $op op in the Post hook
+   * @param string $objectName ObjectName in the Post hook
+   * @param string $op op in the Post hook
    * @return array
    */
   public static function findRulesByObjectNameAndOp($objectName, $op)
   {
-    $events = array();
-    $sql = "SELECT r.id AS rule_id, e.id AS event_id, e.class_name, r.event_params
+    $triggers = array();
+    $sql = "SELECT r.id AS rule_id, t.id AS trigger_id, t.class_name, r.trigger_params
             FROM `civirule_rule` r
-            INNER JOIN `civirule_event` e ON r.event_id = e.id AND e.is_active = 1
-            WHERE r.`is_active` = 1 AND e.cron = 0 AND e.object_name = %1 AND e.op = %2";
+            INNER JOIN `civirule_trigger` t ON r.trigger_id = t.id AND t.is_active = 1
+            WHERE r.`is_active` = 1 AND t.cron = 0 AND t.object_name = %1 AND t.op = %2";
     $params[1] = array($objectName, 'String');
     $params[2] = array($op, 'String');
 
     $dao = CRM_Core_DAO::executeQuery($sql, $params);
     while ($dao->fetch()) {
-      $eventObject = CRM_Civirules_BAO_Event::getPostEventObjectByClassName($dao->class_name, false);
-      if ($eventObject !== false) {
-        $eventObject->setEventId($dao->event_id);
-        $eventObject->setRuleId($dao->rule_id);
-        $eventObject->setEventParams($dao->event_params);
-        $events[] = $eventObject;
+      $triggerObject = CRM_Civirules_BAO_Trigger::getPostTriggerObjectByClassName($dao->class_name, false);
+      if ($triggerObject !== false) {
+        $triggerObject->setTriggerId($dao->trigger_id);
+        $triggerObject->setRuleId($dao->rule_id);
+        $triggerObject->setTriggerParams($dao->trigger_params);
+        $triggers[] = $triggerObject;
       }
     }
-    return $events;
+    return $triggers;
   }
 
   /**
-   * Returns an array with cron events which should be triggered in the cron
+   * Returns an array with cron triggers which should be triggered in the cron
    *
    * @return array
    */
   public static function findRulesForCron()
   {
-    $cronEvents = array();
-    $sql = "SELECT r.id AS rule_id, e.id AS event_id, e.class_name, r.event_params
+    $cronTriggers = array();
+    $sql = "SELECT r.id AS rule_id, t.id AS trigger_id, t.class_name, r.trigger_params
             FROM `civirule_rule` r
-            INNER JOIN `civirule_event` e ON r.event_id = e.id AND e.is_active = 1
-            WHERE r.`is_active` = 1 AND e.cron = 1";
+            INNER JOIN `civirule_trigger` t ON r.trigger_id = t.id AND t.is_active = 1
+            WHERE r.`is_active` = 1 AND t.cron = 1";
 
     $dao = CRM_Core_DAO::executeQuery($sql);
     while ($dao->fetch()) {
-      $cronEventObject = CRM_Civirules_BAO_Event::getEventObjectByClassName($dao->class_name, false);
-      if ($cronEventObject !== false) {
-        $cronEventObject->setEventId($dao->event_id);
-        $cronEventObject->setRuleId($dao->rule_id);
-        $cronEventObject->setEventParams($dao->event_params);
-        $cronEvents[] = $cronEventObject;
+      $cronTriggerObject = CRM_Civirules_BAO_Trigger::getTriggerObjectByClassName($dao->class_name, false);
+      if ($cronTriggerObject !== false) {
+        $cronTriggerObject->setTriggerId($dao->trigger_id);
+        $cronTriggerObject->setRuleId($dao->rule_id);
+        $cronTriggerObject->setTriggerParams($dao->trigger_params);
+        $cronTriggers[] = $cronTriggerObject;
       }
     }
-    return $cronEvents;
+    return $cronTriggers;
   }
 
   /*

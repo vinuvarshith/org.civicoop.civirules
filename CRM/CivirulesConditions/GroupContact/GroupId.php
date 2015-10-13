@@ -18,8 +18,8 @@ class CRM_CivirulesConditions_GroupContact_GroupId extends CRM_Civirules_Conditi
     }
   }
 
-  public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
-    $groupContact = $eventData->getEntityData('GroupContact');
+  public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
+    $groupContact = $triggerData->getEntityData('GroupContact');
     if ($groupContact['group_id'] == $this->conditionParams['group_id']) {
       return true;
     }

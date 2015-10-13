@@ -61,19 +61,19 @@ class CRM_Civirules_Utils {
   }
 
   /**
-   * Function to build the event list
+   * Function to build the trigger list
    *
-   * @return array $eventList
+   * @return array $triggerList
    * @access public
    * @static
    */
-  public static function buildEventList() {
-    $eventList = array();
-    $events = CRM_Civirules_BAO_Event::getValues(array());
-    foreach ($events as $eventId => $event) {
-      $eventList[$eventId] = $event['label'];
+  public static function buildTriggerList() {
+    $triggerList = array();
+    $triggers = CRM_Civirules_BAO_Trigger::getValues(array());
+    foreach ($triggers as $triggerId => $trigger) {
+      $triggerList[$triggerId] = $trigger['label'];
     }
-    return $eventList;
+    return $triggerList;
   }
 
   /**

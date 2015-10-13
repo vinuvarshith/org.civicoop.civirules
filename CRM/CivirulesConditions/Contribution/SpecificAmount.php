@@ -32,14 +32,14 @@ class CRM_CivirulesConditions_Contribution_SpecificAmount extends CRM_Civirules_
   /**
    * Method to determine if the condition is valid
    *
-   * @param CRM_Civirules_EventData_EventData $eventData
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return bool
    */
 
-  public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
+  public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $isConditionValid = FALSE;
 
-    $this->buildWhereClauses($eventData->getEntityData('Contribution'));
+    $this->buildWhereClauses($triggerData->getEntityData('Contribution'));
     if (!empty($this->whereClauses)) {
       $query = 'SELECT COUNT(*) as countContributions FROM civicrm_contribution WHERE '.implode(' AND ', $this->whereClauses);
       $dao = CRM_Core_DAO::executeQuery($query, $this->whereParams);

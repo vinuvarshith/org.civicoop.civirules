@@ -15,12 +15,12 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
 
   protected $rule;
 
-  protected $event;
+  protected $trigger;
 
   /**
-   * @var CRM_Civirules_Event
+   * @var CRM_Civirules_Trigger
    */
-  protected $eventClass;
+  protected $triggerClass;
 
   /**
    * Function to buildQuickForm (extends parent function)
@@ -42,29 +42,29 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     $this->ruleId = CRM_Utils_Request::retrieve('id', 'Integer');
 
     $this->rule = new CRM_Civirules_BAO_Rule();
-    $this->event = new CRM_Civirules_BAO_Event();
+    $this->trigger = new CRM_Civirules_BAO_Trigger();
 
-    $this->assign('event_edit_params', false);
-    $this->eventClass = false;
+    $this->assign('trigger_edit_params', false);
+    $this->triggerClass = false;
     if (!empty($this->ruleId)) {
       $this->rule->id = $this->ruleId;
       if (!$this->rule->find(TRUE)) {
         throw new Exception('Civirules could not find rule');
       }
 
-      $this->event->id = $this->rule->event_id;
-      if (!$this->event->find(TRUE)) {
-        throw new Exception('Civirules could not find event');
+      $this->trigger->id = $this->rule->trigger_id;
+      if (!$this->trigger->find(TRUE)) {
+        throw new Exception('Civirules could not find trigger');
       }
 
-      $this->eventClass = CRM_Civirules_BAO_Event::getEventObjectByEventId($this->event->id, TRUE);
-      $this->eventClass->setEventId($this->event->id);
-      $this->eventClass->setRuleId($this->rule->id);
-      $this->eventClass->setEventParams($this->rule->event_params);
+      $this->triggerClass = CRM_Civirules_BAO_Trigger::getTriggerObjectByTriggerId($this->trigger->id, TRUE);
+      $this->triggerClass->setTriggerId($this->trigger->id);
+      $this->triggerClass->setRuleId($this->rule->id);
+      $this->triggerClass->setTriggerParams($this->rule->trigger_params);
 
-      $this->assign('event_edit_params', $this->eventClass->getExtraDataInputUrl($this->ruleId));
+      $this->assign('trigger_edit_params', $this->triggerClass->getExtraDataInputUrl($this->ruleId));
     }
-    $this->assign('eventClass', $this->eventClass);
+    $this->assign('triggerClass', $this->triggerClass);
 
     $ruleConditionAddUrl = CRM_Utils_System::url('civicrm/civirule/form/rule_condition', 'reset=1&action=add&rid='.$this->ruleId, TRUE);
     $ruleActionAddUrl = CRM_Utils_System::url('civicrm/civirule/form/rule_action', 'reset=1&action=add&rid='.$this->ruleId, TRUE);
@@ -103,8 +103,8 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     }
     
     $this->saveRule($this->_submitValues, $userId);
-    $this->saveRuleEvent($this->_submitValues);
-    $session->setStatus('Rule with linked Event saved succesfully', 'CiviRule saved', 'success');
+    $this->saveRuleTrigger($this->_submitValues);
+    $session->setStatus('Rule with linked Trigger saved succesfully', 'CiviRule saved', 'success');
     /*
      * if add mode, set user context to form in edit mode to add conditions and actions
      */
@@ -113,8 +113,8 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
       $session->pushUserContext($editUrl);
     }
 
-    if (isset($this->_submitValues['rule_event_select'])) {
-      $redirectUrl = $this->getEventRedirect($this->_submitValues['rule_event_select']);
+    if (isset($this->_submitValues['rule_trigger_select'])) {
+      $redirectUrl = $this->getTriggerRedirect($this->_submitValues['rule_trigger_select']);
       if ($redirectUrl) {
         CRM_Utils_System::redirect($redirectUrl);
       }
@@ -156,20 +156,20 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
       ));
     }
     if ($this->_action == CRM_Core_Action::ADD) {
-      $this->addFormRule(array('CRM_Civirules_Form_Rule', 'validateEventEmpty'));
+      $this->addFormRule(array('CRM_Civirules_Form_Rule', 'validateTriggerEmpty'));
     }
   }
 
   /**
-   * Function to validate that event is not empty in add mode
+   * Function to validate that trigger is not empty in add mode
    *
    * @param array $fields
    * @return array|bool
    * @access static
    */
-  static function validateEventEmpty($fields) {
-    if (empty($fields['rule_event_select'])) {
-      $errors['rule_event_select'] = ts('You have to select an event for the rule');
+  static function validateTriggerEmpty($fields) {
+    if (empty($fields['rule_trigger_select'])) {
+      $errors['rule_trigger_select'] = ts('You have to select a trigger for the rule');
       return $errors;
     }
     return TRUE;
@@ -218,9 +218,9 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
       $this->add('checkbox', 'rule_is_active', ts('Enabled'));
       $this->add('text', 'rule_created_date', ts('Created Date'));
       $this->add('text', 'rule_created_contact', ts('Created By'));
-      $eventList = array(' - select - ') + CRM_Civirules_Utils::buildEventList();
-      asort($eventList);
-      $this->add('select', 'rule_event_select', ts('Select Event'), $eventList);
+      $triggerList = array(' - select - ') + CRM_Civirules_Utils::buildTriggerList();
+      asort($triggerList);
+      $this->add('select', 'rule_trigger_select', ts('Select Trigger'), $triggerList);
       if ($this->_action == CRM_Core_Action::UPDATE) {
         $this->createUpdateFormElements();
       }
@@ -244,7 +244,7 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
    * Function to add the form elements specific for the update action
    */
   protected function createUpdateFormElements() {
-    $this->add('text', 'rule_event_label', '', array('size' => CRM_Utils_Type::HUGE));
+    $this->add('text', 'rule_trigger_label', '', array('size' => CRM_Utils_Type::HUGE));
     $this->assign('ruleConditions', $this->getRuleConditions());
     $this->assign('ruleActions', $this->getRuleActions());
   }
@@ -287,8 +287,8 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
         strtotime($ruleData[$this->ruleId]['created_date']));
       $defaults['rule_created_contact'] = CRM_Civirules_Utils::
         getContactName($ruleData[$this->ruleId]['created_user_id']);
-      if (!empty($ruleData[$this->ruleId]['event_id'])) {
-        $defaults['rule_event_label'] = CRM_Civirules_BAO_Event::getEventLabelWithId($ruleData[$this->ruleId]['event_id']);
+      if (!empty($ruleData[$this->ruleId]['trigger_id'])) {
+        $defaults['rule_trigger_label'] = CRM_Civirules_BAO_Trigger::getTriggerLabelWithId($ruleData[$this->ruleId]['trigger_id']);
       }
     }
   }
@@ -416,15 +416,15 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
   }
 
   /**
-   * Function to link an event to a rule
+   * Function to link a trigger to a rule
    *
    * @param array $formValues
    */
-  protected function saveRuleEvent($formValues) {
-    if (isset($formValues['rule_event_select'])) {
+  protected function saveRuleTrigger($formValues) {
+    if (isset($formValues['rule_trigger_select'])) {
       $ruleParams = array(
         'id' => $this->ruleId,
-        'event_id' => $formValues['rule_event_select']
+        'trigger_id' => $formValues['rule_trigger_select']
       );
       CRM_Civirules_BAO_Rule::add($ruleParams);
     }
@@ -433,12 +433,12 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
   /**
    * Returns the url for redirect
    *
-   * @param $event_id
+   * @param $triggerId
    * @return bool|string url
    */
-  protected function getEventRedirect($event_id) {
-    $event = CRM_Civirules_BAO_Event::getEventObjectByEventId($event_id, true);
-    $redirectUrl = $event->getExtraDataInputUrl($this->ruleId);
+  protected function getTriggerRedirect($triggerId) {
+    $trigger = CRM_Civirules_BAO_Trigger::getTriggerObjectByTriggerId($triggerId, true);
+    $redirectUrl = $trigger->getExtraDataInputUrl($this->ruleId);
     if (!empty($redirectUrl)) {
       return $redirectUrl;
     }

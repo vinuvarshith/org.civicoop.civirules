@@ -30,13 +30,13 @@ class CRM_CivirulesConditions_Contribution_RecurringEndDate extends CRM_Civirule
   /**
    * Method to determine if the condition is valid
    *
-   * @param CRM_Civirules_EventData_EventData $eventData
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return bool
    */
 
-  public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
+  public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $isConditionValid = FALSE;
-    $recurring = $eventData->getEntityData('ContributionRecur');
+    $recurring = $triggerData->getEntityData('ContributionRecur');
     if ($this->conditionParams['end_date'] == 0 && empty($recurring['end_date'])) {
       $isConditionValid = TRUE;
     }

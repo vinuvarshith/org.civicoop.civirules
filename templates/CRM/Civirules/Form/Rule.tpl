@@ -10,7 +10,7 @@
     </div>
 {else}
     {include file="CRM/Civirules/Form/RuleBlocks/RuleBlock.tpl"}
-    {include file="CRM/Civirules/Form/RuleBlocks/EventBlock.tpl"}
+    {include file="CRM/Civirules/Form/RuleBlocks/TriggerBlock.tpl"}
     {if $action ne 1}
       {include file="CRM/Civirules/Form/RuleBlocks/ConditionBlock.tpl"}
       {include file="CRM/Civirules/Form/RuleBlocks/ActionBlock.tpl"}

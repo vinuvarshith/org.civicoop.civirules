@@ -11,13 +11,13 @@ class CRM_CivirulesConditions_Contribution_LastContribution extends CRM_Civirule
   /**
    * Returns value of the field
    *
-   * @param object CRM_Civirules_EventData_EventData $eventData
+   * @param object CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return mixed
    * @access protected
    */
-  protected function getFieldValue(CRM_Civirules_EventData_EventData $eventData) {
+  protected function getFieldValue(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $completed_status_id = CRM_Core_OptionGroup::getValue('contribution_status', 'completed', 'name');
-    $contact_id = $eventData->getContactId();
+    $contact_id = $triggerData->getContactId();
 
     $params[1] = array($completed_status_id, 'Integer');
     $params[2] = array($contact_id, 'Integer');

@@ -31,14 +31,14 @@ class CRM_CivirulesConditions_Email_PrimaryEmailChanged extends CRM_CivirulesCon
   /**
    * Method to check if the condition is valid
    *
-   * @param object CRM_Civirules_EventData_EventData $eventData
+   * @param object CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return bool
    * @access public
    */
-  public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
-    $isValid = parent::isConditionValid($eventData);
+  public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
+    $isValid = parent::isConditionValid($triggerData);
     if ($isValid) {
-      $data = $eventData->getEntityData($this->getEntity());
+      $data = $triggerData->getEntityData($this->getEntity());
       if (!empty($data['is_primary'])) {
         $isValid = true;
       } else {

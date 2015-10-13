@@ -11,12 +11,12 @@ class CRM_CivirulesConditions_Contribution_Amount extends CRM_CivirulesCondition
   /**
    * Returns value of the field
    *
-   * @param object CRM_Civirules_EventData_EventData $eventData
+   * @param object CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return mixed
    * @access protected
    */
-  protected function getFieldValue(CRM_Civirules_EventData_EventData $eventData) {
-    $contribution = $eventData->getEntityData('Contribution');
+  protected function getFieldValue(CRM_Civirules_TriggerData_TriggerData $triggerData) {
+    $contribution = $triggerData->getEntityData('Contribution');
     if (isset($contribution['total_amount'])) {
       return (float) $contribution['total_amount'];
     }

@@ -9,12 +9,12 @@ class CRM_CivirulesActions_CreateDonor extends CRM_Civirules_Action {
   /**
    * Method processAction to execute the action
    *
-   * @param CRM_Civirules_EventData_EventData $eventData
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    * @access public
    *
    */
-  public function processAction(CRM_Civirules_EventData_EventData $eventData) {
-    $contactId = $eventData->getContactId();
+  public function processAction(CRM_Civirules_TriggerData_TriggerData $triggerData) {
+    $contactId = $triggerData->getContactId();
     $processContact = false;
 
     // retrieve contact type of contact

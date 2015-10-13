@@ -11,12 +11,12 @@ class CRM_CivirulesActions_Form_Form extends CRM_Core_Form
 
   protected $rule;
 
-  protected $event;
+  protected $trigger;
 
   /**
-   * @var CRM_Civirules_Event
+   * @var CRM_Civirules_Trigger
    */
-  protected $eventClass;
+  protected $triggerClass;
 
   /**
    * Overridden parent method to perform processing before form is build
@@ -32,7 +32,7 @@ class CRM_CivirulesActions_Form_Form extends CRM_Core_Form
 
     $this->action = new CRM_Civirules_BAO_Action();
     $this->rule = new CRM_Civirules_BAO_Rule();
-    $this->event = new CRM_Civirules_BAO_Event();
+    $this->trigger = new CRM_Civirules_BAO_Trigger();
 
     if (!$this->ruleAction->find(true)) {
       throw new Exception('Civirules could not find ruleAction');
@@ -48,13 +48,13 @@ class CRM_CivirulesActions_Form_Form extends CRM_Core_Form
       throw new Exception('Civirules could not find rule');
     }
 
-    $this->event->id = $this->rule->event_id;
-    if (!$this->event->find(true)) {
-      throw new Exception('Civirules could not find event');
+    $this->trigger->id = $this->rule->trigger_id;
+    if (!$this->trigger->find(true)) {
+      throw new Exception('Civirules could not find trigger');
     }
 
-    $this->eventClass = CRM_Civirules_BAO_Event::getPostEventObjectByClassName($this->event->class_name, true);
-    $this->eventClass->setEventId($this->event->id);
+    $this->triggerClass = CRM_Civirules_BAO_Trigger::getPostTriggerObjectByClassName($this->trigger->class_name, true);
+    $this->triggerClass->setTriggerId($this->trigger->id);
 
     //set user context
     $session = CRM_Core_Session::singleton();

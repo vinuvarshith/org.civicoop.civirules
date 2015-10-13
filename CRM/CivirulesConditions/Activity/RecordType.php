@@ -33,12 +33,12 @@ class CRM_CivirulesConditions_Activity_RecordType extends CRM_Civirules_Conditio
    * Method to check if the condition is valid, will check if the contact
    * has an activity of the selected type
    *
-   * @param object CRM_Civirules_EventData_EventData $eventData
+   * @param object CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return bool
    * @access public
    */
-  public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
-    $ActivityContact = $eventData->getEntityData('ActivityContact');
+  public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
+    $ActivityContact = $triggerData->getEntityData('ActivityContact');
     if ($ActivityContact['record_type_id'] == $this->conditionParams['record_type_id']) {
       return true;
     }

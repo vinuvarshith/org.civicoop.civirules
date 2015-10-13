@@ -31,14 +31,14 @@ class CRM_CivirulesConditions_Contribution_DistinctContributingDay extends CRM_C
   /**
    * Method to determine if the condition is valid
    *
-   * @param CRM_Civirules_EventData_EventData $eventData
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return bool
    */
 
-  public function isConditionValid(CRM_Civirules_EventData_EventData $eventData)
+  public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData)
   {
     $isConditionValid = FALSE;
-    $contact_id = $eventData->getContactId();
+    $contact_id = $triggerData->getContactId();
     /*
      * retrieve count of contributions for donor grouped by extracted YMD from receive_date
      */
