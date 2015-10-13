@@ -56,5 +56,6 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     if (CRM_Core_DAO::checkTableExists("civirule_rule")) {
       $this->executeSqlFile('sql/upgrade1002.sql');
     }
+    return true;
   }
 }
