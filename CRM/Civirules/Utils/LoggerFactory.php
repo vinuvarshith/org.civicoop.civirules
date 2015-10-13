@@ -18,6 +18,14 @@ class CRM_Civirules_Utils_LoggerFactory {
     return self::$logger;
   }
 
+  public static function log($message, $context=array(), $level=\Psr\Log\LogLevel::INFO) {
+    $logger = CRM_Civirules_Utils_LoggerFactory::getLogger();
+    if (empty($logger)) {
+      return;
+    }
+    $logger->log($level, $message, $context);
+  }
+
   public static function logError($reason, $original_error, CRM_Civirules_EventData_EventData $eventData, $context=array()) {
     $logger = CRM_Civirules_Utils_LoggerFactory::getLogger();
     if (empty($logger)) {

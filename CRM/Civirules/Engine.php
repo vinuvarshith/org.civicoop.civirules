@@ -32,7 +32,12 @@ class CRM_Civirules_Engine {
         return true;
       }
     } catch (Exception $e) {
-      CRM_Civirules_Utils_LoggerFactory::logError("Failed to execute rule",  $e->getMessage(), $eventData);
+      $message = "Error on {file} (Line {line})\r\n\r\n{exception_message}";
+      $context = array();
+      $context['line'] = $e->getLine();
+      $context['file'] = $e->getFile();
+      $context['exception_message'] = $e->getMessage();
+      CRM_Civirules_Utils_LoggerFactory::logError("Failed to execute rule",  $message, $eventData, $context);
     }
     return false;
   }

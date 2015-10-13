@@ -1,6 +1,12 @@
 <?php
 
 require_once 'civirules.civix.php';
+if (!interface_exists("\\Psr\\Log\\LoggerInterface")) {
+  require_once('psr/log/LoggerInterface.php');
+}
+if (!class_exists("\\Psr\\Log\\LogLevel")) {
+  require_once('psr/log/LogLevel.php');
+}
 
 /**
  * Implementation of hook_civicrm_config

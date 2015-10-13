@@ -97,6 +97,33 @@ abstract class CRM_Civirules_Action {
     return '';
   }
 
+  /**
+   * Logs a message to the logger
+   *
+   * @param $message
+   * @param \CRM_Civirules_EventData_EventData|NULL $eventData
+   * @param string $level Should be one of \Psr\Log\LogLevel
+   */
+  protected function logAction($message, CRM_Civirules_EventData_EventData $eventData=null, $level=\Psr\Log\LogLevel::INFO) {
+    $context = array();
+    $context['message'] = $message;
+    $context['rule_id'] = $this->ruleAction['rule_id'];
+    $rule = new CRM_Civirules_BAO_Rule();
+    $rule->id = $this->ruleAction['rule_id'];
+    $context['rule_title'] = '';
+    if ($rule->find(true)) {
+      $context['rule_title'] = $rule->label;
+    }
+    $context['rule_action_id'] = $this->ruleAction['id'];
+    $context['action_label'] = CRM_Civirules_BAO_Action::getActionLabelWithId($this->ruleAction['action_id']);
+    $context['action_parameters'] = $this->userFriendlyConditionParams();
+    $context['contact_id'] = $eventData ? $eventData->getContactId() : - 1;
+    $msg = "{action_label} ({rule_action_id}\r\n\r\n{message}\r\n\r\nRule: '{rule_title}' with id {rule_id}";
+    if ($context['contact_id'] > 0) {
+      $msg .= "\r\nFor contact: {contact_id}";
+    }
+    CRM_Civirules_Utils_LoggerFactory::log($msg, $context, $level);
+  }
 
 
 }
