@@ -233,6 +233,27 @@ class CRM_Civirules_Utils {
   }
 
   /**
+   * Method to get the membership status
+   * @param bool $onlyActive
+   * @return array
+   */
+  public static function getMembershipStatus($onlyActive = TRUE) {
+    $return = array();
+    if ($onlyActive) {
+      $params = array('is_active' => 1);
+    } else {
+      $params = array();
+    }
+    try {
+      $apiMembershipStatus = civicrm_api3("MembershipStatus", "Get", $params);
+      foreach ($apiMembershipStatus['values'] as $membershipStatus) {
+        $return[$membershipStatus['id']] = $membershipStatus['name'];
+      }
+    } catch (CiviCRM_API3_Exception $ex) {}
+    return $return;
+  }
+
+  /**
    * Method to check if the incoming date is later than today
    *
    * @param mixed $inDate

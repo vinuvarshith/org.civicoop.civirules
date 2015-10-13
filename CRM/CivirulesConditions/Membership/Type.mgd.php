@@ -9,7 +9,7 @@ return array (
         array (
           'version' => 3,
           'name' => 'membership_type',
-          'label' => 'Membership is (not) of membership type ...',
+          'label' => 'Membership type is (not) ...',
           'class_name' => 'CRM_CivirulesConditions_Membership_Type',
           'is_active' => 1
         ),
