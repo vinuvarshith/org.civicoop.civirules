@@ -38,7 +38,7 @@
     {/literal}
     {if ($field_options)}
         {foreach from=$field_options item=value key=key}
-    options[options.length] = {'key': key, 'value': value};
+    {literal}options[options.length] = {'key': key, 'value': value};{/literal}
         {/foreach}
     {/if}
     {if ($is_field_option_multiple)}
