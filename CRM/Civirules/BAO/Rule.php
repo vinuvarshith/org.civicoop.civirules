@@ -48,6 +48,14 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
     if (empty($params)) {
       throw new Exception('Params can not be empty when adding or updating a civirule rule');
     }
+
+    if (!empty($params['id'])) {
+      CRM_Utils_Hook::pre('edit', 'Rule', $params['id'], $params);
+    }
+    else {
+      CRM_Utils_Hook::pre('create', 'Rule', NULL, $params);
+    }
+
     $rule = new CRM_Civirules_BAO_Rule();
     $fields = self::fields();
     foreach ($params as $key => $value) {
@@ -62,6 +70,14 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
     }
     $rule->save();
     self::storeValues($rule, $result);
+
+    if (!empty($params['id'])) {
+      CRM_Utils_Hook::post('edit', 'Rule', $rule->id, $rule);
+    }
+    else {
+      CRM_Utils_Hook::post('create', 'Rule', $rule->id, $rule);
+    }
+
     return $result;
   }
 
@@ -77,11 +93,17 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
     if (empty($ruleId)) {
       throw new Exception('rule id can not be empty when attempting to delete a civirule rule');
     }
+
+    CRM_Utils_Hook::pre('delete', 'Rule', $ruleId, CRM_Core_DAO::$_nullArray);
+
     CRM_Civirules_BAO_RuleAction::deleteWithRuleId($ruleId);
     CRM_Civirules_BAO_RuleCondition::deleteWithRuleId($ruleId);
     $rule = new CRM_Civirules_BAO_Rule();
     $rule->id = $ruleId;
     $rule->delete();
+
+    CRM_Utils_Hook::post('delete', 'Rule', $ruleId, CRM_Core_DAO::$_nullArray);
+
     return;
   }
 
