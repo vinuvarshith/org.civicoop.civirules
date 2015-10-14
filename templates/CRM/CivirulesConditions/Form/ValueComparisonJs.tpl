@@ -87,12 +87,12 @@
                     checked = 'checked="checked"';
                     selectedOptions[selectedOptions.length] = options[i].key;
                 }
-                if (value.key == currentSelectedOption) {
+                if (value.key == currentSelectedOption || (!currentSelectedOption && i == 0)) {
                     selected='selected="selected"';
                     selectedOption = options[i].key;
                 }
                 multi_select_options = multi_select_options + '<input type="checkbox" value="'+options[i].key+'" '+checked+'>'+options[i].value+'<br>';
-                select_options = select_options + '<option value="'+value.key+'" '+selected+'>'+options[i].value+'</option>';
+                select_options = select_options + '<option value="'+options[i].key+'" '+selected+'>'+options[i].value+'</option>';
             }
 
             cj('#value').val(selectedOption);

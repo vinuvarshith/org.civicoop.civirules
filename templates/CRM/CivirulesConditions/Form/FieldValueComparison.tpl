@@ -59,6 +59,7 @@
             var field = cj('#field').val();
             var field = field.replace(cj('#entity').val()+'_', "");
             retrieveOptionsForEntityAndField(entity, field);
+            cj('#operator').trigger('change');
         });
 
         cj('#entity').change(function() {
