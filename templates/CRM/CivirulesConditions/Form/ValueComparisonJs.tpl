@@ -87,7 +87,7 @@
                     checked = 'checked="checked"';
                     selectedOptions[selectedOptions.length] = options[i].key;
                 }
-                if (value.key == currentSelectedOption || (!currentSelectedOption && i == 0)) {
+                if (options[i].key == currentSelectedOption || (!currentSelectedOption && i == 0)) {
                     selected='selected="selected"';
                     selectedOption = options[i].key;
                 }
