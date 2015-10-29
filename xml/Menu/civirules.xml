@@ -134,6 +134,13 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/condition/contact_hasphone</path>
+    <page_callback>CRM_CivirulesConditions_Form_Contact_HasPhone</page_callback>
+    <title>Has Phone</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/condition/contribution_paidby</path>
     <page_callback>CRM_CivirulesConditions_Form_Contribution_PaidBy</page_callback>
     <title>paid by</title>
