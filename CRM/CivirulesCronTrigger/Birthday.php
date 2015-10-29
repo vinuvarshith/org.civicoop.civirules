@@ -16,7 +16,7 @@ class CRM_CivirulesCronTrigger_Birthday extends CRM_Civirules_Trigger_Cron {
    * @return CRM_Civirules_TriggerData_EntityDefinition
    */
   protected function reactOnEntity() {
-    return new CRM_Civirules_TriggerData_EntityDefinition(ts('Person'), 'contact', 'CRM_Contact_DAO_Contact', 'contact');
+    return new CRM_Civirules_TriggerData_EntityDefinition(ts('Person'), 'contact', 'CRM_Contact_DAO_Contact', 'Contact');
   }
 
   /**

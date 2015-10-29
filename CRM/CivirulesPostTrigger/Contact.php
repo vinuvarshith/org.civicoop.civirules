@@ -8,7 +8,7 @@ class CRM_CivirulesPostTrigger_Contact extends CRM_Civirules_Trigger_Post {
    * @return CRM_Civirules_TriggerData_EntityDefinition
    */
   protected function reactOnEntity() {
-    return new CRM_Civirules_TriggerData_EntityDefinition($this->objectName, $this->objectName, $this->getDaoClassName(), 'contact');
+    return new CRM_Civirules_TriggerData_EntityDefinition($this->objectName, $this->objectName, $this->getDaoClassName(), 'Contact');
   }
 
   /**

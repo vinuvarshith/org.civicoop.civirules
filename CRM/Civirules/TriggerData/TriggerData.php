@@ -67,8 +67,20 @@ abstract class CRM_Civirules_TriggerData_TriggerData {
    * @return array
    */
   public function getEntityData($entity) {
-    if (isset($this->entity_data[$entity]) && is_array($this->entity_data[$entity])) {
+    //only lookup entities by their lower case name. Entity is now case insensetive
+    if (isset($this->entity_data[strtolower($entity)]) && is_array($this->entity_data[strtolower($entity)])) {
+      return $this->entity_data[strtolower($entity)];
+    //just for backwards compatibility also check case sensitive entity
+    } elseif (isset($this->entity_data[$entity]) && is_array($this->entity_data[$entity])) {
       return $this->entity_data[$entity];
+    } elseif (strtolower($entity) == strtolower('Contact') && $this->getContactId()) {
+      $contactObject = new CRM_Contact_BAO_Contact();
+      $contactObject->id = $this->getContactId();
+      $contactData = array();
+      if ($contactObject->find(true)) {
+        CRM_Core_DAO::storeValues($contactObject, $contactData);
+      }
+      return $contactData;
     }
     return array();
   }
@@ -82,7 +94,7 @@ abstract class CRM_Civirules_TriggerData_TriggerData {
    */
   public function setEntityData($entity, $data) {
     if (is_array($data)) {
-      $this->entity_data[$entity] = $data;
+      $this->entity_data[strtolower($entity)] = $data;
     }
     return $this;
   }

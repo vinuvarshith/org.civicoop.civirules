@@ -70,7 +70,12 @@ abstract class CRM_Civirules_Trigger {
    * @return array of CRM_Civirules_TriggerData_EntityDefinition
    */
   protected function getAdditionalEntities() {
-    return array();
+    $reactOnEntity = $this->reactOnEntity();
+    $entities = array();
+    if (strtolower($reactOnEntity->key) != strtolower('Contact')) {
+      $entities[] = new CRM_Civirules_TriggerData_EntityDefinition('Contact', 'Contact', 'CRM_Contact_DAO_Contact', 'Contact');
+    }
+    return $entities;
   }
 
   /**

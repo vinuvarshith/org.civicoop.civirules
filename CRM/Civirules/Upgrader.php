@@ -75,4 +75,16 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     $this->executeSqlFile('sql/update_1003.sql');
     return true;
   }
+
+  /**
+   * Executes upgrade 1004
+   *
+   * Changes the class for entity triggers
+   *
+   * @return bool
+   */
+  public function upgrade_1004() {
+    CRM_Core_DAO::executeQuery("update `civirule_trigger` set `class_name` = 'CRM_CivirulesPostTrigger_EntityTag' where `object_name` = 'EntityTag';");
+    return true;
+  }
 }
