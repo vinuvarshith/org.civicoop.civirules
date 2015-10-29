@@ -76,6 +76,16 @@ abstract class CRM_Civirules_Action {
   }
 
   /**
+   * Returns wether we should ignore rechecking of the conditions when an action
+   * is executed with a delay
+   *
+   * @return bool
+   */
+  public function ignoreConditionsOnDelayedProcessing() {
+    return $this->ruleAction['ignore_condition_with_delay'] ? true : false;
+  }
+
+  /**
    * Returns a redirect url to extra data input from the user after adding a action
    *
    * Return false if you do not need extra data input

@@ -85,6 +85,7 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
    */
   public function upgrade_1004() {
     CRM_Core_DAO::executeQuery("update `civirule_trigger` set `class_name` = 'CRM_CivirulesPostTrigger_EntityTag' where `object_name` = 'EntityTag';");
+    CRM_Core_DAO::executeQuery("ALTER TABLE `civirule_rule_action` ADD COLUMN `ignore_condition_with_delay` TINYINT NULL default 0 AFTER `delay`");
     return true;
   }
 }

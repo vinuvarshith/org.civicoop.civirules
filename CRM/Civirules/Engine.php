@@ -130,7 +130,15 @@ class CRM_Civirules_Engine {
    */
   public static function executeDelayedAction(CRM_Queue_TaskContext $ctx, CRM_Civirules_Action $action, CRM_Civirules_TriggerData_TriggerData $triggerData) {
     try {
-      $action->processAction($triggerData);
+      if ($action->ignoreConditionsOnDelayedProcessing()) {
+        $processAction = true;
+      } else {
+        $processAction = self::areConditionsValid($triggerData);
+      }
+
+      if ($processAction) {
+        $action->processAction($triggerData);
+      }
     } catch (Exception $e) {
       CRM_Civirules_Utils_LoggerFactory::logError("Failed to execute delayed action",  $e->getMessage(), $triggerData);
     }
@@ -261,14 +269,10 @@ class CRM_Civirules_Engine {
   /**
    * This function writes a record to the log table to indicate that this rule for this trigger is triggered
    *
-<<<<<<< HEAD
    * The data this function stores is required by the cron type events.
    * @todo: think of a better handling for cron type events
    *
-   * @param CRM_Civirules_EventData_EventData $eventData
-=======
    * @param CRM_Civirules_TriggerData_TriggerData $triggerData
->>>>>>> origin/event_to_trigger
    */
   protected static function logRule(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $sql = "INSERT INTO `civirule_rule_log` (`rule_id`, `contact_id`, `log_date`) VALUES (%1, %2, NOW())";

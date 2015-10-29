@@ -75,6 +75,7 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
       'rule_id' => $this->_submitValues['rule_id'],
       'action_id' => $this->_submitValues['rule_action_select'],
       'delay' => 'null',
+      'ignore_condition_with_delay' => '0',
     );
     if ($this->ruleActionId) {
       $saveParams['id'] = $this->ruleActionId;
@@ -84,6 +85,7 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
       $delayClass = CRM_Civirules_Delay_Factory::getDelayClassByName($this->_submitValues['delay_select']);
       $delayClass->setValues($this->_submitValues);
       $saveParams['delay'] = serialize($delayClass);
+      $saveParams['ignore_condition_with_delay'] = $this->_submitValues['ignore_condition_with_delay'];
     }
 
     $ruleAction = CRM_Civirules_BAO_RuleAction::add($saveParams);
@@ -127,6 +129,7 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
       $delay_class->addElements($this);
     }
     $this->assign('delayClasses', CRM_Civirules_Delay_Factory::getAllDelayClasses());
+    $this->add('checkbox', 'ignore_condition_with_delay', ts('Don\'t recheck condition upon processing of delayed action'));
 
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
@@ -143,6 +146,7 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
     if (!empty($this->ruleActionId)) {
       $defaults['rule_action_select'] = $this->ruleActionId;
       $defaults['id'] = $this->ruleActionId;
+      $defaults['ignore_condition_with_delay'] = $this->ruleAction->ignore_condition_with_delay;
 
       $delayClass = unserialize($this->ruleAction->delay);
       if ($delayClass) {

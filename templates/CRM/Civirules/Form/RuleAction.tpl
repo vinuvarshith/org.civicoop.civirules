@@ -30,6 +30,14 @@
             {include file=$delayClass->getTemplateFilename()}
         </div>
     {/foreach}
+    <div class="crm-section crm-ignore_condition_with_delay" id="div_ignore_condition_with_delay">
+        <div class="label"></div>
+        <div class="content">
+            {$form.ignore_condition_with_delay.html}
+            {$form.ignore_condition_with_delay.label}
+        </div>
+        <div class="clear"></div>
+    </div>
 </div>
 <div class="crm-submit-buttons">
   {include file="CRM/common/formButtons.tpl" location="bottom"}
