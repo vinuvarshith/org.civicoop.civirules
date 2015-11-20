@@ -92,7 +92,7 @@
                 }
             });
         }
-        CRM.api3(entity, 'getoptions', {'sequential': 1, 'field': field}, true)
+        CRM.api3(entity, 'getoptions', {'sequential': 1, 'field': field}, false)
         .done(function (data) {
             if (data.values) {
                 options = data.values;
