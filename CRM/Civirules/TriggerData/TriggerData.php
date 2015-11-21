@@ -48,14 +48,15 @@ abstract class CRM_Civirules_TriggerData_TriggerData {
    * @return int
    */
   public function getContactId() {
-    if ($this->contact_id) {
+    if (!empty($this->contact_id)) {
       return $this->contact_id;
     }
-    foreach($this->entity_data as $data) {
+    foreach($this->entity_data as $entity => $data) {
       if (!empty($data['contact_id'])) {
         return $data['contact_id'];
       }
     }
+    return null;
   }
 
   /**
