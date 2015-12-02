@@ -95,14 +95,7 @@ class CRM_Civirules_Trigger_Post extends CRM_Civirules_Trigger {
    */
   protected function getTriggerDataFromPost($op, $objectName, $objectId, $objectRef) {
     $entity = CRM_Civirules_Utils_ObjectName::convertToEntity($objectName);
-
-    //set data
-    $data = array();
-    if (is_object($objectRef)) {
-      CRM_Core_DAO::storeValues($objectRef, $data);
-    } elseif (is_array($objectRef)) {
-      $data = $objectRef;
-    }
+    $data = $this->convertObjectRefToDataArray($entity, $objectRef, $objectId);
 
     if ($op == 'edit') {
       //set also original data with an edit event
@@ -111,7 +104,22 @@ class CRM_Civirules_Trigger_Post extends CRM_Civirules_Trigger {
     } else {
       $triggerData = new CRM_Civirules_TriggerData_Post($entity, $objectId, $data);
     }
+
+    $this->alterTriggerData($triggerData);
+
     return $triggerData;
+  }
+
+  protected function convertObjectRefToDataArray($entity, $objectRef, $id) {
+    //set data
+    $data = array();
+    if (is_object($objectRef)) {
+      CRM_Core_DAO::storeValues($objectRef, $data);
+    } elseif (is_array($objectRef)) {
+      $data = $objectRef;
+    }
+
+    return $data;
   }
 
 

@@ -34,6 +34,10 @@ class CRM_Civirules_Utils_HookInvoker {
     }
   }
 
+  public function hook_civirules_alterTriggerData(CRM_Civirules_TriggerData_TriggerData &$triggerData) {
+    $this->invoke('civirules_alter_trigger_data', 1, $triggerData);
+  }
+
   private function invoke($fnSuffix, $numParams, &$arg1 = null, &$arg2 = null, &$arg3 = null, &$arg4 = null, &$arg5 = null) {
     $hook =  CRM_Utils_Hook::singleton();
     $civiVersion = CRM_Core_BAO_Domain::version();

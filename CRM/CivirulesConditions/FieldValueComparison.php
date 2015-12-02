@@ -21,12 +21,18 @@ class CRM_CivirulesConditions_FieldValueComparison extends CRM_CivirulesConditio
     }
 
     if (strpos($field, 'custom_')===0) {
+      $custom_field_id = str_replace("custom_", "", $field);
       try {
         $params['entityID'] = $data['id'];
         $params[$field] = 1;
         $values = CRM_Core_BAO_CustomValueTable::getValues($params);
         if (!empty($values[$field])) {
           return $this->normalizeValue($values[$field]);
+        } elseif (!empty($values['error_message'])) {
+          $custom_values = $triggerData->getCustomFieldValues($custom_field_id);
+          if (!empty($custom_values)) {
+            return $this->normalizeValue(reset($custom_values));
+          }
         }
       } catch (Exception $e) {
         //do nothing

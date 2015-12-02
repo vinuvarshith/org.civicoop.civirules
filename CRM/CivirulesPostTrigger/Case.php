@@ -78,32 +78,13 @@ class CRM_CivirulesPostTrigger_Case extends CRM_Civirules_Trigger_Post {
     return $entities;
   }
 
-  /**
-   * Get trigger data belonging to this specific post event
-   *
-   * Sub classes could override this method. E.g. a post on GroupContact doesn't give on object of GroupContact
-   * it rather gives an array with contact Id's
-   *
-   * @param $op
-   * @param $objectName
-   * @param $objectId
-   * @param $objectRef
-   * @return CRM_Civirules_TriggerData_Edit|CRM_Civirules_TriggerData_Post
-   */
-  protected function getTriggerDataFromPost($op, $objectName, $objectId, $objectRef) {
-    $entity = CRM_Civirules_Utils_ObjectName::convertToEntity($objectName);
-
+  protected function convertObjectRefToDataArray($entity, $objectRef, $id) {
     //set data
-    $data = array();
-    if (is_object($objectRef)) {
-      CRM_Core_DAO::storeValues($objectRef, $data);
-    } elseif (is_array($objectRef)) {
-      $data = $objectRef;
-    }
+    $data = parent::convertObjectRefToDataArray($entity, $objectRef, $id);
 
     //retrieve extra data from the database because the objectRef does not contain all
     //data from the case
-    $case_data = civicrm_api3('Case', 'getsingle', array('id' => $objectId));
+    $case_data = civicrm_api3('Case', 'getsingle', array('id' => $id));
     foreach($case_data as $key => $value) {
       if (!isset($data[$key])) {
         $data[$key] = $value;
@@ -113,14 +94,7 @@ class CRM_CivirulesPostTrigger_Case extends CRM_Civirules_Trigger_Post {
     //unset contact_id
     unset($data['contact_id']);
 
-    if ($op == 'edit') {
-      //set also original data with an edit event
-      $oldData = CRM_Civirules_Utils_PreData::getPreData($entity, $objectId);
-      $triggerData = new CRM_Civirules_TriggerData_Edit($entity, $objectId, $data, $oldData);
-    } else {
-      $triggerData = new CRM_Civirules_TriggerData_Post($entity, $objectId, $data);
-    }
-    return $triggerData;
+    return $data;
   }
 
 }

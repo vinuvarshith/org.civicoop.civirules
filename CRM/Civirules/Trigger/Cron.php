@@ -18,6 +18,7 @@ abstract class CRM_Civirules_Trigger_Cron extends CRM_Civirules_Trigger {
     $count = 0;
     $isValidCount = 0;
     while($triggerData = $this->getNextEntityTriggerData()) {
+      $this->alterTriggerData($triggerData);
       $isValid = CRM_Civirules_Engine::triggerRule($this, $triggerData);
       if ($isValid) {
         $isValidCount++;

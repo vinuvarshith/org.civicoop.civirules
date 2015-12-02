@@ -103,4 +103,14 @@ abstract class CRM_Civirules_Trigger {
     return '';
   }
 
+  /**
+   * Alter the trigger data with extra data
+   *
+   * @param \CRM_Civirules_TriggerData_TriggerData $triggerData
+   */
+  public function alterTriggerData(CRM_Civirules_TriggerData_TriggerData &$triggerData) {
+    $hook_invoker = CRM_Civirules_Utils_HookInvoker::singleton();
+    $hook_invoker->hook_civirules_alterTriggerData($triggerData);
+  }
+
 }

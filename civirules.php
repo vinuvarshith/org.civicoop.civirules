@@ -130,8 +130,14 @@ function civirules_civicrm_navigationMenu( &$params ) {
 
 function civirules_civicrm_pre($op, $objectName, $objectId, &$params) {
   CRM_Civirules_Utils_PreData::pre($op, $objectName, $objectId, $params);
+  CRM_Civirules_Utils_CustomDataFromPre::pre($op, $objectName, $objectId, $params);
 }
 
 function civirules_civicrm_post( $op, $objectName, $objectId, &$objectRef ) {
   CRM_Civirules_Trigger_Post::post($op, $objectName, $objectId, $objectRef);
+}
+
+function civirules_civirules_alter_trigger_data(CRM_Civirules_TriggerData_TriggerData &$triggerData) {
+  //also add the custom data which is passed to the pre hook (and not the post)
+  CRM_Civirules_Utils_CustomDataFromPre::addCustomDataToTriggerData($triggerData);
 }

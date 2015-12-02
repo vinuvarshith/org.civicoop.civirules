@@ -45,7 +45,14 @@ class CRM_Civirules_Utils_PreData {
 
     //retrieve data as it is currently in the database
     $entity = CRM_Civirules_Utils_ObjectName::convertToEntity($objectName);
-    $data = civicrm_api3($entity, 'getsingle', array('id' => $id));
+    if (!$entity) {
+      return;
+    }
+    try {
+      $data = civicrm_api3($entity, 'getsingle', array('id' => $id));
+    } catch (Exception $e) {
+      return;
+    }
     self::setPreData($entity, $id, $data);
   }
 

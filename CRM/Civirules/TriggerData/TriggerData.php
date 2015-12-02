@@ -15,6 +15,17 @@ abstract class CRM_Civirules_TriggerData_TriggerData {
    */
   private $entity_data = array();
 
+  /**
+   * Contains data of custom fields.
+   *
+   * Takes the format of
+   *   custom_field_id => id => value
+   * where id is the is of the record in the custom_group set.
+   *
+   * @var array
+   */
+  private $custom_data = array();
+
   protected $contact_id = 0;
 
   /**
@@ -100,6 +111,28 @@ abstract class CRM_Civirules_TriggerData_TriggerData {
     return $this;
   }
 
+  /**
+   * Sets custom data into the trigger data
+   * The custom data usually comes from within the pre hook where it is available
+   *
+   * @param int $custom_field_id
+   * @param $id id of the record in the database -1 for new ones
+   * @param $value
+   */
+  public function setCustomFieldValue($custom_field_id, $id, $value) {
+    $this->custom_data[$custom_field_id][$id] = $value;
+  }
 
-
+  /**
+   * Returns an array of values for custom field
+   *
+   * @param $custom_field_id
+   * @return array
+   */
+  public function getCustomFieldValues($custom_field_id) {
+    if (isset($this->custom_data[$custom_field_id])) {
+      return $this->custom_data[$custom_field_id];
+    }
+    return array();
+  }
 }
