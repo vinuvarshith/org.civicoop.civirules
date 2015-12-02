@@ -62,10 +62,11 @@ class CRM_CivirulesConditions_Contact_HasPhone extends CRM_Civirules_Condition {
    */
   public function userFriendlyConditionParams() {
     $phoneType = $this->conditionParams['phone_type'];
+    $phoneTypes = CRM_Core_OptionGroup::values('phone_type', false, false, false, false, 'label', false);
     $phoneTypeLabel = ts('Any phone type');
-    if ($phoneType) {
+    if ($phoneType && isset($phoneTypes[$phoneType])) {
       $phoneTypeLabel = ts('Phone type is %1', array(
-        1 => CRM_Core_OptionGroup::getValue('phone_type', $phoneType, 'value', 'String', 'label')
+        1 => $phoneTypes[$phoneType],
       ));
     }
     $locationType = $this->conditionParams['location_type'];
