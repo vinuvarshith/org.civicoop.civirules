@@ -9,10 +9,10 @@
 class CRM_CivirulesConditions_Form_Contact_HasPhone extends CRM_CivirulesConditions_Form_Form {
 
   protected function getPhoneTypes() {
-    return array_merge(
-      array(0 => ts(' - Any phone type -')),
+    return
+      array(0 => ts(' - Any phone type -')) +
       CRM_Core_OptionGroup::values('phone_type', false, false, false, false, 'label', false)
-    );
+    ;
   }
 
   protected function getLocationTypes() {
