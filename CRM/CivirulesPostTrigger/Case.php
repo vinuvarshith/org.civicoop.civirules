@@ -35,11 +35,8 @@ class CRM_CivirulesPostTrigger_Case extends CRM_Civirules_Trigger_Post {
     $clients = CRM_Case_BAO_Case::getCaseClients($objectId);
     foreach($clients as $client) {
       $triggerData = clone $t;
-      $roleData = array();
-      $roleData['contact_id'] = $client;
-      $roleData['is_client'] = true;
-      $triggerData->setEntityData('CaseRole', $roleData);
       $triggerData->setEntityData('Relationship', null);
+      $triggerData->setContactId($client);
 
       CRM_Civirules_Engine::triggerRule($this, $triggerData);
     }
@@ -47,12 +44,7 @@ class CRM_CivirulesPostTrigger_Case extends CRM_Civirules_Trigger_Post {
     //trigger for each case role
     $relatedContacts = CRM_Case_BAO_Case::getRelatedContacts($objectId);
     foreach($relatedContacts as $contact) {
-      $roleData = array();
-      $roleData['contact_id'] = $contact['contact_id'];
-      $roleData['is_client'] = false;
-
-      $triggerData->setEntityData('CaseRole', $roleData);
-
+      $triggerData = clone $t;
       $relationshipData = null;
       $relationship = new CRM_Contact_BAO_Relationship();
       $relationship->contact_id_b = $contact['contact_id'];
@@ -61,8 +53,9 @@ class CRM_CivirulesPostTrigger_Case extends CRM_Civirules_Trigger_Post {
         CRM_Core_DAO::storeValues($relationship, $relationshipData);
       }
       $triggerData->setEntityData('Relationship', $relationshipData);
+      $triggerData->setContactId($contact['contact_id']);
 
-      CRM_Civirules_Engine::triggerRule($this, clone $triggerData);
+      CRM_Civirules_Engine::triggerRule($this, $triggerData);
     }
   }
 

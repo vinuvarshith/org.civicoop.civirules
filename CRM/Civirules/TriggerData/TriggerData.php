@@ -70,6 +70,10 @@ abstract class CRM_Civirules_TriggerData_TriggerData {
     return null;
   }
 
+  public function setContactId($contact_id) {
+    $this->contact_id = $contact_id;
+  }
+
   /**
    * Returns an array with data for an entity
    *
