@@ -66,7 +66,6 @@ class CRM_CivirulesPostTrigger_Case extends CRM_Civirules_Trigger_Post {
    */
   protected function getAdditionalEntities() {
     $entities = parent::getAdditionalEntities();
-    $entities[] = new CRM_Civirules_TriggerData_EntityDefinition('CaseRole', 'CivirulesCaseRole', 'CRM_CivirulesPostTrigger_DataSpecification_CaseRole', 'CaseRole');
     $entities[] = new CRM_Civirules_TriggerData_EntityDefinition('Relationship', 'Relationship', 'CRM_Contact_DAO_Relationship' , 'Relationship');
     return $entities;
   }
