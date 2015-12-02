@@ -76,7 +76,7 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_CivirulesCon
         if (in_array($customGroup['id'], $processedGroups)) {
           continue;
         }
-        if ($customGroup['is_multiple']) {
+        if (!empty($customGroup['is_multiple'])) {
           //do not include multiple custom groups
           continue;
         }
