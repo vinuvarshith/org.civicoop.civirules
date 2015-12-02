@@ -71,12 +71,17 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
    * @access public
    */
   function postProcess() {
-    $saveParams = array(
-      'rule_id' => $this->_submitValues['rule_id'],
-      'action_id' => $this->_submitValues['rule_action_select'],
-      'delay' => 'null',
-      'ignore_condition_with_delay' => '0',
-    );
+    $saveParams = array();
+    $saveParams['rule_id'] = $this->_submitValues['rule_id'];
+    $saveParams['delay'] = 'null';
+    $saveParams['ignore_condition_with_delay'] = '0';
+    if (!empty($this->_submitValues['rule_action_select'])) {
+      if (!$this->ruleAction) {
+        $this->ruleAction = new CRM_Civirules_BAO_RuleAction();
+      }
+      $this->ruleAction->action_id = $this->_submitValues['rule_action_select'];
+      $saveParams['action_id'] = $this->_submitValues['rule_action_select'];
+    }
     if ($this->ruleActionId) {
       $saveParams['id'] = $this->ruleActionId;
     }
@@ -85,7 +90,9 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
       $delayClass = CRM_Civirules_Delay_Factory::getDelayClassByName($this->_submitValues['delay_select']);
       $delayClass->setValues($this->_submitValues);
       $saveParams['delay'] = serialize($delayClass);
-      $saveParams['ignore_condition_with_delay'] = $this->_submitValues['ignore_condition_with_delay'];
+      if (!empty($this->_submitValues['ignore_condition_with_delay'])) {
+        $saveParams['ignore_condition_with_delay'] = '1';
+      }
     }
 
     $ruleAction = CRM_Civirules_BAO_RuleAction::add($saveParams);
@@ -94,7 +101,7 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
     $session->setStatus('Action added to CiviRule '.CRM_Civirules_BAO_Rule::getRuleLabelWithId($this->_submitValues['rule_id']),
       'Action added', 'success');
 
-    $action = CRM_Civirules_BAO_Action::getActionObjectById($ruleAction['action_id'], true);
+    $action = CRM_Civirules_BAO_Action::getActionObjectById($this->ruleAction->action_id, true);
     $redirectUrl = $action->getExtraDataInputUrl($ruleAction['id']);
     if (empty($redirectUrl) || $this->ruleActionId) {
       $redirectUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id=' . $this->_submitValues['rule_id'], TRUE);
@@ -144,7 +151,7 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
     }
 
     if (!empty($this->ruleActionId)) {
-      $defaults['rule_action_select'] = $this->ruleActionId;
+      $defaults['rule_action_select'] = $this->ruleAction->action_id;
       $defaults['id'] = $this->ruleActionId;
       $defaults['ignore_condition_with_delay'] = $this->ruleAction->ignore_condition_with_delay;
 
