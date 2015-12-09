@@ -79,8 +79,24 @@ class CRM_Civirules_BAO_RuleCondition extends CRM_Civirules_DAO_RuleCondition {
     }
     $ruleCondition = new CRM_Civirules_BAO_RuleCondition();
     $ruleCondition->id = $ruleConditionId;
-    $ruleCondition->delete();
+    if ($ruleCondition->find(true)) {
+      $ruleCondition->delete();
+      CRM_Civirules_BAO_RuleCondition::emptyConditionLinkForFirstCondition($ruleCondition->rule_id);
+    }
     return;
+  }
+
+  public static function emptyConditionLinkForFirstCondition($rule_id) {
+    $conditionParams = array(
+        'is_active' => 1,
+        'rule_id' => $rule_id
+    );
+    $ruleConditions = CRM_Civirules_BAO_RuleCondition::getValues($conditionParams);
+    if (count($ruleConditions)) {
+      $ruleCondition = reset($ruleConditions);
+      $ruleCondition['condition_link'] = 'null';
+      CRM_Civirules_BAO_RuleCondition::add($ruleCondition);
+    }
   }
 
   /**
