@@ -102,6 +102,6 @@ class CRM_CivirulesConditions_Contribution_DonorIsRecurring extends CRM_Civirule
    * @access public
    */
   public function requiredEntities() {
-    return array('ContributionRecur');
+    return array('Contact');
   }
 }
