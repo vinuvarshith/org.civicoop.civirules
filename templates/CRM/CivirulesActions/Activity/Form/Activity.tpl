@@ -16,13 +16,21 @@
         <div class="clear"></div>
     </div>
 
-    <div class="crm-section">
-        <div class="label">{ts}Assignee{/ts}</div>
-        <div class="content">
-            {include file="CRM/Contact/Form/NewContact.tpl" noLabel=true skipBreak=true multiClient=false showNewSelect=false}
+    {if ($use_old_contact_ref_fields)}
+        <div class="crm-section">
+            <div class="label">{ts}Assignee{/ts}</div>
+            <div class="content">
+                {include file="CRM/Contact/Form/NewContact.tpl" noLabel=true skipBreak=true multiClient=false showNewSelect=false}
+            </div>
+            <div class="clear"></div>
         </div>
-        <div class="clear"></div>
-    </div>
+    {else}
+        <div class="crm-section">
+            <div class="label">{$form.assignee_contact_id.label}</div>
+            <div class="content">{$form.assignee_contact_id.html}</div>
+            <div class="clear"></div>
+        </div>
+    {/if}
 </div>
 <div class="crm-submit-buttons">
     {include file="CRM/common/formButtons.tpl" location="bottom"}

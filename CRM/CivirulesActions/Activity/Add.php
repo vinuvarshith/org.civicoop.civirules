@@ -63,9 +63,26 @@ class CRM_CivirulesActions_Activity_Add extends CRM_CivirulesActions_Generic_Api
       $return .= ts("Subject: %1", array(1 => $subject));
     }
     if (!empty($params['assignee_contact_id'])) {
-      $assignee = civicrm_api3('Contact', 'getvalue', array('return' => 'display_name', 'id' => $params['assignee_contact_id']));
+      if (!is_array($params['assignee_contact_id'])) {
+        $params['assignee_contact_id'] = array($params['assignee_contact_id']);
+      }
+      $assignees = '';
+      foreach($params['assignee_contact_id'] as $cid) {
+        try {
+          $assignee = civicrm_api3('Contact', 'getvalue', array('return' => 'display_name', 'id' => $cid));
+          if ($assignee) {
+            if (strlen($assignees)) {
+              $assignees .= ', ';
+            }
+            $assignees .= $assignee;
+          }
+        } catch (Exception $e) {
+          //do nothing
+        }
+      }
+
       $return .= '<br>';
-      $return .= ts("Assignee: %1", array(1 => $assignee));
+      $return .= ts("Assignee(s): %1", array(1 => $assignees));
     }
     return $return;
   }

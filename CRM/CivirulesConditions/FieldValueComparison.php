@@ -26,13 +26,17 @@ class CRM_CivirulesConditions_FieldValueComparison extends CRM_CivirulesConditio
         $params['entityID'] = $data['id'];
         $params[$field] = 1;
         $values = CRM_Core_BAO_CustomValueTable::getValues($params);
+
+        $value = null;
         if (!empty($values[$field])) {
-          return $this->normalizeValue($values[$field]);
+          $value = $this->normalizeValue($values[$field]);
         } elseif (!empty($values['error_message'])) {
-          $custom_values = $triggerData->getCustomFieldValues($custom_field_id);
-          if (!empty($custom_values)) {
-            return $this->normalizeValue(reset($custom_values));
-          }
+          $value = $triggerData->getCustomFieldValue($custom_field_id);
+        }
+
+        if ($value !== null) {
+          $value = $this->convertMultiselectCustomfieldToArray($custom_field_id, $value);
+          return $this->normalizeValue($value);
         }
       } catch (Exception $e) {
         //do nothing
@@ -40,6 +44,23 @@ class CRM_CivirulesConditions_FieldValueComparison extends CRM_CivirulesConditio
     }
 
     return null;
+  }
+
+  /**
+   * Returns an array of value when the custom field is a multi select
+   * otherwise just return the value
+   *
+   * @param $custom_field_id
+   * @param $value
+   * @return mixed
+   */
+  protected function convertMultiselectCustomfieldToArray($custom_field_id, $value) {
+    $custom_field = civicrm_api3('CustomField', 'getsingle', array('id' => $custom_field_id));
+    if (CRM_Core_BAO_CustomField::isSerialized($custom_field)) {
+      $value = trim($value, CRM_Core_DAO::VALUE_SEPARATOR);
+      $value = explode(CRM_Core_DAO::VALUE_SEPARATOR, $value);
+    }
+    return $value;
   }
 
   /**
