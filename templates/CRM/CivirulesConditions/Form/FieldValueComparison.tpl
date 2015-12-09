@@ -85,7 +85,7 @@
             .done(function(data) {
                 switch(data.html_type) {
                     {/literal}
-                        {foreach $custom_field_multi_select_html_types as $custom_field_multi_select_html_type}
+                        {foreach from=$custom_field_multi_select_html_types item=custom_field_multi_select_html_type}
                     case '{$custom_field_multi_select_html_type}':
                         {/foreach}
                     {literal}
