@@ -31,10 +31,7 @@ class CRM_CivirulesConditions_FieldValueComparison extends CRM_CivirulesConditio
         if (!empty($values[$field])) {
           $value = $this->normalizeValue($values[$field]);
         } elseif (!empty($values['error_message'])) {
-          $custom_values = $triggerData->getCustomFieldValues($custom_field_id);
-          if (!empty($custom_values)) {
-            $value = $custom_values;
-          }
+          $value = $triggerData->getCustomFieldValue($custom_field_id);
         }
 
         if ($value !== null) {

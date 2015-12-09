@@ -35,7 +35,7 @@ class CRM_Civirules_Utils_CustomDataFromPre {
      *   [] => value_b
      *
      */
-    if (!empty($custom_field['option_group_id']) && is_array($value)) {
+    if (CRM_Core_BAO_CustomField::isSerialized($custom_field) && is_array($value)) {
       $all_ones = true;
       foreach($value as $i => $j) {
         if ($j != 1) {
@@ -48,7 +48,10 @@ class CRM_Civirules_Utils_CustomDataFromPre {
           $v[] = $i;
         }
       }
-    }
+    } /*elseif (CRM_Core_BAO_CustomField::isSerialized($custom_field)) {
+      $v = trim($value, CRM_Core_DAO::VALUE_SEPARATOR);
+      $v = explode(CRM_Core_DAO::VALUE_SEPARATOR, $v);
+    }*/
     self::$customValues[$field_id][$id] = $v;
   }
 

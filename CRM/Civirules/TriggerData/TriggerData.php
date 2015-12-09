@@ -139,4 +139,19 @@ abstract class CRM_Civirules_TriggerData_TriggerData {
     }
     return array();
   }
+
+  /**
+   * Returns value of a custom field.
+   *
+   * In case the custom group is a multirecord group the first record in the list is returned.
+   *
+   * @param $custom_field_id
+   * @return mixed
+   */
+  public function getCustomFieldValue($custom_field_id) {
+    if (!empty($this->custom_data[$custom_field_id])) {
+      return reset($this->custom_data[$custom_field_id]);
+    }
+    return null;
+  }
 }
