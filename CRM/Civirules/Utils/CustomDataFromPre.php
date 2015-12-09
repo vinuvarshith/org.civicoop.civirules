@@ -23,7 +23,6 @@ class CRM_Civirules_Utils_CustomDataFromPre {
 
   private static function setCustomData($objectName, $field_id, $value, $id) {
     $v = $value;
-    $custom_field = civicrm_api3('CustomField', 'getsingle', array('id' => $field_id));
 
     /**
      * Convert value array from
@@ -35,7 +34,7 @@ class CRM_Civirules_Utils_CustomDataFromPre {
      *   [] => value_b
      *
      */
-    if (CRM_Core_BAO_CustomField::isSerialized($custom_field) && is_array($value)) {
+    if (CRM_Civirules_Utils_CustomField::isCustomFieldMultiselect($field_id) && is_array($value)) {
       $all_ones = true;
       foreach($value as $i => $j) {
         if ($j != 1) {
@@ -48,10 +47,7 @@ class CRM_Civirules_Utils_CustomDataFromPre {
           $v[] = $i;
         }
       }
-    } /*elseif (CRM_Core_BAO_CustomField::isSerialized($custom_field)) {
-      $v = trim($value, CRM_Core_DAO::VALUE_SEPARATOR);
-      $v = explode(CRM_Core_DAO::VALUE_SEPARATOR, $v);
-    }*/
+    }
     self::$customValues[$field_id][$id] = $v;
   }
 

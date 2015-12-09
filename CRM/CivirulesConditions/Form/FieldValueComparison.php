@@ -109,11 +109,10 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_CivirulesCon
 
 
     $this->add('hidden', 'rule_condition_id');
-
     $this->add('select', 'entity', ts('Entity'), $this->getEntityOptions(), true);
     $this->add('select', 'field', ts('Field'), $this->getFields(), true);
-
     $this->assign('entities', $this->getEntities());
+    $this->assign('custom_field_multi_select_html_types', CRM_Civirules_Utils_CustomField::getMultiselectTypes());
   }
 
   /**

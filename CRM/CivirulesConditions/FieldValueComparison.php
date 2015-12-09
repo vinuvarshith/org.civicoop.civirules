@@ -55,8 +55,7 @@ class CRM_CivirulesConditions_FieldValueComparison extends CRM_CivirulesConditio
    * @return mixed
    */
   protected function convertMultiselectCustomfieldToArray($custom_field_id, $value) {
-    $custom_field = civicrm_api3('CustomField', 'getsingle', array('id' => $custom_field_id));
-    if (CRM_Core_BAO_CustomField::isSerialized($custom_field)) {
+    if (CRM_Civirules_Utils_CustomField::isCustomFieldMultiselect($custom_field_id)) {
       $value = trim($value, CRM_Core_DAO::VALUE_SEPARATOR);
       $value = explode(CRM_Core_DAO::VALUE_SEPARATOR, $value);
     }

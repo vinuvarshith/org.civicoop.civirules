@@ -84,9 +84,11 @@
             CRM.api3('CustomField', 'getsingle', {'sequential': 1, 'id': custom_field_id}, true)
             .done(function(data) {
                 switch(data.html_type) {
-                    case 'CheckBox':
-                    case 'Multi-Select':
-                    case 'AdvMulti-Select':
+                    {/literal}
+                        {foreach $custom_field_multi_select_html_types as $custom_field_multi_select_html_type}
+                    case '{$custom_field_multi_select_html_type}':
+                        {/foreach}
+                    {literal}
                         multiple = true;
                         CRM_civirules_conidtion_form_updateOptionValues(options, multiple);
                         break;

@@ -13,7 +13,7 @@ class CRM_CivirulesActions_Activity_Form_Activity extends CRM_CivirulesActions_F
   public function preProcess()
   {
     $version = CRM_Core_BAO_Domain::version();
-    if (version_compare($version, '4.4', '<=')) {
+    if (version_compare($version, '4.5', '<')) {
       $this->use_old_contact_ref_fields = true;
     }
 
