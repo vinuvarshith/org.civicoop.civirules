@@ -153,7 +153,9 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
     if (!empty($this->ruleActionId)) {
       $defaults['rule_action_select'] = $this->ruleAction->action_id;
       $defaults['id'] = $this->ruleActionId;
-      $defaults['ignore_condition_with_delay'] = $this->ruleAction->ignore_condition_with_delay;
+      if ($this->ruleAction->ignore_condition_with_delay) {
+        $defaults['ignore_condition_with_delay'] = $this->ruleAction->ignore_condition_with_delay;
+      }
 
       $delayClass = unserialize($this->ruleAction->delay);
       if ($delayClass) {
