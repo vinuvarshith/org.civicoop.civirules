@@ -5,6 +5,9 @@ class CRM_Civirules_Utils_CustomDataFromPre {
   private static $customValues = array();
 
   public static function pre($op, $objectName, $objectId, $params) {
+    if (!is_array($params)) {
+      return;
+    }
     if (isset($params['custom']) && is_array($params['custom'])) {
       foreach($params['custom'] as $fid => $custom_values) {
         foreach($custom_values as $id => $field) {
