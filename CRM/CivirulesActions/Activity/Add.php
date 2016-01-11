@@ -27,13 +27,17 @@ class CRM_CivirulesActions_Activity_Add extends CRM_CivirulesActions_Generic_Api
       $assignee = array();
       if (is_array($action_params['assignee_contact_id'])) {
         foreach($action_params['assignee_contact_id'] as $contact_id) {
-          $assignee[] = $contact_id;
+          if($contact_id) {
+            $assignee[] = $contact_id;
+          }
         }
       } else {
         $assignee[] = $action_params['assignee_contact_id'];
       }
       if (count($assignee)) {
         $params['assignee_contact_id'] = $action_params['assignee_contact_id'];
+      } else {
+        $params['assignee_contact_id'] = '';
       }
     }
     return $params;
