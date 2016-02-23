@@ -19,13 +19,20 @@ class CRM_Civirules_Utils_CustomDataFromPre {
     foreach($params as $key => $value) {
       if (stripos($key, 'custom_')===0) {
         list($custom_, $fid, $id) = explode("_", $key, 3);
-        self::setCustomData($objectName, $fid, $value, $id);
+        if (is_numeric($fid)) {
+          // The variable $fid should contain a valid ID which should be a numeric value.
+          self::setCustomData($objectName, $fid, $value, $id);
+        }
       }
     }
   }
 
   private static function setCustomData($objectName, $field_id, $value, $id) {
     $v = $value;
+
+    if (!is_numeric($field_id)) {
+      return; // The parameter $field_id should contain a valid ID which is a numeric value.
+    }
 
     /**
      * Convert value array from
