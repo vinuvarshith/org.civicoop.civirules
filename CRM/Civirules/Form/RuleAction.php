@@ -43,7 +43,7 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
       $this->ruleAction = new CRM_Civirules_BAO_RuleAction();
       $this->ruleAction->id = $this->ruleActionId;
       if (!$this->ruleAction->find(true)) {
-        throw new Exception('Civirules could not find ruleAction');
+        throw new Exception('Civirules could not find ruleAction (RuleAction)');
       }
 
       $this->action = new CRM_Civirules_BAO_Action();
