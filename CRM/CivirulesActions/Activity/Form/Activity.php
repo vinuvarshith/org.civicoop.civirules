@@ -79,7 +79,7 @@ class CRM_CivirulesActions_Activity_Form_Activity extends CRM_CivirulesActions_F
       $defaultValues['subject'] = $data['subject'];
     }
     if (!empty($data['assignee_contact_id'])) {
-      $defaults['assignee_contact_id'] = $data['assignee_contact_id'];
+      $defaultValues['assignee_contact_id'] = $data['assignee_contact_id'];
     }
     return $defaultValues;
   }
