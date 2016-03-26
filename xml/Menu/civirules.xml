@@ -217,4 +217,11 @@
     <access_arguments>access CiviCRM</access_arguments>
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/civirule/form/action/display_message</path>
+    <page_callback>CRM_CivirulesActions_User_Form_DisplayMessage</page_callback>
+    <title>Display Message</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
 </menu>
