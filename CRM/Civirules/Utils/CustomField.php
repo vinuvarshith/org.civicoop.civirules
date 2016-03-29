@@ -21,7 +21,9 @@ class CRM_Civirules_Utils_CustomField {
      * @throws CiviCRM_API3_Exception
      */
     public static function isCustomFieldMultiselect($customfield_id) {
+        //var_dump($customfield_id); exit();
         $multi_select_types = self::getMultiselectTypes();
+
         $custom_field = civicrm_api3('CustomField', 'getsingle', array('id' => $customfield_id));
         if (in_array($custom_field['html_type'], $multi_select_types)) {
             return true;

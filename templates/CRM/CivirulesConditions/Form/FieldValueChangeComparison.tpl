@@ -180,7 +180,7 @@
             cj('#original_multi_value_options').html(multi_select_options);
             cj('#original_multi_value_options').removeClass('hiddenElement');
             cj('#original_multi_value_options input[type="checkbox"]').change(function() {
-                var currentOptions = cj('#multi_value').val().match(/[^\r\n]+/g);
+                var currentOptions = cj('#original_multi_value').val().match(/[^\r\n]+/g);
                 if (!currentOptions) {
                     currentOptions = new Array();
                 }
