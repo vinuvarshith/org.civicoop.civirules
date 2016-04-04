@@ -74,6 +74,7 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
       case '>=':
       case '<':
       case '<=':
+      case 'contains string':
         $key = 'value';
         break;
       case 'is one of':
@@ -195,6 +196,9 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
           return true;
         }
         return false;
+        break;
+      case 'contains string':
+        return stripos($leftValue,  $rightValue) !== FALSE;
         break;
       case 'contains one of':
         $leftArray = $this->convertValueToArray($leftValue);
@@ -320,6 +324,7 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
       '<' => ts('Is less than'),
       '>=' => ts('Is greater than or equal to'),
       '<=' => ts('Is less than or equal to'),
+      'contains string' => ts('Contains string (case insensitive)'),
       'is one of' => ts('Is one of'),
       'is not one of' => ts('Is not one of'),
       'contains one of' => ts('Does contain one of'),

@@ -35,7 +35,7 @@ class CRM_CivirulesActions_Form_Form extends CRM_Core_Form
     $this->trigger = new CRM_Civirules_BAO_Trigger();
 
     if (!$this->ruleAction->find(true)) {
-      throw new Exception('Civirules could not find ruleAction');
+      throw new Exception('Civirules could not find ruleAction (Form)');
     }
 
     $this->action->id = $this->ruleAction->action_id;
