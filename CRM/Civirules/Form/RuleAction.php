@@ -124,9 +124,9 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
     }
     $actionList = array(' - select - ') + CRM_Civirules_Utils::buildActionList();
     asort($actionList);
-    $attributes = array();
+    $attributes = array('class' => 'crm-select2');
     if (empty($this->ruleActionId)) {
-      $this->add('select', 'rule_action_select', ts('Select Action'), $actionList, $attributes);
+      $this->add('select', 'rule_action_select', ts('Select Action'), $actionList, true, $attributes);
     }
 
 
