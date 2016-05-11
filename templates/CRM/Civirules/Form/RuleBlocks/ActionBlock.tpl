@@ -49,7 +49,7 @@
   </div>
   <div class="crm-submit-buttons">
     <a class="add button" title="Add Action" href="{$ruleActionAddUrl}">
-      <span><div class="icon add-icon"></div>Add Action</span></a>
+      <span><div class="icon add-icon ui-icon-circle-plus"></div>Add Action</span></a>
   </div>
 </div>
 
