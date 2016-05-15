@@ -115,6 +115,7 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
     $dateType = CRM_Utils_Type::T_DATE;
     $timeType = CRM_Utils_Type::T_TIME;
     $dateTimeType = $dateType + $timeType;
+    $timestampType = CRM_Utils_Type::T_TIMESTAMP;
 
     $fields = civicrm_api3(
       $entity,
@@ -131,6 +132,7 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
           case $dateType:
           case $timeType:
           case $dateTimeType:
+          case $timestampType:
             $isDate = true;
             return $isDate;
         }
