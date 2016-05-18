@@ -30,12 +30,12 @@ class CRM_CivirulesConditions_Contribution_FinancialType extends CRM_Civirules_C
     $contribution = $triggerData->getEntityData('Contribution');
     switch ($this->conditionParams['operator']) {
       case 0:
-        if ($contribution['financial_type_id'] == $this->conditionParams['financial_type_id']) {
+        if (in_array($contribution['financial_type_id'], $this->conditionParams['financial_type_id'])) {
           $isConditionValid = TRUE;
         }
       break;
       case 1:
-        if ($contribution['financial_type_id'] != $this->conditionParams['financial_type_id']) {
+        if (!in_array($contribution['financial_type_id'], $this->conditionParams['financial_type_id'])) {
           $isConditionValid = TRUE;
         }
       break;
@@ -65,19 +65,25 @@ class CRM_CivirulesConditions_Contribution_FinancialType extends CRM_Civirules_C
    * @access public
    */
   public function userFriendlyConditionParams() {
-    $financialType = new CRM_Financial_BAO_FinancialType();
-    $financialType->id = $this->conditionParams['financial_type_id'];
-    $operator = null;
+    $friendlyText = "";
     if ($this->conditionParams['operator'] == 0) {
-      $operator = 'equals';
+      $friendlyText = 'Financial Type is one of: ';
     }
     if ($this->conditionParams['operator'] == 1) {
-      $operator = 'is not equal to';
+      $friendlyText = 'Financial Type is NOT one of: ';
     }
-    if ($financialType->find(true)) {
-      return 'Financial type '.$operator.' '.$financialType->name;
+    $finText = array();
+    foreach ($this->conditionParams['financial_type_id'] as $finTypeId) {
+      $financialType = new CRM_Financial_BAO_FinancialType();
+      $financialType->id = $finTypeId;
+      if ($financialType->find(true)) {
+        $finText[] = $financialType->name;
+      }
     }
-    return '';
+    if (!empty($finText)) {
+      $friendlyText .= implode(", ", $finText);
+    }
+    return $friendlyText;
   }
 
   /**

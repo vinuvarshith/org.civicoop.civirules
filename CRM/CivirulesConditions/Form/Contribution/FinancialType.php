@@ -17,10 +17,10 @@ class CRM_CivirulesConditions_Form_Contribution_FinancialType extends CRM_Civiru
     $this->add('hidden', 'rule_condition_id');
 
     $financialTypes = CRM_Civirules_Utils::getFinancialTypes();
-    $financialTypes[0] = ts('- select -');
     asort($financialTypes);
-    $this->add('select', 'financial_type_id', ts('Financial type'), $financialTypes, true);
-    $this->add('select', 'operator', ts('Operator'), array('equals', 'is not equal to'), true);
+    $this->add('select', 'financial_type_id', ts('Financial Type(s)'), $financialTypes, true,
+      array('id' => 'financial_type_ids', 'multiple' => 'multiple','class' => 'crm-select2'));
+    $this->add('select', 'operator', ts('Operator'), array('is one of', 'is NOT one of'), true);
 
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
@@ -56,7 +56,6 @@ class CRM_CivirulesConditions_Form_Contribution_FinancialType extends CRM_Civiru
     $data['operator'] = $this->_submitValues['operator'];
     $this->ruleCondition->condition_params = serialize($data);
     $this->ruleCondition->save();
-
     parent::postProcess();
   }
 }

@@ -5,9 +5,13 @@
     <div class="content">{$form.operator.html}</div>
     <div class="clear"></div>
   </div>
-  <div class="crm-section">
-    <div class="label">{$form.financial_type_id.label}</div>
-    <div class="content">{$form.financial_type_id.html}</div>
+  <div class="crm-section sector-section">
+    <div class="label">
+      <label for="financial_type-select">{ts}Financial Type(s){/ts}</label>
+    </div>
+    <div class="content crm-select-container" id="financial_type_block">
+      {$form.financial_type_id.html}
+    </div>
     <div class="clear"></div>
   </div>
 </div>
