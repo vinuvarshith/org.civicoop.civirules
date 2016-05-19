@@ -6,7 +6,7 @@
  * @license AGPL-3.0
  */
 
-class CRM_CivirulesConditions_Form_Contribution_RecurringEndDate extends CRM_CivirulesConditions_Form_Form {
+class CRM_CivirulesConditions_Form_ContributionRecur_EndDate extends CRM_CivirulesConditions_Form_Form {
 
   /**
    * Overridden parent method to build form

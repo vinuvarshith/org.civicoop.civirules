@@ -1,5 +1,5 @@
 <h3>{$ruleConditionHeader}</h3>
-<div class="crm-block crm-form-block crm-civirule-rule_condition-block-contribution_donor is recurring">
+<div class="crm-block crm-form-block crm-civirule-rule_condition-block-contribution_recur_donor_is">
   <div class="crm-section">
     <div class="label">{$form.has_recurring.label}</div>
     <div class="content">{$form.has_recurring.html}</div>

@@ -8,7 +8,7 @@
  * @license http://www.gnu.org/licenses/agpl-3.0.html
  */
 
-class CRM_CivirulesConditions_Contribution_DonorIsRecurring extends CRM_Civirules_Condition {
+class CRM_CivirulesConditions_ContributionRecur_DonorIsRecurring extends CRM_Civirules_Condition {
 
   private $conditionParams = array();
 
@@ -78,7 +78,7 @@ class CRM_CivirulesConditions_Contribution_DonorIsRecurring extends CRM_Civirule
    * @access public
    */
   public function getExtraDataInputUrl($ruleConditionId) {
-    return CRM_Utils_System::url('civicrm/civirule/form/condition/contribution_donorisrecurring/', 'rule_condition_id='.$ruleConditionId);
+    return CRM_Utils_System::url('civicrm/civirule/form/condition/contribution_recur_donorisrecurring/', 'rule_condition_id='.$ruleConditionId);
   }
 
   /**
@@ -88,10 +88,14 @@ class CRM_CivirulesConditions_Contribution_DonorIsRecurring extends CRM_Civirule
    * @access public
    */
   public function userFriendlyConditionParams() {
-    if ($this->conditionParams['has_recurring'] == 0) {
-      return 'Donor has no active recurring contributions today';
+    if (isset($this->conditionParams['has_recurring'])) {
+      if ($this->conditionParams['has_recurring'] == 0) {
+        return 'Donor has no active recurring contributions today';
+      } else {
+        return 'Donor has active recurring contributions today';
+      }
     } else {
-      return 'Donor has active recurring contributions today';
+      return '';
     }
   }
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class CRM_CivirulesConditions_Contribution_CountRecurring
+ * Class CRM_CivirulesConditions_ContributionRecur_Count
  *
  * This CiviRule condition will check for the xth contribution resulting from a recurring contribution
  *
@@ -9,7 +9,7 @@
  * @link http://redmine.civicoop.org/projects/civirules/wiki/Tutorial_create_a_more_complicated_condition_with_its_own_form_processing
  */
 
-class CRM_CivirulesConditions_Contribution_CountRecurring extends CRM_Civirules_Condition {
+class CRM_CivirulesConditions_ContributionRecur_Count extends CRM_Civirules_Condition {
 
   private $conditionParams = array();
 
@@ -96,7 +96,7 @@ WHERE contact_id = %1 AND civicrm_contribution.contribution_recur_id > %2 AND co
    * @abstract
    */
   public function getExtraDataInputUrl($ruleConditionId) {
-    return CRM_Utils_System::url('civicrm/civirule/form/condition/contribution_countrecurring/', 'rule_condition_id='.$ruleConditionId);
+    return CRM_Utils_System::url('civicrm/civirule/form/condition/contribution_recur_count/', 'rule_condition_id='.$ruleConditionId);
   }
 
   /**

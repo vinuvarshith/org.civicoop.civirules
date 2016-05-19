@@ -1,12 +1,12 @@
 <?php
 /**
- * Class for CiviRules Condition Contribution Count Contributions from a Recurring
+ * Class for CiviRules Condition Contribution Recur Count
  *
  * @author Erik Hommel (CiviCooP) <erik.hommel@civicoop.org>
  * @license AGPL-3.0
  */
 
-class CRM_CivirulesConditions_Form_Contribution_CountRecurring extends CRM_CivirulesConditions_Form_Form {
+class CRM_CivirulesConditions_Form_ContributionRecur_Count extends CRM_CivirulesConditions_Form_Form {
 
   /**
    * Overridden parent method to build form

@@ -1,15 +1,13 @@
 <?php
-
 /**
- * Class CRM_CivirulesConditions_Contribution_RecurringEndDate
- *
- * This CiviRule condition will check if the end date of the recurring contribution is set or not set
+ * Class for CiviRules Condition Contribution Recur Campaign
  *
  * @author Erik Hommel (CiviCooP) <erik.hommel@civicoop.org>
- * @link http://redmine.civicoop.org/projects/civirules/wiki/Tutorial_create_a_more_complicated_condition_with_its_own_form_processing
+ * @date 19 May 2016
+ * @license AGPL-3.0
  */
 
-class CRM_CivirulesConditions_Contribution_RecurringEndDate extends CRM_Civirules_Condition {
+class CRM_CivirulesConditions_ContributionRecur_Campaign extends CRM_Civirules_Condition {
 
   private $conditionParams = array();
 
@@ -36,12 +34,18 @@ class CRM_CivirulesConditions_Contribution_RecurringEndDate extends CRM_Civirule
 
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $isConditionValid = FALSE;
-    $recurring = $triggerData->getEntityData('ContributionRecur');
-    if ($this->conditionParams['end_date'] == 0 && empty($recurring['end_date'])) {
-      $isConditionValid = TRUE;
-    }
-    if ($this->conditionParams['end_date'] == 1 && !empty($recurring['end_date'])) {
-      $isConditionValid = TRUE;
+    $contributionRecur = $triggerData->getEntityData('ContributionRecur');
+    switch ($this->conditionParams['operator']) {
+      case 0:
+        if (in_array($contributionRecur['campaign_id'], $this->conditionParams['campaign_id'])) {
+          $isConditionValid = TRUE;
+        }
+      break;
+      case 1:
+        if (!in_array($contributionRecur['campaign_id'], $this->conditionParams['campaign_id'])) {
+          $isConditionValid = TRUE;
+        }
+      break;
     }
     return $isConditionValid;
   }
@@ -57,7 +61,7 @@ class CRM_CivirulesConditions_Contribution_RecurringEndDate extends CRM_Civirule
    * @abstract
    */
   public function getExtraDataInputUrl($ruleConditionId) {
-    return CRM_Utils_System::url('civicrm/civirule/form/condition/contribution_recurringenddate/', 'rule_condition_id='.$ruleConditionId);
+    return CRM_Utils_System::url('civicrm/civirule/form/condition/contribution_recur_campaign/', 'rule_condition_id='.$ruleConditionId);
   }
 
   /**
@@ -68,12 +72,23 @@ class CRM_CivirulesConditions_Contribution_RecurringEndDate extends CRM_Civirule
    * @access public
    */
   public function userFriendlyConditionParams() {
-    if ($this->conditionParams['end_date'] == 1) {
-      $endDateString = 'is set';
-    } else {
-      $endDateString = 'is not set';
+    $friendlyText = "";
+    if ($this->conditionParams['operator'] == 0) {
+      $friendlyText = 'Is in one of these campaigns: ';
     }
-    return 'End Date of Recurring Contribution '.$endDateString;
+    if ($this->conditionParams['operator'] == 1) {
+      $friendlyText = 'Is NOT in of these campaigns: ';
+    }
+    $campaignText = array();
+    foreach ($this->conditionParams['campaign_id'] as $campaignId) {
+      try {
+        $campaignText[] = civicrm_api3('Campaign', 'Getvalue', array('id' => $campaignId, 'return' => 'title'));
+      } catch (CiviCRM_API3_Exception $ex) {}
+    }
+    if (!empty($campaignText)) {
+      $friendlyText .= implode(", ", $campaignText);
+    }
+    return $friendlyText;
   }
 
   /**
@@ -85,4 +100,5 @@ class CRM_CivirulesConditions_Contribution_RecurringEndDate extends CRM_Civirule
   public function requiredEntities() {
     return array('ContributionRecur');
   }
+
 }
