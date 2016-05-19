@@ -99,6 +99,13 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/condition/contribution_campaign</path>
+    <page_callback>CRM_CivirulesConditions_Form_Contribution_Campaign</page_callback>
+    <title>contribution campaign</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/condition/contribution_distinctcontributingday</path>
     <page_callback>CRM_CivirulesConditions_Form_Contribution_DistinctContributingDay</page_callback>
     <title>distinct contributing days</title>
