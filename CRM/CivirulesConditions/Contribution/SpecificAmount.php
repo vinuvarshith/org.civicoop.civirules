@@ -86,7 +86,7 @@ class CRM_CivirulesConditions_Contribution_SpecificAmount extends CRM_Civirules_
    * @param array $contribution
    * @access protected
    */
-  protected function buildWhereClauses($contribution) {
+  private function buildWhereClauses($contribution) {
     $this->whereClauses[] = 'contribution_status_id = %1';
     $this->whereParams[1] = array(CRM_Civirules_Utils::getContributionStatusIdWithName('Completed'), 'Integer');
     $this->whereClauses[] = 'is_test = %2';
@@ -121,12 +121,11 @@ class CRM_CivirulesConditions_Contribution_SpecificAmount extends CRM_Civirules_
   /**
    * Method to get the operator
    *
-   * @param int $operatorId
    * @return string
    * @access protected
    */
-  protected function setOperator($operatorId) {
-    switch ($operatorId) {
+  private function setOperator() {
+    switch ($this->conditionParams['count_operator']) {
       case 1:
         return "!=";
       break;
@@ -146,6 +145,28 @@ class CRM_CivirulesConditions_Contribution_SpecificAmount extends CRM_Civirules_
         return "=";
       break;
     }
+  }
+
+  /**
+   * Method to set a text for the count type condition param
+   *
+   * @return string
+   * @access private
+   */
+  private function setCountType() {
+    $result = "";
+    switch ($this->conditionParams['count_type']) {
+      case 0:
+        $result = "contributions that are not part of a recurring contribution";
+        break;
+      case 1:
+        $result = "contributions that are part of a recurring contribution";
+        break;
+      case 2:
+        $result = "all contributions (one-off and recurring)";
+        break;
+    }
+    return $result;
   }
 
   /**
@@ -171,8 +192,9 @@ class CRM_CivirulesConditions_Contribution_SpecificAmount extends CRM_Civirules_
    */
   public function userFriendlyConditionParams() {
     $operator = null;
-    $countOperator = $this->setOperator($this->conditionParams['count_operator']);
-    $formattedString = 'Number of contributions '.$countOperator.' '.$this->conditionParams['no_of_contributions'];
+    $countOperator = $this->setOperator();
+    $countType = $this->setCountType();
+    $formattedString = 'Number of '.$countType.' '.$countOperator.' '.$this->conditionParams['no_of_contributions'];
     if (!empty($this->conditionParams['financial_type'])) {
       $financialType = new CRM_Financial_BAO_FinancialType();
       $financialType->id = $this->conditionParams['financial_type'];
