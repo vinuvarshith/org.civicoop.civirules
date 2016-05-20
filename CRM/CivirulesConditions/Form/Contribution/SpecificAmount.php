@@ -20,6 +20,10 @@ class CRM_CivirulesConditions_Form_Contribution_SpecificAmount extends CRM_Civir
     $operatorList[3] = 'is more than or equal (>=)';
     $operatorList[4] = 'is less than (<)';
     $operatorList[5] = 'is less than or equal (<=)';
+    
+    $countTypeList[0] = "do not count contributions that are part of a recurring one";
+    $countTypeList[1] = "count only contributions that are part of a recurring one";
+    $countTypeList[2] = "count all contributions (one-time and recurring)";
 
     $financialTypes = CRM_Civirules_Utils::getFinancialTypes();
     $financialTypes[0] = ts(' - any -');
@@ -27,8 +31,10 @@ class CRM_CivirulesConditions_Form_Contribution_SpecificAmount extends CRM_Civir
 
     $this->add('hidden', 'rule_condition_id');
     $this->add('select', 'count_operator', ts('Operator'), $operatorList, true);
+    $this->add('select', 'count_type', ts('Count What?'), $countTypeList, true);
     $this->add('select', 'amount_operator', ts('where Operator'), $operatorList, true);
-    $this->add('select', 'financial_type', ts('of Financial Type'), $financialTypes, true);
+    $this->add('select', 'financial_type_id', ts('of Financial Type(s)'), $financialTypes, true,
+      array('id' => 'financial_type_ids', 'multiple' => 'multiple','class' => 'crm-select2'));
     $this->add('text', 'no_of_contributions', ts('Number of Contributions'), array(), true);
     $this->addRule('no_of_contributions','Number of contributions must be a whole number','numeric');
     $this->addRule('no_of_contributions','Number of contributions must be a whole number','nopunctuation');
@@ -55,8 +61,11 @@ class CRM_CivirulesConditions_Form_Contribution_SpecificAmount extends CRM_Civir
     if (!empty($data['no_of_contributions'])) {
       $defaultValues['no_of_contributions'] = $data['no_of_contributions'];
     }
-    if (!empty($data['financial_type'])) {
-      $defaultValues['financial_type'] = $data['financial_type'];
+    if (!empty($data['count_type'])) {
+      $defaultValues['count_type'] = $data['count_type'];
+    }
+    if (!empty($data['financial_type_id'])) {
+      $defaultValues['financial_type_id'] = $data['financial_type_id'];
     }
     if (!empty($data['amount_operator'])) {
       $defaultValues['amount_operator'] = $data['amount_operator'];
@@ -76,7 +85,8 @@ class CRM_CivirulesConditions_Form_Contribution_SpecificAmount extends CRM_Civir
   public function postProcess() {
     $data['count_operator'] = $this->_submitValues['count_operator'];
     $data['no_of_contributions'] = $this->_submitValues['no_of_contributions'];
-    $data['financial_type'] = $this->_submitValues['financial_type'];
+    $data['count_type'] = $this->_submitValues['count_type'];
+    $data['financial_type_id'] = $this->_submitValues['financial_type_id'];
     $data['amount_operator'] = $this->_submitValues['amount_operator'];
     $data['amount'] = $this->_submitValues['amount'];
     $this->ruleCondition->condition_params = serialize($data);

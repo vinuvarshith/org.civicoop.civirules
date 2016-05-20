@@ -14,8 +14,13 @@
     <div class="clear"></div>
   </div>
   <div class="crm-section">
-    <div class="label">{$form.financial_type.label}</div>
-    <div class="content">{$form.financial_type.html}</div>
+    <div class="label">{$form.count_type.label}</div>
+    <div class="content">{$form.count_type.html}</div>
+    <div class="clear"></div>
+  </div>
+  <div class="crm-section">
+    <div class="label">{$form.financial_type_id.label}</div>
+    <div class="content crm-select-container">{$form.financial_type_id.html}</div>
     <div class="clear"></div>
   </div>
   <div class="crm-section">

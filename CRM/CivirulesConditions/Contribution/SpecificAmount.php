@@ -71,7 +71,7 @@ class CRM_CivirulesConditions_Contribution_SpecificAmount extends CRM_Civirules_
             }
           break;
           default:
-            if ($dao->countContributions == $this->conditionParams['no_of_contribution']) {
+            if ($dao->countContributions == $this->conditionParams['no_of_contributions']) {
               $isConditionValid = TRUE;
             }
           break;
@@ -99,10 +99,22 @@ class CRM_CivirulesConditions_Contribution_SpecificAmount extends CRM_Civirules_
       $this->whereClauses[] = 'total_amount '.$this->setOperator($this->conditionParams['amount_operator']).' %'.$index;
       $this->whereParams[$index] = array($this->conditionParams['amount'], 'Money');
     }
-    if (!empty($this->conditionParams['financial_type'])) {
-      $index++;
-      $this->whereClauses[] = 'financial_type_id = %'.$index;
-      $this->whereParams[$index] = array($this->conditionParams['financial_type'], 'Integer');
+    if (!empty($this->conditionParams['financial_type_id'])) {
+      $finTypeClauses = array();
+      foreach ($this->conditionParams['financial_type_id'] as $finTypeId) {
+        $index++;
+        $finTypeClauses[] = 'financial_type_id = %'.$index;
+        $this->whereParams[$index] = array($finTypeId, 'Integer');
+      }
+      $this->whereClauses[] = '('.implode(' OR ', $finTypeClauses).')';
+    }
+    switch ($this->conditionParams['count_type']) {
+      case 0:
+        $this->whereClauses[] = 'contribution_recur_id IS NULL';
+        break;
+      case 1:
+        $this->whereClauses[] = 'contribution_recur_id IS NOT NULL';
+        break;
     }
   }
 
