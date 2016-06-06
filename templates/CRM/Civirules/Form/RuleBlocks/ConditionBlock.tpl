@@ -44,6 +44,6 @@
   </div>
   <div class="crm-submit-buttons">
     <a class="add button" title="Add Condition" href="{$ruleConditionAddUrl}">
-      <span><div class="icon add-icon"></div>Add Condition</span></a>
+      <span><div class="icon add-icon ui-icon-circle-plus"></div>Add Condition</span></a>
   </div>
 </div>

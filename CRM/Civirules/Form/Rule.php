@@ -244,7 +244,7 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
       $this->add('text', 'rule_created_contact', ts('Created By'));
       $triggerList = array(' - select - ') + CRM_Civirules_Utils::buildTriggerList();
       asort($triggerList);
-      $this->add('select', 'rule_trigger_select', ts('Select Trigger'), $triggerList);
+      $this->add('select', 'rule_trigger_select', ts('Select Trigger'), $triggerList, true, array('class' => 'crm-select2'));
       if ($this->_action == CRM_Core_Action::UPDATE) {
         $this->createUpdateFormElements();
       }
