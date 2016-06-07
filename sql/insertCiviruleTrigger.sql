@@ -78,9 +78,9 @@ VALUES
   ('new_pledge_payment', 'Pledge Payment is added', 'PledgePayment', 'create', null,  CURDATE(), 1),
   ('changed_pledge_payment', 'Pledge Payment is changed', 'PledgePayment', 'edit', null, CURDATE(), 1),
   ('deleted_pledge_payment', 'Pledge Payment is deleted', 'PledgePayment', 'delete', null, CURDATE(), 1),
-  ('new_relationship', 'Relationship is added', 'Relationship', 'create', null,  CURDATE(), 1),
-  ('changed_relationship', 'Relationship is changed', 'Relationship', 'edit', null, CURDATE(), 1),
-  ('deleted_relationship', 'Relationship is deleted', 'Relationship', 'delete', null, CURDATE(), 1),
+  ('new_relationship', 'Relationship is added', 'Relationship', 'create', 'CRM_CivirulesPostTrigger_Relationship',  CURDATE(), 1),
+  ('changed_relationship', 'Relationship is changed', 'Relationship', 'edit', 'CRM_CivirulesPostTrigger_Relationship', CURDATE(), 1),
+  ('deleted_relationship', 'Relationship is deleted', 'Relationship', 'delete', 'CRM_CivirulesPostTrigger_Relationship', CURDATE(), 1),
   ('new_tag', 'Tag is added', 'Tag', 'create', null,  CURDATE(), 1),
   ('changed_tag', 'Tag is changed', 'Tag', 'edit', null, CURDATE(), 1),
   ('deleted_tag', 'Tag is deleted', 'Tag', 'delete', null, CURDATE(), 1);
