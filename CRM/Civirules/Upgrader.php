@@ -93,4 +93,15 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     CRM_Core_DAO::executeQuery("update `civirule_trigger` SET `class_name` = 'CRM_CivirulesPostTrigger_Case' where `object_name` = 'Case'");
     return true;
   }
+
+  /**
+   * Update for a trigger class for relationships
+   *
+   * See https://github.com/CiviCooP/org.civicoop.civirules/issues/83
+   * @return bool
+   */
+  public function upgrade_1006() {
+    CRM_Core_DAO::executeQuery("update `civirule_trigger` SET `class_name` = 'CRM_CivirulesPostTrigger_Relationship' where `object_name` = 'Relationship'");
+    return true;
+  }
 }
