@@ -44,7 +44,7 @@ class CRM_Civirules_Utils_CustomDataFromPre {
      *   [] => value_b
      *
      */
-    if (CRM_Civirules_Utils_CustomField::isCustomFieldMultiselect($field_id) && is_array($value)) {
+    if ($field_id > 0 && CRM_Civirules_Utils_CustomField::isCustomFieldMultiselect($field_id) && is_array($value)) {
       $all_ones = true;
       foreach($value as $i => $j) {
         if ($j != 1) {
