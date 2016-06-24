@@ -207,6 +207,24 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
     $errors = array();
     if (isset($fields['rule_action_select']) && empty($fields['rule_action_select'])) {
       $errors['rule_action_select'] = ts('Action has to be selected, press CANCEL if you do not want to add an action');
+    } else {
+      $actionClass = CRM_Civirules_BAO_Action::getActionObjectById($fields['rule_action_select'], false);
+      if (!$actionClass) {
+        $errors['rule_action_select'] = ts('Not a valid action, action class is missing');
+      } else {
+        $rule = new CRM_Civirules_BAO_Rule();
+        $rule->id = $fields['rule_id'];
+        $rule->find(TRUE);
+        $trigger = new CRM_Civirules_BAO_Trigger();
+        $trigger->id = $rule->trigger_id;
+        $trigger->find(TRUE);
+
+        $triggerObject = CRM_Civirules_BAO_Trigger::getPostTriggerObjectByClassName($trigger->class_name, TRUE);
+        $triggerObject->setTriggerId($trigger->id);
+        if (!$actionClass->doesWorkWithTrigger($triggerObject, $rule)) {
+          $errors['rule_action_select'] = ts('This action is not available with trigger %1', array(1 => $trigger->label));
+        }
+      }
     }
     if (!empty($fields['delay_select'])) {
       $delayClass = CRM_Civirules_Delay_Factory::getDelayClassByName($fields['delay_select']);

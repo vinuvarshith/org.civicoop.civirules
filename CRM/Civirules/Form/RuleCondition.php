@@ -152,6 +152,13 @@ class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
         return $errors;
       }
     }
+
+    if (!$conditionClass->doesWorkWithTrigger($triggerObject, $rule)) {
+      $errors['rule_condition_select'] = ts('This condition is not available with trigger %1', array(1 => $trigger->label));
+      return $errors;
+    }
+    
+    
     return true;
   }
 
