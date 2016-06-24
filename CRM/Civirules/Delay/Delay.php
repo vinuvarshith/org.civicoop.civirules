@@ -6,9 +6,10 @@ abstract class CRM_Civirules_Delay_Delay {
    * Returns the DateTime to which an action is delayed to
    *
    * @param DateTime $date
+   * @param CRM_Civirules_TriggerData_TriggerData
    * @return DateTime
    */
-  abstract public function delayTo(DateTime $date);
+  abstract public function delayTo(DateTime $date, CRM_Civirules_TriggerData_TriggerData $triggerData);
 
   /**
    * Add elements to the form

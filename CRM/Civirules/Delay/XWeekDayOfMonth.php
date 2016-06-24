@@ -10,7 +10,7 @@ class CRM_Civirules_Delay_XWeekDayOfMonth extends CRM_Civirules_Delay_Delay {
 
   protected $time_minute = '00';
 
-  public function delayTo(DateTime $date) {
+  public function delayTo(DateTime $date, CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $d = clone $date;
     $d->modify('-30 minutes');
     $mod = $this->week_offset .' '.$this->day.' of this month';

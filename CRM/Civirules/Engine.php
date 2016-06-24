@@ -76,7 +76,7 @@ class CRM_Civirules_Engine {
     $object->setRuleActionData($ruleAction);
 
     //determine if the action should be executed with a delay
-    $delay = self::getActionDelay($ruleAction, $object);
+    $delay = self::getActionDelay($ruleAction, $object, $triggerData);
     if ($delay instanceof DateTime) {
       self::delayAction($delay, $object, $triggerData);
     } else {
@@ -183,19 +183,20 @@ class CRM_Civirules_Engine {
    *
    * @param $ruleAction
    * @param CRM_Civirules_Action $actionObject
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return bool|\DateTime
    */
-  protected static function getActionDelay($ruleAction, CRM_Civirules_Action $actionObject) {
+  protected static function getActionDelay($ruleAction, CRM_Civirules_Action $actionObject, CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $delayedTo = new DateTime();
     $now = new DateTime();
     if (!empty($ruleAction['delay'])) {
       $delayClass = unserialize(($ruleAction['delay']));
       if ($delayClass instanceof CRM_Civirules_Delay_Delay) {
-        $delayedTo = $delayClass->delayTo($delayedTo);
+        $delayedTo = $delayClass->delayTo($delayedTo, $triggerData);
       }
     }
 
-    $actionDelayedTo = $actionObject->delayTo($delayedTo);
+    $actionDelayedTo = $actionObject->delayTo($delayedTo, $triggerData);
     if ($actionDelayedTo instanceof DateTime) {
       if ($now < $actionDelayedTo) {
         return $actionDelayedTo;

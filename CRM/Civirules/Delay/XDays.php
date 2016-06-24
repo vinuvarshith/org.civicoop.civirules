@@ -4,7 +4,7 @@ class CRM_Civirules_Delay_XDays extends CRM_Civirules_Delay_Delay {
 
   protected $dayOffset;
 
-  public function delayTo(DateTime $date) {
+  public function delayTo(DateTime $date, CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $date->modify("+ ".$this->dayOffset." days");
     return $date;
   }

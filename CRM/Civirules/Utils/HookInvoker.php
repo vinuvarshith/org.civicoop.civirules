@@ -21,6 +21,17 @@ class CRM_Civirules_Utils_HookInvoker {
   }
 
   /**
+   * hook_civirules_alter_delay_classes
+   *
+   * @param array $classes
+   *
+   * This hook could alter the classes with options for a delay
+   */
+  public function hook_civirules_alter_delay_classes($classes) {
+    $this->invoke('civirules_alter_delay_classes', 1, $classes);
+  }
+
+  /**
    * hook_civicrm_civirules_logger
    *
    * @param \Psr\Log\LoggerInterface|NULL $logger

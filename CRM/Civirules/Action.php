@@ -32,9 +32,10 @@ abstract class CRM_Civirules_Action {
    * If you don't have a delay you should return false
    *
    * @param DateTime $date the current scheduled date/time
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    * @return bool|DateTime
    */
-  public function delayTo(DateTime $date) {
+  public function delayTo(DateTime $date, CRM_Civirules_TriggerData_TriggerData $triggerData) {
     return false;
   }
 

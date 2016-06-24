@@ -193,6 +193,10 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
         'validateRuleAction'
       ));
     }
+    $this->addFormRule(array(
+      'CRM_Civirules_Form_RuleAction',
+      'validateDelay'
+    ));
   }
 
   /**
@@ -226,6 +230,24 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
         }
       }
     }
+
+    if (count($errors)) {
+      return $errors;
+    }
+
+    return TRUE;
+  }
+
+  /**
+   * Function to validate value of the delay
+   *
+   * @param array $fields
+   * @return array|bool
+   * @access public
+   * @static
+   */
+  static function validateDelay($fields) {
+    $errors = array();
     if (!empty($fields['delay_select'])) {
       $delayClass = CRM_Civirules_Delay_Factory::getDelayClassByName($fields['delay_select']);
       $delayClass->validate($fields, $errors);

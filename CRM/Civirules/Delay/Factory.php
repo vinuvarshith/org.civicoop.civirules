@@ -8,12 +8,18 @@ class CRM_Civirules_Delay_Factory {
    * @return array
    */
   public static function getAllDelayClasses() {
-    return array(
+    $classes = array(
       new CRM_Civirules_Delay_XMinutes(),
       new CRM_Civirules_Delay_XDays(),
       new CRM_Civirules_Delay_XWeekDay(),
       new CRM_Civirules_Delay_XWeekDayOfMonth(),
+      new CRM_Civirules_Delay_DayOfMonthBasedOnContribution()
     );
+
+    $hookInvoker = CRM_Civirules_Utils_HookInvoker::singleton();
+    $hookInvoker->hook_civirules_alter_delay_classes($classes);
+
+    return $classes;
   }
 
   /**
