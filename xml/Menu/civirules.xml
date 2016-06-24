@@ -78,6 +78,13 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/condition/activemembershiptype</path>
+    <page_callback>CRM_CivirulesConditions_Form_Membership_ActiveMembership</page_callback>
+    <title>membership type</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/condition/membershipstatus</path>
     <page_callback>CRM_CivirulesConditions_Form_Membership_Status</page_callback>
     <title>membership status</title>
