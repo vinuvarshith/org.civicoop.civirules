@@ -124,8 +124,8 @@ class CRM_CivirulesConditions_Contribution_SpecificAmount extends CRM_Civirules_
    * @return string
    * @access protected
    */
-  private function setOperator() {
-    switch ($this->conditionParams['count_operator']) {
+  private function setOperator($operator) {
+    switch ($operator) {
       case 1:
         return "!=";
       break;
@@ -192,7 +192,7 @@ class CRM_CivirulesConditions_Contribution_SpecificAmount extends CRM_Civirules_
    */
   public function userFriendlyConditionParams() {
     $operator = null;
-    $countOperator = $this->setOperator();
+    $countOperator = $this->setOperator($this->conditionParams['count_operator']);
     $countType = $this->setCountType();
     $formattedString = 'Number of '.$countType.' '.$countOperator.' '.$this->conditionParams['no_of_contributions'];
     if (!empty($this->conditionParams['financial_type'])) {
