@@ -50,7 +50,7 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
    * Post rule details are shown on the form just between the rule name and the
    * linked trigger
    *
-   * @param $postRuleDetails
+   * @param $postRuleBlock
    */
   public function setPostRuleBlock($postRuleBlock) {
     $this->postRuleBlock = $postRuleBlock;

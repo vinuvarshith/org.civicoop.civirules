@@ -15,6 +15,7 @@ class CRM_Civirules_Page_Rule extends CRM_Core_Page {
    * @access public
    */
   function run() {
+
     $this->setPageConfiguration();
     $this->assign('rules', $this->getRules());
     parent::run();

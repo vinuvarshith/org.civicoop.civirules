@@ -20,8 +20,7 @@ class CRM_Civirules_Config
   /**
    * Constructor
    */
-  function __construct()
-  {
+  function __construct()   {
     $this->setTriggerProperties();
   }
 
