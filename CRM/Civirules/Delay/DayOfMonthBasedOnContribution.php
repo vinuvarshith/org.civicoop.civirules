@@ -35,13 +35,13 @@ class CRM_Civirules_Delay_DayOfMonthBasedOnContribution extends CRM_Civirules_De
     return ts('Delay by the %1 day of the month of the contribution', array(1 => $this->day_of_month));
   }
 
-  public function addElements(CRM_Core_Form &$form) {
-    $form->add('text', 'day_of_month', ts('Day of month (1-31)'));
+  public function addElements(CRM_Core_Form &$form, $prefix) {
+    $form->add('text', $prefix.'day_of_month', ts('Day of month (1-31)'));
   }
 
-  public function validate($values, &$errors) {
-    if (empty($values['day_of_month']) || !is_numeric($values['day_of_month']) || $values['day_of_month'] < 0 || $values['day_of_month'] > 31) {
-      $errors['day_of_month'] = ts('You need to provide a day of the month (between 1 and 31)');
+  public function validate($values, &$errors, $prefix) {
+    if (empty($values[$prefix.'day_of_month']) || !is_numeric($values[$prefix.'day_of_month']) || $values[$prefix.'day_of_month'] < 0 || $values[$prefix.'day_of_month'] > 31) {
+      $errors[$prefix.'day_of_month'] = ts('You need to provide a day of the month (between 1 and 31)');
     }
 
     $rule = new CRM_Civirules_BAO_Rule();
@@ -56,17 +56,17 @@ class CRM_Civirules_Delay_DayOfMonthBasedOnContribution extends CRM_Civirules_De
 
     $availableEntities = $triggerObject->getProvidedEntities();
     if (!isset($availableEntities['Contribution'])) {
-      $errors['delay_select'] = ts('This delay is not available with trigger %1', array(1 => $trigger->label));
+      $errors[$prefix.'delay_select'] = ts('This delay is not available with trigger %1', array(1 => $trigger->label));
     }
   }
 
-  public function setValues($values) {
-    $this->day_of_month = $values['day_of_month'];
+  public function setValues($values, $prefix) {
+    $this->day_of_month = $values[$prefix.'day_of_month'];
   }
 
-  public function getValues() {
+  public function getValues($prefix) {
     $values = array();
-    $values['day_of_month'] = $this->day_of_month;
+    $values[$prefix.'day_of_month'] = $this->day_of_month;
     return $values;
   }
   

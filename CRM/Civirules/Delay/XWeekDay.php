@@ -45,7 +45,7 @@ class CRM_Civirules_Delay_XWeekDay extends CRM_Civirules_Delay_Delay {
 
   public function getDelayExplanation() {
     $offsets = $this->getWeekOffset();
-    return ts('Delay action to %1 of %2 at %3:%4',
+    return ts('Delay to %1 of %2 at %3:%4',
       array(
         1 => ts($this->day),
         2 => $offsets[$this->week_offset],
@@ -54,11 +54,11 @@ class CRM_Civirules_Delay_XWeekDay extends CRM_Civirules_Delay_Delay {
       ));
   }
 
-  public function addElements(CRM_Core_Form &$form) {
-    $form->add('select', 'XWeekDay_week_offset', ts('Offset'), $this->getWeekOffset());
-    $form->add('select', 'XWeekDay_day', ts('Days'), $this->getDays());
-    $form->add('text', 'XWeekDay_time_hour', ts('Time (hour)'));
-    $form->add('text', 'XWeekDay_time_minute', ts('Time (minute)'));
+  public function addElements(CRM_Core_Form &$form,$prefix) {
+    $form->add('select', $prefix.'XWeekDay_week_offset', ts('Offset'), $this->getWeekOffset());
+    $form->add('select', $prefix.'XWeekDay_day', ts('Days'), $this->getDays());
+    $form->add('text', $prefix.'XWeekDay_time_hour', ts('Time (hour)'));
+    $form->add('text', $prefix.'XWeekDay_time_minute', ts('Time (minute)'));
   }
 
   protected function getDays() {
@@ -81,28 +81,28 @@ class CRM_Civirules_Delay_XWeekDay extends CRM_Civirules_Delay_Delay {
     );
   }
 
-  public function validate($values, &$errors) {
-    if (empty($values['XWeekDay_time_hour']) || !is_numeric($values['XWeekDay_time_hour']) || $values['XWeekDay_time_hour'] < 0 || $values['XWeekDay_time_hour'] > 23) {
-      $errors['XWeekDay_time_hour'] = ts('You need to provide a number between 0 and 23');
+  public function validate($values, &$errors,$prefix) {
+    if (empty($values[$prefix.'XWeekDay_time_hour']) || !is_numeric($values[$prefix.'XWeekDay_time_hour']) || $values[$prefix.'XWeekDay_time_hour'] < 0 || $values[$prefix.'XWeekDay_time_hour'] > 23) {
+      $errors[$prefix.'XWeekDay_time_hour'] = ts('You need to provide a number between 0 and 23');
     }
-    if (empty($values['XWeekDay_time_minute']) || !is_numeric($values['XWeekDay_time_minute']) || $values['XWeekDay_time_minute'] < 0 || $values['XWeekDay_time_minute'] > 59) {
-      $errors['XWeekDay_time_minute'] = ts('You need to provide a number between 0 and 59');
+    if (empty($values[$prefix.'XWeekDay_time_minute']) || !is_numeric($values[$prefix.'XWeekDay_time_minute']) || $values[$prefix.'XWeekDay_time_minute'] < 0 || $values[$prefix.'XWeekDay_time_minute'] > 59) {
+      $errors[$prefix.'XWeekDay_time_minute'] = ts('You need to provide a number between 0 and 59');
     }
   }
 
-  public function setValues($values) {
-    $this->week_offset = $values['XWeekDay_week_offset'];
-    $this->day = $values['XWeekDay_day'];
-    $this->time_hour = $values['XWeekDay_time_hour'];
-    $this->time_minute = $values['XWeekDay_time_minute'];
+  public function setValues($values,$prefix) {
+    $this->week_offset = $values[$prefix.'XWeekDay_week_offset'];
+    $this->day = $values[$prefix.'XWeekDay_day'];
+    $this->time_hour = $values[$prefix.'XWeekDay_time_hour'];
+    $this->time_minute = $values[$prefix.'XWeekDay_time_minute'];
   }
 
-  public function getValues() {
+  public function getValues($prefix) {
     $values = array();
-    $values['XWeekDay_week_offset'] = $this->week_offset;
-    $values['XWeekDay_day'] = $this->day;
-    $values['XWeekDay_time_hour'] = $this->time_hour;
-    $values['XWeekDay_time_minute'] = $this->time_minute;
+    $values[$prefix.'XWeekDay_week_offset'] = $this->week_offset;
+    $values[$prefix.'XWeekDay_day'] = $this->day;
+    $values[$prefix.'XWeekDay_time_hour'] = $this->time_hour;
+    $values[$prefix.'XWeekDay_time_minute'] = $this->time_minute;
     return $values;
   }
 
@@ -111,9 +111,9 @@ class CRM_Civirules_Delay_XWeekDay extends CRM_Civirules_Delay_Delay {
    *
    * @param $values
    */
-  public function setDefaultValues(&$values) {
-    $values['XWeekDay_time_hour'] = '9';
-    $values['XWeekDay_time_minute'] = '00';
+  public function setDefaultValues(&$values, $prefix) {
+    $values[$prefix.'XWeekDay_time_hour'] = '9';
+    $values[$prefix.'XWeekDay_time_minute'] = '00';
   }
 
 }

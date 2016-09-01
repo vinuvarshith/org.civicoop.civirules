@@ -14,26 +14,26 @@ class CRM_Civirules_Delay_XMinutes extends CRM_Civirules_Delay_Delay {
   }
 
   public function getDelayExplanation() {
-    return ts('Delay action by %1 minutes', array(1 => $this->minuteOffset));
+    return ts('Delay by %1 minutes', array(1 => $this->minuteOffset));
   }
 
-  public function addElements(CRM_Core_Form &$form) {
-    $form->add('text', 'xminutes_minuteOffset', ts('Minutes'));
+  public function addElements(CRM_Core_Form &$form, $prefix) {
+    $form->add('text', $prefix.'xminutes_minuteOffset', ts('Minutes'));
   }
 
-  public function validate($values, &$errors) {
-    if (empty($values['xminutes_minuteOffset']) || !is_numeric($values['xminutes_minuteOffset'])) {
-      $errors['xminutes_minuteOffset'] = ts('You need to provide a number of minutess');
+  public function validate($values, &$errors,$prefix) {
+    if (empty($values[$prefix.'xminutes_minuteOffset']) || !is_numeric($values[$prefix.'xminutes_minuteOffset'])) {
+      $errors[$prefix.'xminutes_minuteOffset'] = ts('You need to provide a number of minutess');
     }
   }
 
-  public function setValues($values) {
-    $this->minuteOffset = $values['xminutes_minuteOffset'];
+  public function setValues($values,$prefix) {
+    $this->minuteOffset = $values[$prefix.'xminutes_minuteOffset'];
   }
 
-  public function getValues() {
+  public function getValues($prefix) {
     $values = array();
-    $values['xminutes_minuteOffset'] = $this->minuteOffset;
+    $values[$prefix.'xminutes_minuteOffset'] = $this->minuteOffset;
     return $values;
   }
 

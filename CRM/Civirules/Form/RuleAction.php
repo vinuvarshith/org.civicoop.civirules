@@ -88,7 +88,7 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
 
     if (!empty($this->_submitValues['delay_select'])) {
       $delayClass = CRM_Civirules_Delay_Factory::getDelayClassByName($this->_submitValues['delay_select']);
-      $delayClass->setValues($this->_submitValues);
+      $delayClass->setValues($this->_submitValues, '');
       $saveParams['delay'] = serialize($delayClass);
       if (!empty($this->_submitValues['ignore_condition_with_delay'])) {
         $saveParams['ignore_condition_with_delay'] = '1';
@@ -133,9 +133,10 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
     $delayList = array(' - No Delay - ') + CRM_Civirules_Delay_Factory::getOptionList();
     $this->add('select', 'delay_select', ts('Delay action to'), $delayList);
     foreach(CRM_Civirules_Delay_Factory::getAllDelayClasses() as $delay_class) {
-      $delay_class->addElements($this);
+      $delay_class->addElements($this, '');
     }
     $this->assign('delayClasses', CRM_Civirules_Delay_Factory::getAllDelayClasses());
+    $this->assign('delayPrefix', '');
     $this->add('checkbox', 'ignore_condition_with_delay', ts('Don\'t recheck condition upon processing of delayed action'));
 
     $this->addButtons(array(
@@ -147,7 +148,7 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
     $defaults['rule_id'] = $this->ruleId;
 
     foreach(CRM_Civirules_Delay_Factory::getAllDelayClasses() as $delay_class) {
-      $delay_class->setDefaultValues($defaults);
+      $delay_class->setDefaultValues($defaults, '');
     }
 
     if (!empty($this->ruleActionId)) {
@@ -160,7 +161,7 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
       $delayClass = unserialize($this->ruleAction->delay);
       if ($delayClass) {
         $defaults['delay_select'] = get_class($delayClass);
-        foreach($delayClass->getValues() as $key => $val) {
+        foreach($delayClass->getValues('') as $key => $val) {
           $defaults[$key] = $val;
         }
       }
@@ -250,7 +251,7 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
     $errors = array();
     if (!empty($fields['delay_select'])) {
       $delayClass = CRM_Civirules_Delay_Factory::getDelayClassByName($fields['delay_select']);
-      $delayClass->validate($fields, $errors);
+      $delayClass->validate($fields, $errors, '');
     }
 
     if (count($errors)) {

@@ -52,8 +52,14 @@ class CRM_CivirulesActions_Activity_Form_Activity extends CRM_CivirulesActions_F
         'api' => array('params' => array('is_deceased' => 0))
       );
       $this->addEntityRef('assignee_contact_id', ts('Assigned to'), $attributes, false);
-
     }
+
+    $delayList = array('' => ts(' - Do not set an activity date - ')) + CRM_Civirules_Delay_Factory::getOptionList();
+    $this->add('select', 'activity_date_time', ts('Set activity date'), $delayList);
+    foreach(CRM_Civirules_Delay_Factory::getAllDelayClasses() as $delay_class) {
+      $delay_class->addElements($this, 'activity_date_time');
+    }
+    $this->assign('delayClasses', CRM_Civirules_Delay_Factory::getAllDelayClasses());
 
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
@@ -80,8 +86,65 @@ class CRM_CivirulesActions_Activity_Form_Activity extends CRM_CivirulesActions_F
     }
     if (!empty($data['assignee_contact_id'])) {
       $defaultValues['assignee_contact_id'] = $data['assignee_contact_id'];
+      if ($this->use_old_contact_ref_fields) {
+        $assignee_contact_id = reset($data['assignee_contact_id']);
+        if (!empty($assignee_contact_id)) {
+          $defaultValues['contact[1]'] = civicrm_api3('Contact', 'getvalue', array(
+            'id' => $assignee_contact_id,
+            'return' => 'display_name'
+          ));
+          $defaultValues['contact_select_id[1]'] = $assignee_contact_id;
+        }
+      }
     }
+
+    foreach(CRM_Civirules_Delay_Factory::getAllDelayClasses() as $delay_class) {
+      $delay_class->setDefaultValues($defaultValues, 'activity_date_time');
+    }
+    $activityDateClass = unserialize($data['activity_date_time']);
+    if ($activityDateClass) {
+      $defaultValues['activity_date_time'] = get_class($activityDateClass);
+      foreach($activityDateClass->getValues('activity_date_time') as $key => $val) {
+        $defaultValues[$key] = $val;
+      }
+    }
+
     return $defaultValues;
+  }
+
+  /**
+   * Function to add validation action rules (overrides parent function)
+   *
+   * @access public
+   */
+  public function addRules() {
+    parent::addRules();
+    $this->addFormRule(array(
+      'CRM_CivirulesActions_Activity_Form_Activity',
+      'validateActivityDateTime'
+    ));
+  }
+
+  /**
+   * Function to validate value of the delay
+   *
+   * @param array $fields
+   * @return array|bool
+   * @access public
+   * @static
+   */
+  static function validateActivityDateTime($fields) {
+    $errors = array();
+    if (!empty($fields['activity_date_time'])) {
+      $activityDateClass = CRM_Civirules_Delay_Factory::getDelayClassByName($fields['activity_date_time']);
+      $activityDateClass->validate($fields, $errors, 'activity_date_time');
+    }
+
+    if (count($errors)) {
+      return $errors;
+    }
+
+    return TRUE;
   }
 
   /**
@@ -102,6 +165,13 @@ class CRM_CivirulesActions_Activity_Form_Activity extends CRM_CivirulesActions_F
       }
     } else {
       $data["assignee_contact_id"] = explode(',', $this->_submitValues["assignee_contact_id"]);
+    }
+
+    $data['activity_date_time'] = 'null';
+    if (!empty($this->_submitValues['activity_date_time'])) {
+      $scheduledDateClass = CRM_Civirules_Delay_Factory::getDelayClassByName($this->_submitValues['activity_date_time']);
+      $scheduledDateClass->setValues($this->_submitValues, 'activity_date_time');
+      $data['activity_date_time'] = serialize($scheduledDateClass);
     }
 
     $this->ruleAction->action_params = serialize($data);
