@@ -40,6 +40,17 @@ class CRM_CivirulesActions_Activity_Add extends CRM_CivirulesActions_Generic_Api
         $params['assignee_contact_id'] = '';
       }
     }
+
+    if (!empty($action_params['activity_date_time'])) {
+      $delayClass = unserialize(($action_params['activity_date_time']));
+      if ($delayClass instanceof CRM_Civirules_Delay_Delay) {
+        $activityDate = $delayClass->delayTo(new DateTime(), $triggerData);
+        if ($activityDate instanceof DateTime) {
+          $params['activity_date_time'] = $activityDate->format('Ymd His');
+        }
+      }
+    }
+
     return $params;
   }
 
@@ -98,6 +109,14 @@ class CRM_CivirulesActions_Activity_Add extends CRM_CivirulesActions_Generic_Api
       $return .= '<br>';
       $return .= ts("Assignee(s): %1", array(1 => $assignees));
     }
+
+    if (!empty($params['activity_date_time'])) {
+      $delayClass = unserialize(($params['activity_date_time']));
+      if ($delayClass instanceof CRM_Civirules_Delay_Delay) {
+        $return .= '<br>'.ts('Activity date time').': '.$delayClass->getDelayExplanation();
+      }
+    }
+
     return $return;
   }
 

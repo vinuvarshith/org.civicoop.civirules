@@ -15,33 +15,37 @@ abstract class CRM_Civirules_Delay_Delay {
    * Add elements to the form
    *
    * @param \CRM_Core_Form $form
+   * @param prefix - The prefix for the form field name
    * @return mixed
    */
-  abstract public function addElements(CRM_Core_Form &$form);
+  abstract public function addElements(CRM_Core_Form &$form, $prefix);
 
   /**
    * Validate the values and set error message in $errors
    *
    * @param array $values
    * @param array $errors
+   * @param prefix - The prefix for the form field name
    * @return void
    */
-  abstract public function validate($values, &$errors);
+  abstract public function validate($values, &$errors, $prefix);
 
   /**
    * Set the values
    *
    * @param array $values
+   * @param prefix - The prefix for the form field name
    * @return void
    */
-  abstract public function setValues($values);
+  abstract public function setValues($values, $prefix);
 
   /**
    * Get the values
    *
+   * @param prefix - The prefix for the form field name
    * @return array
    */
-  abstract public function getValues();
+  abstract public function getValues($prefix);
 
   /**
    * Returns an description of the delay
@@ -63,8 +67,9 @@ abstract class CRM_Civirules_Delay_Delay {
    * Set default values
    *
    * @param $values
+   * @param prefix - The prefix for the form field name
    */
-  public function setDefaultValues(&$values) {
+  public function setDefaultValues(&$values, $prefix) {
 
   }
 
