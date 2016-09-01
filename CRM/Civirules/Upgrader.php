@@ -121,4 +121,27 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     }
     return true;
   }
+
+  /**
+   * Update for changed recurring contribution class names
+   */
+  public function upgrade_1008() {
+    $query = 'UPDATE civirule_condition SET class_name = %1 WHERE class_name = %2';
+    $paramsRecurCount = array(
+      1 => array('CRM_CivirulesConditions_ContributionRecur_Count', 'String'),
+      2 => array('CRM_CivirulesConditions_Contribution_CountRecurring', 'String'));
+    CRM_Core_DAO::executeQuery($query, $paramsRecurCount);
+
+    $paramsRecurIs = array(
+      1 => array('CRM_CivirulesConditions_ContributionRecur_DonorIsRecurring', 'String'),
+      2 => array('CRM_CivirulesConditions_Contribution_DonorIsRecurring', 'String'));
+    CRM_Core_DAO::executeQuery($query, $paramsRecurIs);
+
+    $paramsRecurEnd = array(
+      1 => array('CRM_CivirulesConditions_ContributionRecur_EndDate', 'String'),
+      2 => array('CRM_CivirulesConditions_Contribution_RecurringEndDate', 'String'));
+    CRM_Core_DAO::executeQuery($query, $paramsRecurEnd);
+
+    return true;
+  }
 }
