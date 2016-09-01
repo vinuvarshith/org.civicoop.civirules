@@ -127,6 +127,9 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
     );
 
     foreach( $fields['values'] as $field ) {
+      if (!isset($field['name'])) {
+        continue;
+      }
       if ( $field['name'] == $fieldname ) {
         switch( $field['type'] ) {
           case $dateType:
