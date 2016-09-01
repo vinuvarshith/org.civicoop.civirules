@@ -22,7 +22,7 @@ class CRM_Civirules_Delay_XDays extends CRM_Civirules_Delay_Delay {
   }
 
   public function validate($values, &$errors, $prefix) {
-    if (empty($values[$prefix.'xdays_dayOffset']) || !is_numeric($prefix.$values['xdays_dayOffset'])) {
+    if (empty($values[$prefix.'xdays_dayOffset']) || !is_numeric($values[$prefix.'xdays_dayOffset'])) {
       $errors[$prefix.'xdays_dayOffset'] = ts('You need to provide a number of days');
     }
   }

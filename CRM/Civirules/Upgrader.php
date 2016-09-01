@@ -144,4 +144,15 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
 
     return true;
   }
+
+  /**
+   * Update to insert the trigger for Activity Date reached
+   */
+  public function upgrade_1009() {
+    CRM_Core_DAO::executeQuery("
+      INSERT INTO civirule_trigger (name, label, object_name, op, cron, class_name, created_date, created_user_id)
+      VALUES ('activitydate', 'Activity Date reached', null, null, 1, 'CRM_CivirulesCronTrigger_ActivityDate',  CURDATE(), 1);"
+    );
+    return true;
+  }
 }
