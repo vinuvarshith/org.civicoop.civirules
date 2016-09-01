@@ -239,12 +239,15 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     $this->add('hidden', 'id', ts('RuleId'), array('id' => 'ruleId'));
     if ($this->_action != CRM_Core_Action::DELETE) {
       $this->add('text', 'rule_label', ts('Name'), array('size' => CRM_Utils_Type::HUGE), TRUE);
+      $this->add('text', 'rule_description', ts('Description'), array('size' => 100, 'maxlength' => 256));
+      $this->add('textarea', 'rule_help_text', ts('Help text with purpose of rule'),
+        array('rows' => 6, 'cols'    => 100), false);
       $this->add('checkbox', 'rule_is_active', ts('Enabled'));
       $this->add('text', 'rule_created_date', ts('Created Date'));
       $this->add('text', 'rule_created_contact', ts('Created By'));
       $triggerList = array(' - select - ') + CRM_Civirules_Utils::buildTriggerList();
       asort($triggerList);
-      $this->add('select', 'rule_trigger_select', ts('Select Trigger'), $triggerList, true, array('class' => 'crm-select2'));
+      $this->add('select', 'rule_trigger_select', ts('Select Trigger'), $triggerList, false, array('class' => 'crm-select2'));
       if ($this->_action == CRM_Core_Action::UPDATE) {
         $this->createUpdateFormElements();
       }
@@ -306,6 +309,12 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     $ruleData = CRM_Civirules_BAO_Rule::getValues(array('id' => $this->ruleId));
     if (!empty($ruleData) && !empty($this->ruleId)) {
       $defaults['rule_label'] = $ruleData[$this->ruleId]['label'];
+      if (isset($ruleData[$this->ruleId]['description'])) {
+        $defaults['rule_description'] = $ruleData[$this->ruleId]['description'];
+      }
+      if (isset($ruleData[$this->ruleId]['help_text'])) {
+        $defaults['rule_help_text'] = $ruleData[$this->ruleId]['help_text'];
+      }
       $defaults['rule_is_active'] = $ruleData[$this->ruleId]['is_active'];
       $defaults['rule_created_date'] = date('d-m-Y', 
         strtotime($ruleData[$this->ruleId]['created_date']));
@@ -432,6 +441,9 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
         'modified_user_id' => $userId,
         'id' => $formValues['id']);
     }
+    $ruleParams['label'] = $formValues['rule_label'];
+    $ruleParams['description'] = $formValues['rule_description'];
+    $ruleParams['help_text'] = $formValues['rule_help_text'];
     $ruleParams['label'] = $formValues['rule_label'];
     $ruleParams['name'] = CRM_Civirules_Utils::buildNameFromLabel($formValues['rule_label']);
     $ruleParams['is_active'] = $formValues['rule_is_active'] ? 1 : 0;

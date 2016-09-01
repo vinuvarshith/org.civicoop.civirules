@@ -7,6 +7,16 @@
     <div class="clear"></div>
   </div>
   <div class="crm-section">
+    <div class="label">{$form.rule_description.label}</div>
+    <div class="content">{$form.rule_description.html}</div>
+    <div class="clear"></div>
+  </div>
+  <div class="crm-section">
+    <div class="label">{$form.rule_help_text.label}</div>
+    <div class="content">{$form.rule_help_text.html}</div>
+    <div class="clear"></div>
+  </div>
+  <div class="crm-section">
     <div class="label">{$form.rule_is_active.label}</div>
     <div class="content">{$form.rule_is_active.html}</div>
     <div class="clear"></div>

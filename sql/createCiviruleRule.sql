@@ -5,6 +5,8 @@ CREATE TABLE IF NOT EXISTS civirule_rule (
   trigger_id INT UNSIGNED NULL,
   trigger_params TEXT NULL,
   is_active TINYINT NULL DEFAULT 1,
+  description VARCHAR(256) NULL,
+  help_text TEXT NULL,
   created_date DATE NULL,
   created_user_id INT NULL,
   modified_date DATE NULL,

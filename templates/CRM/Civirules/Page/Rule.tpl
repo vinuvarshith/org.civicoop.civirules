@@ -14,6 +14,7 @@
           <th class="sorting-disabled" rowspan="1" colspan="1">{ts}Name{/ts}</th>
           <th class="sorting-disabled" rowspan="1" colspan="1">{ts}Trigger{/ts}</th>
           <th class="sorting-disabled" rowspan="1" colspan="1">{ts}Active{/ts}</th>
+          <th class="sorting-disabled" rowspan="1" colspan="1">{ts}Description{/ts}</th>
           <th class="sorting-disabled" rowspan="1" colspan="1">{ts}Date Created{/ts}</th>
           <th class="sorting-disabled" rowspan="1" colspan="1">{ts}Created By{/ts}</th>
           <th class="sorting_disabled" rowspan="1" colspan="1"></th>
@@ -21,11 +22,13 @@
       </thead>
       <tbody>
         {assign var="row_class" value="odd-row"}
-          {foreach from=$rules key=rule_id item=rule}
-          <tr id="row1" class={$row_class}>
+        {foreach from=$rules key=rule_id item=rule}
+          <tr id="row_{$rule.id}" class={$row_class}>
+            <td hidden="1">{$rule.id}</td>
             <td>{$rule.label}</td>
             <td>{$rule.trigger_label}</td>
             <td>{$rule.is_active}</td>
+            <td>{$rule.description} <a href = "#" class="helpicon" onclick="showRuleHelp({$rule.id},'{$rule.help_text}')"></a></td>
             <td>{$rule.created_date|crmDate}</td>
             <td>{$rule.created_contact_name}</td>
             <td>
@@ -51,3 +54,17 @@
     </a>
   </div>
 </div>
+
+{literal}
+  <script type="text/javascript">
+    function showRuleHelp(ruleId, helpText) {
+      if (helpText) {
+        CRM.alert(helpText, 'CiviRule Help', 'info');
+      } else {
+        CRM.alert('There is no help text defined for this rule. You can set the help text when you edit the rule', 'No Help for CiviRule', 'info');
+      }
+    }
+  </script>
+{/literal}
+
+

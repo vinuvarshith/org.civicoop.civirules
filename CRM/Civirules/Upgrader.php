@@ -104,4 +104,21 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     CRM_Core_DAO::executeQuery("update `civirule_trigger` SET `class_name` = 'CRM_CivirulesPostTrigger_Relationship' where `object_name` = 'Relationship'");
     return true;
   }
+
+  /**
+   * Update for issue 97 - add description and help_text to civirule_rule
+   * See https://github.com/CiviCooP/org.civicoop.civirules/issues/97
+   * @return bool
+   */
+  public function upgrade_1007() {
+    if (CRM_Core_DAO::checkTableExists('civirule_rule')) {
+      if (!CRM_Core_DAO::checkFieldExists('civirule_rule', 'description')) {
+        CRM_Core_DAO::executeQuery("ALTER TABLE `civirule_rule` ADD COLUMN `description` VARCHAR(256) NULL AFTER `is_active`");
+      }
+      if (!CRM_Core_DAO::checkFieldExists('civirule_rule', 'help_text')) {
+        CRM_Core_DAO::executeQuery("ALTER TABLE `civirule_rule` ADD COLUMN `help_text` TEXT NULL AFTER `description`");
+      }
+    }
+    return true;
+  }
 }
