@@ -155,4 +155,15 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     );
     return true;
   }
+
+  /**
+   * Update to insert the trigger for Case Activity changed
+   */
+  public function upgrade_1010() {
+    CRM_Core_DAO::executeQuery("
+      INSERT INTO civirule_trigger (name, label, object_name, op, class_name, created_date, created_user_id)
+      VALUES ('changed_case_activity', 'Case activity is changed', 'Activity', 'edit', 'CRM_CivirulesPostTrigger_CaseActivity', CURDATE(), 1);"
+    );
+    return TRUE;
+  }
 }
