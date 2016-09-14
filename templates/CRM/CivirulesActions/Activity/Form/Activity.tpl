@@ -41,7 +41,7 @@
             <div class="label"></div>
             <div class="content"><strong>{$delayClass->getDescription()}</strong></div>
             <div class="clear"></div>
-            {include file=$delayClass->getTemplateFilename() delayPrefix='activity_date'}
+            {include file=$delayClass->getTemplateFilename() delayPrefix='activity_date_time'}
         </div>
     {/foreach}
 </div>

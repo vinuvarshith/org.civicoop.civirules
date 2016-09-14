@@ -204,6 +204,13 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/trigger/activitydate</path>
+    <page_callback>CRM_CivirulesCronTrigger_Form_ActivityDate</page_callback>
+    <title>Activity date reached</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/action/tag</path>
     <page_callback>CRM_CivirulesActions_Tag_Form_TagId</page_callback>
     <title>Tag</title>
@@ -225,6 +232,13 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/action/activity_update_status</path>
+    <page_callback>CRM_CivirulesActions_Activity_Form_UpdateStatus</page_callback>
+    <title>Update activity status</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/condition/activity_type</path>
     <page_callback>CRM_CivirulesConditions_Form_Activity_Type</page_callback>
     <title>Activity Type</title>
@@ -242,6 +256,13 @@
     <path>civicrm/civirule/form/action/display_message</path>
     <page_callback>CRM_CivirulesActions_User_Form_DisplayMessage</page_callback>
     <title>Display Message</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/action/case/setstatus</path>
+    <page_callback>CRM_CivirulesActions_Case_Form_SetStatus</page_callback>
+    <title>Case - Set Status</title>
     <access_arguments>access CiviCRM</access_arguments>
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
