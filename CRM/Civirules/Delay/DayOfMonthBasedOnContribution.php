@@ -35,11 +35,11 @@ class CRM_Civirules_Delay_DayOfMonthBasedOnContribution extends CRM_Civirules_De
     return ts('Delay by the %1 day of the month of the contribution', array(1 => $this->day_of_month));
   }
 
-  public function addElements(CRM_Core_Form &$form, $prefix) {
+  public function addElements(CRM_Core_Form &$form, $prefix, CRM_Civirules_BAO_Rule $rule) {
     $form->add('text', $prefix.'day_of_month', ts('Day of month (1-31)'));
   }
 
-  public function validate($values, &$errors, $prefix) {
+  public function validate($values, &$errors, $prefix, CRM_Civirules_BAO_Rule $rule) {
     if (empty($values[$prefix.'day_of_month']) || !is_numeric($values[$prefix.'day_of_month']) || $values[$prefix.'day_of_month'] < 0 || $values[$prefix.'day_of_month'] > 31) {
       $errors[$prefix.'day_of_month'] = ts('You need to provide a day of the month (between 1 and 31)');
     }
@@ -60,11 +60,11 @@ class CRM_Civirules_Delay_DayOfMonthBasedOnContribution extends CRM_Civirules_De
     }
   }
 
-  public function setValues($values, $prefix) {
+  public function setValues($values, $prefix, CRM_Civirules_BAO_Rule $rule) {
     $this->day_of_month = $values[$prefix.'day_of_month'];
   }
 
-  public function getValues($prefix) {
+  public function getValues($prefix, CRM_Civirules_BAO_Rule $rule) {
     $values = array();
     $values[$prefix.'day_of_month'] = $this->day_of_month;
     return $values;

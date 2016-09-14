@@ -57,7 +57,7 @@ class CRM_CivirulesActions_Activity_Form_Activity extends CRM_CivirulesActions_F
     $delayList = array('' => ts(' - Do not set an activity date - ')) + CRM_Civirules_Delay_Factory::getOptionList();
     $this->add('select', 'activity_date_time', ts('Set activity date'), $delayList);
     foreach(CRM_Civirules_Delay_Factory::getAllDelayClasses() as $delay_class) {
-      $delay_class->addElements($this, 'activity_date_time');
+      $delay_class->addElements($this, 'activity_date_time', $this->rule);
     }
     $this->assign('delayClasses', CRM_Civirules_Delay_Factory::getAllDelayClasses());
 
@@ -99,12 +99,12 @@ class CRM_CivirulesActions_Activity_Form_Activity extends CRM_CivirulesActions_F
     }
 
     foreach(CRM_Civirules_Delay_Factory::getAllDelayClasses() as $delay_class) {
-      $delay_class->setDefaultValues($defaultValues, 'activity_date_time');
+      $delay_class->setDefaultValues($defaultValues, 'activity_date_time', $this->rule);
     }
     $activityDateClass = unserialize($data['activity_date_time']);
     if ($activityDateClass) {
       $defaultValues['activity_date_time'] = get_class($activityDateClass);
-      foreach($activityDateClass->getValues('activity_date_time') as $key => $val) {
+      foreach($activityDateClass->getValues('activity_date_time', $this->rule) as $key => $val) {
         $defaultValues[$key] = $val;
       }
     }
@@ -136,8 +136,16 @@ class CRM_CivirulesActions_Activity_Form_Activity extends CRM_CivirulesActions_F
   static function validateActivityDateTime($fields) {
     $errors = array();
     if (!empty($fields['activity_date_time'])) {
+      $ruleActionId = CRM_Utils_Request::retrieve('rule_action_id', 'Integer');
+      $ruleAction = new CRM_Civirules_BAO_RuleAction();
+      $ruleAction->id = $ruleActionId;
+      $ruleAction->find(true);
+      $rule = new CRM_Civirules_BAO_Rule();
+      $rule->id = $ruleAction->rule_id;
+      $rule->find(true);
+
       $activityDateClass = CRM_Civirules_Delay_Factory::getDelayClassByName($fields['activity_date_time']);
-      $activityDateClass->validate($fields, $errors, 'activity_date_time');
+      $activityDateClass->validate($fields, $errors, 'activity_date_time', $rule);
     }
 
     if (count($errors)) {
@@ -170,7 +178,7 @@ class CRM_CivirulesActions_Activity_Form_Activity extends CRM_CivirulesActions_F
     $data['activity_date_time'] = 'null';
     if (!empty($this->_submitValues['activity_date_time'])) {
       $scheduledDateClass = CRM_Civirules_Delay_Factory::getDelayClassByName($this->_submitValues['activity_date_time']);
-      $scheduledDateClass->setValues($this->_submitValues, 'activity_date_time');
+      $scheduledDateClass->setValues($this->_submitValues, 'activity_date_time', $this->rule);
       $data['activity_date_time'] = serialize($scheduledDateClass);
     }
 
