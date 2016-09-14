@@ -29,6 +29,8 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
     while ($rule->fetch()) {
       $row = array();
       self::storeValues($rule, $row);
+      // add trigger label
+      $row['trigger_label'] = CRM_Civirules_BAO_Trigger::getTriggerLabelWithId($rule->trigger_id);
       $result[$row['id']] = $row;
     }
     return $result;

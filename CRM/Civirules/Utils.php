@@ -61,6 +61,23 @@ class CRM_Civirules_Utils {
   }
 
   /**
+   * Public function to generate label from name
+   *
+   * @param $name
+   * @return string
+   * @access public
+   * @static
+   */
+  public static function buildLabelFromName($name) {
+    $labelParts = array();
+    $nameParts = explode('_', strtolower($name));
+    foreach ($nameParts as $namePart) {
+      $labelParts[] = ucfirst($namePart);
+    }
+    return implode(' ', $labelParts);
+  }
+
+  /**
    * Function to build the trigger list
    *
    * @return array $triggerList

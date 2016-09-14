@@ -64,6 +64,10 @@ class CRM_Civirules_DAO_Rule extends CRM_Core_DAO {
           'name' => 'help_text',
           'type' => CRM_Utils_Type::T_TEXT,
         ),
+        'rule_tag_id' => array(
+          'name' => 'rule_tag_id',
+          'type' => CRM_Utils_Type::T_INT,
+        ),
         'created_date' => array(
           'name' => 'created_date',
           'type' => CRM_Utils_Type::T_DATE
@@ -102,6 +106,7 @@ class CRM_Civirules_DAO_Rule extends CRM_Core_DAO {
         'is_active' => 'is_active',
         'description' => 'description',
         'help_text' => 'help_text',
+        'rule_tag_id' => 'rule_tag_id',
         'created_date' => 'created_date',
         'created_user_id' => 'created_user_id',
         'modified_date' => 'modified_date',
