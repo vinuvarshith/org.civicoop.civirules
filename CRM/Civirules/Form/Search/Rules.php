@@ -78,11 +78,12 @@ class CRM_Civirules_Form_Search_Rules extends CRM_Contact_Form_Search_Custom_Bas
       ts('Trigger') => 'rule_trigger_label',
       ts('Tag(s)') => 'rule_tags',
       ts('Description') => 'rule_description',
-      ts('Active?') => 'rule_is_active',
+      ts('Active?') => 'is_active',
       ts('Date Created') => 'rule_created_date',
       ts('Created By') => 'rule_created_by',
       // hidden row elements
-      ts('RuleID') => 'rule_id'
+      ts('RuleID') => 'rule_id',
+      ts('Hidden Active') => 'rule_is_active'
     );
     return $columns;
   }
@@ -109,7 +110,7 @@ class CRM_Civirules_Form_Search_Rules extends CRM_Contact_Form_Search_Custom_Bas
    */
   function select() {
     return "DISTINCT(crr.id) AS rule_id, crr.name AS rule_name, crr.label AS rule_label, crr.is_active AS rule_is_active,
-	'' AS rule_tags, crtrigger.label AS rule_trigger_label, crr.description AS rule_description, 
+	'' AS rule_tags, crtrigger.label AS rule_trigger_label, crr.description AS rule_description, '' AS is_active,
 	crr.help_text AS rule_help_text, crr.created_date AS rule_created_date, contact.display_name AS rule_created_by";
   }
 
@@ -137,9 +138,12 @@ LEFT JOIN civicrm_contact contact ON crr.created_user_id = contact.id";
     $index  = 1;
     $clauses = array();
 
-    $params[$index] = array(CRM_Utils_Array::value('only_active_rules', $this->_formValues), 'Integer');
-    $clauses[] = "crr.is_active = %{$index}";
-    $index++;
+    $onlyActiveRules = CRM_Utils_Array::value('only_active_rules', $this->_formValues);
+    if ($onlyActiveRules == 1) {
+      $clauses[] = "crr.is_active = %{$index}";
+      $params[$index] = array(1, 'Integer');
+      $index++;
+    }
 
     $label   = CRM_Utils_Array::value('rule_label', $this->_formValues);
     if ($label != NULL) {
@@ -195,9 +199,9 @@ LEFT JOIN civicrm_contact contact ON crr.created_user_id = contact.id";
    */
   function alterRow(&$row) {
     if ($row['rule_is_active'] == 1) {
-      $row['rule_is_active'] = "Yes";
+      $row['is_active'] = ts("Yes");
     } else {
-      $row['rule_is_active'] = "No";
+      $row['is_active'] = ts("No");
     }
     $row['rule_tags'] = CRM_Civirules_BAO_RuleTag::getTagLabelsForRule($row['rule_id']);
   }

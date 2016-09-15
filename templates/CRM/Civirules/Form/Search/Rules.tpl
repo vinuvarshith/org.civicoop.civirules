@@ -32,7 +32,7 @@
             {foreach from=$columnHeaders item=header}
                 <th scope="col">
                     {if $header.sort}
-                        {if $header.name ne "RuleID"}
+                        {if $header.name ne "RuleID" and $header.name ne "Hidden Active"}
                             {assign var='key' value=$header.sort}
                             {$sort->_response.$key.link}
                         {/if}
@@ -49,7 +49,7 @@
                 <tr id='rowid{$row.contact_id}' class="{cycle values="odd-row,even-row"}">
                     {foreach from=$columnHeaders item=header}
                         {assign var=fName value=$header.sort}
-                        {if $fName ne 'rule_id'}
+                        {if $fName ne 'rule_id' and $fName ne 'rule_is_active'}
                             {if $fName eq 'rule_created_date'}
                                 <td>{$row.$fName|crmDate}</td>
                             {else}
