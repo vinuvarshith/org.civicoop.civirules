@@ -18,7 +18,20 @@ class CRM_Civirules_Utils_CustomDataFromPre {
     }
     foreach($params as $key => $value) {
       if (stripos($key, 'custom_')===0) {
-        list($custom_, $fid, $id) = explode("_", $key, 3);
+        // $key has the format of custom_45_34 or of custom_45
+        // In the example above the 45 stands for the id of the custom field
+        // and the 34 is the id of the record. The second number is not always
+        // present and if it is not present we will treat the record number as a new one
+        // and give it the id of -1.
+        $customInfo = explode("_", $key, 3);
+        if (count($customInfo == 2)) {
+          list($custom_, $fid) = $customInfo;
+          $id = -1; //It is a new value
+        } elseif (count($customInfo) == 3) {
+          list($custom_, $fid, $id) = $customInfo;
+        } else {
+          Throw new Exception('Field '.$key.' is invalid');
+        }
         if (is_numeric($fid)) {
           // The variable $fid should contain a valid ID which should be a numeric value.
           self::setCustomData($objectName, $fid, $value, $id);
