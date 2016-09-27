@@ -104,7 +104,7 @@ class CRM_CivirulesActions_Case_Form_SetDateField extends CRM_CivirulesActions_F
    * @access public
    */
   public function postProcess() {
-    $data['date'] = 'null';
+    $data['date'] = false;
     if (!empty($this->_submitValues['date'])) {
       $scheduledDateClass = CRM_Civirules_Delay_Factory::getDelayClassByName($this->_submitValues['date']);
       $scheduledDateClass->setValues($this->_submitValues, 'date', $this->rule);
