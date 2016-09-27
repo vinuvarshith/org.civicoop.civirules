@@ -4,12 +4,7 @@
 class CRM_CivirulesConditions_Form_Case_CaseType extends CRM_CivirulesConditions_Form_Form {
 
   protected function getCaseTypes() {
-    $caseTypes = civicrm_api3('CaseType', 'Get', array('is_active' => 1));
-    $return = array();
-    foreach($caseTypes['values'] as $caseType) {
-      $return[$caseType['id']] = $caseType['title'];
-    }
-    return $return;
+    return CRM_CivirulesConditions_Case_CaseType::getCaseTypes();
   }
 
   /**

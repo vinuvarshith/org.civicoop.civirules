@@ -35,12 +35,11 @@ class CRM_CivirulesActions_Case_Form_SetDateField extends CRM_CivirulesActions_F
    */
   public function setDefaultValues() {
     $defaultValues = parent::setDefaultValues();
-
+    $data = unserialize($this->ruleAction->action_params);
     if (!empty($data['field'])) {
       $defaultValues['field'] = $data['field'];
     }
 
-    $data = unserialize($this->ruleAction->action_params);
     foreach(CRM_Civirules_Delay_Factory::getAllDelayClasses() as $delay_class) {
       $delay_class->setDefaultValues($defaultValues, 'date', $this->rule);
     }
