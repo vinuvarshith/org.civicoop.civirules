@@ -266,4 +266,11 @@
     <access_arguments>access CiviCRM</access_arguments>
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/civirule/form/action/case/setdatefield</path>
+    <page_callback>CRM_CivirulesActions_Case_Form_SetDateField</page_callback>
+    <title>Case - Set date field</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
 </menu>
