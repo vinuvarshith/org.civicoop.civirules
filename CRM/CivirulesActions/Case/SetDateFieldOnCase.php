@@ -12,8 +12,11 @@ class CRM_CivirulesActions_Case_SetDateFieldOnCase extends CRM_Civirules_Action 
   public function processAction(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $case = $triggerData->getEntityData('Case');
     $actionParameters = $this->getActionParameters();
-    $isCustomField = true;
-    $field = 'custom_505';
+    $isCustomField = false;
+    $field = $actionParameters['field'];
+    if (stripos($field, 'custom_')===0) {
+      $isCustomField = true;
+    }
 
     $date = new DateTime();
     $params = array();
@@ -37,6 +40,52 @@ class CRM_CivirulesActions_Case_SetDateFieldOnCase extends CRM_Civirules_Action 
         civicrm_api('Case', 'create', $params);
       }
     }
+  }
+
+  public static function getFields() {
+    $return = array();
+    $fields = civicrm_api3('Case', 'getfields', array('limit' => 99999));
+    foreach ($fields['values'] as $field) {
+      if (!isset($field['type'])) {
+        continue;
+      }
+      if (!($field['type'] & CRM_Utils_Type::T_DATE)) {
+        continue; //Field is not a Date field.
+      }
+
+      $fieldKey = $field['name'];
+      if (isset($field['title'])) {
+        $label = trim($field['title']);
+      } elseif (isset($field['label'])) {
+        $label = trim($field['label']);
+      } else {
+        $label = "";
+      }
+      if (empty($label)) {
+        $label = $field['name'];
+      }
+      if (!empty($field['groupTitle'])) {
+        $label = $field['groupTitle'].': '.$label;
+      }
+      $return[$fieldKey] = $label;
+    }
+    return $return;
+  }
+
+  public function userFriendlyConditionParams() {
+    $actionParameters = $this->getActionParameters();
+    $fields = self::getFields();
+    $field = $actionParameters['field'];
+    $label = 'Set '.$fields[$field].' to ';
+    if (!empty($actionParameters['date'])) {
+      $delayClass = unserialize(($actionParameters['date']));
+      if ($delayClass instanceof CRM_Civirules_Delay_Delay) {
+        $label .= $delayClass->getDelayExplanation();
+      }
+    } else {
+      $label .= ' the date of processing of the action';
+    }
+    return $label;
   }
 
   /**

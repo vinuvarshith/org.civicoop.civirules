@@ -7,33 +7,7 @@
 class CRM_CivirulesActions_Case_Form_SetDateField extends CRM_CivirulesActions_Form_Form {
 
   protected function getFields() {
-    $return = array();
-    $fields = civicrm_api3('Case', 'getfields', array('limit' => 99999));
-    foreach ($fields['values'] as $field) {
-      if (!isset($field['type'])) {
-        continue;
-      }
-      if (!($field['type'] & CRM_Utils_Type::T_DATE)) {
-        continue; //Field is not a Date field.
-      }
-
-      $fieldKey = $field['name'];
-      if (isset($field['title'])) {
-        $label = trim($field['title']);
-      } elseif (isset($field['label'])) {
-        $label = trim($field['label']);
-      } else {
-        $label = "";
-      }
-      if (empty($label)) {
-        $label = $field['name'];
-      }
-      if (!empty($field['groupTitle'])) {
-        $label = $field['groupTitle'].': '.$label;
-      }
-      $return[$fieldKey] = $label;
-    }
-    return $return;
+    return CRM_CivirulesActions_Case_SetDateFieldOnCase::getFields();
   }
 
   public function buildQuickForm() {
