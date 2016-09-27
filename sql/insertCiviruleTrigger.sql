@@ -84,7 +84,8 @@ VALUES
   ('new_tag', 'Tag is added', 'Tag', 'create', null,  CURDATE(), 1),
   ('changed_tag', 'Tag is changed', 'Tag', 'edit', null, CURDATE(), 1),
   ('deleted_tag', 'Tag is deleted', 'Tag', 'delete', null, CURDATE(), 1),
-  ('changed_case_activity', 'Case activity is changed', 'Activity', 'edit', 'CRM_CivirulesPostTrigger_CaseActivity', CURDATE(), 1);
+  ('changed_case_activity', 'Case activity is changed', 'Activity', 'edit', 'CRM_CivirulesPostTrigger_CaseActivity', CURDATE(), 1),
+  ('changed_case_custom_data', 'Custom data on case changed', null, null, 'CRM_CivirulesPostTrigger_CaseCustomDataChanged', CURDATE(), 1);
 
 INSERT INTO civirule_trigger (name, label, object_name, op, cron, class_name, created_date, created_user_id)
 VALUES

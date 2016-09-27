@@ -238,6 +238,32 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
     return $cronTriggers;
   }
 
+  /**
+   * Returns an array with cron triggers which should be triggered in the cron
+   *
+   * @return array
+   */
+  public static function findRulesByClassname($classname)
+  {
+    $triggers = array();
+    $sql = "SELECT r.id AS rule_id, t.id AS trigger_id, t.class_name, r.trigger_params
+            FROM `civirule_rule` r
+            INNER JOIN `civirule_trigger` t ON r.trigger_id = t.id AND t.is_active = 1
+            WHERE r.`is_active` = 1 AND t.class_name = %1";
+    $params[1] = array($classname, 'String');
+    $dao = CRM_Core_DAO::executeQuery($sql, $params);
+    while ($dao->fetch()) {
+      $triggerObject = CRM_Civirules_BAO_Trigger::getTriggerObjectByClassName($dao->class_name, false);
+      if ($triggerObject !== false) {
+        $triggerObject->setTriggerId($dao->trigger_id);
+        $triggerObject->setRuleId($dao->rule_id);
+        $triggerObject->setTriggerParams($dao->trigger_params);
+        $triggers[] = $triggerObject;
+      }
+    }
+    return $triggers;
+  }
+
   /*
    * Function to get latest rule id
    *

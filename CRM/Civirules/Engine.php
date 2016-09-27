@@ -279,7 +279,9 @@ class CRM_Civirules_Engine {
     $sql = "INSERT INTO `civirule_rule_log` (`rule_id`, `contact_id`, `log_date`) VALUES (%1, %2, NOW())";
     $params[1] = array($triggerData->getTrigger()->getRuleId(), 'Integer');
     $params[2] = array($triggerData->getContactId(), 'Integer');
-    if (empty($params[2])) {
+    if (empty($triggerData->getTrigger()->getRuleId())) {
+      CRM_Civirules_Utils_LoggerFactory::logError("Failed log rule", "RuleId not set", $triggerData);
+    } elseif (empty($triggerData->getContactId())) {
       CRM_Civirules_Utils_LoggerFactory::logError("Failed log rule", "contact_id not set", $triggerData);
     } else {
       CRM_Core_DAO::executeQuery($sql, $params);
