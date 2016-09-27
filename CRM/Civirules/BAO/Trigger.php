@@ -76,7 +76,7 @@ class CRM_Civirules_BAO_Trigger extends CRM_Civirules_DAO_Trigger {
       throw new Exception('trigger id can not be empty when attempting to delete a civirule trigger');
     }
     $trigger = new CRM_Civirules_BAO_Trigger();
-    $trigger->id = $trigger;
+    $trigger->id = $triggerId;
     $trigger->delete();
     return;
   }
