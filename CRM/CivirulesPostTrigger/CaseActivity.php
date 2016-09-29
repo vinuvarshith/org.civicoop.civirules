@@ -18,25 +18,24 @@ class CRM_CivirulesPostTrigger_CaseActivity extends CRM_CivirulesPostTrigger_Act
     $triggerData = parent::getTriggerDataFromPost($op, $objectName,
                                                   $objectId, $objectRef);
 
-
-    // Get the CaseActivity record.
-    $caseActivity = new CRM_Case_DAO_CaseActivity();
-    $caseActivity->activity_id = $objectId;
-    if (!$caseActivity->find(TRUE)) {
-      return $triggerData;
-    }
-
-    // Now load the case.
     $case = new CRM_Case_BAO_Case();
-    $case->id = $caseActivity->case_id;
-    if (!$case->find(TRUE)) {
-      return $triggerData;
+    if ($objectRef instanceof CRM_Activity_DAO_Activity && $objectRef->case_id) {
+      $case->id = $objectRef->case_id;
+    } else {
+      // Get the CaseActivity record.
+      $caseActivity = new CRM_Case_DAO_CaseActivity();
+      $caseActivity->activity_id = $objectId;
+      if ($caseActivity->find(TRUE)) {
+        // Now load the case.
+        $case->id = $caseActivity->case_id;
+      }
     }
 
-    $data = array();
-    CRM_Core_DAO::storeValues($case, $data);
-    $triggerData->setEntityData('Case', $data);
-
+    if ($case->id && $case->find(TRUE)) {
+      $data = array();
+      CRM_Core_DAO::storeValues($case, $data);
+      $triggerData->setEntityData('Case', $data);
+    }
     return $triggerData;
   }
 
@@ -50,11 +49,23 @@ class CRM_CivirulesPostTrigger_CaseActivity extends CRM_CivirulesPostTrigger_Act
    * @param $objectRef
    */
   public function triggerTrigger($op, $objectName, $objectId, $objectRef) {
-    if (CRM_Case_BAO_Case::isCaseActivity($objectId)) {
+    if ($this->isCaseActivity($op, $objectName, $objectId, $objectRef)) {
       // It is a Case-related activity -- let our parent trigger
       // actually trigger the rule.
       parent::triggerTrigger($op, $objectName, $objectId, $objectRef);
     }
+  }
+
+  protected function isCaseActivity($op, $objectName, $objectId, $objectRef) {
+    if ($objectName != 'Activity') {
+      return false;
+    }
+    if (isset($objectRef->case_id) && !empty($objectRef->case_id)) {
+      return true;
+    } elseif (CRM_Case_BAO_Case::isCaseActivity($objectId)) {
+      return true;
+    }
+    return false;
   }
 
 

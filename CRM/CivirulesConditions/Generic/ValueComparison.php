@@ -75,6 +75,7 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
         strtotime( $this->conditionParams['value'] ) );
     }
 
+    $key = false;
     switch ($this->getOperator()) {
       case '=':
       case '!=':
@@ -95,7 +96,7 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
         break;
     }
 
-    if (!empty($this->conditionParams[$key])) {
+    if ($key && !empty($this->conditionParams[$key])) {
       return $this->conditionParams[$key];
     } else {
       return '';
@@ -284,6 +285,16 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
         }
         return false;
         break;
+      case 'is empty':
+        if (empty($leftValue)) {
+          return true;
+        }
+        return false;
+      case 'is not empty':
+        if (empty($leftValue)) {
+          return false;
+        }
+        return true;
       default:
         return false;
         break;
@@ -377,6 +388,8 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
       '>=' => ts('Is greater than or equal to'),
       '<=' => ts('Is less than or equal to'),
       'contains string' => ts('Contains string (case insensitive)'),
+      'is empty' => ts('Is empty'),
+      'is not empty' => ts('Is not empty'),
       'is one of' => ts('Is one of'),
       'is not one of' => ts('Is not one of'),
       'contains one of' => ts('Does contain one of'),
