@@ -45,6 +45,15 @@ class CRM_Civirules_Trigger_Post extends CRM_Civirules_Trigger {
   }
 
   /**
+   * Getter for object name
+   *
+   * @return mixed
+   */
+  public function getObjectName() {
+    return $this->objectName;
+  }
+
+  /**
    * Method post
    *
    * @param string $op
