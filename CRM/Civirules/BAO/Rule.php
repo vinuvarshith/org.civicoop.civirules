@@ -238,7 +238,7 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
     return $cronTriggers;
   }
 
-  /*
+  /**
    * Function to get latest rule id
    *
    * @return int $ruleId
@@ -252,5 +252,32 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
     if ($dao->fetch()) {
       return $dao->maxId;
     }
+  }
+
+  /**
+   * Method to get all active rules with a specific trigger id
+   *
+   * @param int $triggerId
+   * @return array $ruleIds
+   * @throws Exception when triggerId not integer
+   * @access public
+   * @static
+   */
+  public static function getRuleIdsByTriggerId($triggerId) {
+    if (!is_numeric($triggerId)) {
+      throw new Exception('You are passing a trigger id as a parameter into '.__METHOD__
+        .' which does not pass the PHP is_numeric test. An integer is required (only numbers allowed)! Contact your system administrator');
+    }
+    $ruleIds = array();
+    $sql = 'SELECT id FROM civirule_rule WHERE trigger_id = %1 AND is_active = %2';
+    $params = array(
+      1 => array($triggerId, 'Integer'),
+      2 => array(1, 'Integer')
+    );
+    $dao = CRM_Core_DAO::executeQuery($sql, $params);
+    while ($dao->fetch()) {
+      $ruleIds[] = $dao->id;
+    }
+    return $ruleIds;
   }
 }
