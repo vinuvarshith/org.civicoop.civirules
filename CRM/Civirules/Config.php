@@ -91,6 +91,7 @@ class CRM_Civirules_Config
       'Phone',
       'Pledge',
       'PledgePayment',
+      'PumCaseProject',
       'Relationship',
       'Tag');
   }
