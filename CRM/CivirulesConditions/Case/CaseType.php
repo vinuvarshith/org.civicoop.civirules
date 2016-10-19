@@ -31,12 +31,12 @@ class CRM_CivirulesConditions_Case_CaseType extends CRM_Civirules_Condition {
     $case_type_id = str_replace(CRM_Core_DAO::VALUE_SEPARATOR, "", $case['case_type_id']);
     switch ($this->conditionParams['operator']) {
       case 0:
-        if ($case_type_id == $this->conditionParams['case_type_id']) {
+        if (in_array($case_type_id, $this->conditionParams['case_type_id'])) {
           $isConditionValid = TRUE;
         }
         break;
       case 1:
-        if ($case_type_id != $this->conditionParams['case_type_id']) {
+        if (!in_array($case_type_id, $this->conditionParams['case_type_id'])) {
           $isConditionValid = TRUE;
         }
         break;
