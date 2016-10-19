@@ -25,6 +25,40 @@ class CRM_CivirulesPostTrigger_Relationship extends CRM_Civirules_Trigger_Post {
   }
 
   /**
+   * Inherited from parent to add case to the triggerData when a relationship does contain case_id.
+   *
+   * @param $op
+   * @param $objectName
+   * @param $objectId
+   * @param $objectRef
+   * @return CRM_Civirules_TriggerData_Edit|CRM_Civirules_TriggerData_Post
+   */
+  protected function getTriggerDataFromPost($op, $objectName, $objectId, $objectRef) {
+    $triggerData = parent::getTriggerDataFromPost($op, $objectName, $objectId, $objectRef);
+    $relationship = $triggerData->getEntityData('Relationship');
+    if (!empty($relationship['case_id'])) {
+      try {
+        $case = civicrm_api3('Case', 'getsingle', array('id' => $relationship['case_id']));
+        $triggerData->setEntityData('Case', $case);
+      } catch (Exception $e) {
+        // Do nothing.
+      }
+      return $triggerData;
+    }
+  }
+
+  /**
+   * Returns additional entities provided in this trigger.
+   *
+   * @return array of CRM_Civirules_TriggerData_EntityDefinition
+   */
+  protected function getAdditionalEntities() {
+    $entities = parent::getAdditionalEntities();
+    $entities[] = new CRM_Civirules_TriggerData_EntityDefinition('Case', 'Case', 'CRM_Case_DAO_Case' , 'Case');
+    return $entities;
+  }
+
+  /**
    * Trigger a rule for this trigger
    *
    * @param $op
