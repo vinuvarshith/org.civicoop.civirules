@@ -67,21 +67,22 @@ class CRM_CivirulesConditions_Case_CaseType extends CRM_Civirules_Condition {
    * @access public
    */
   public function userFriendlyConditionParams() {
-    try {
-      $caseTypes = self::getCaseTypes();
-      $operator = null;
-      if ($this->conditionParams['operator'] == 0) {
-        $operator = 'equals';
-      }
-      if ($this->conditionParams['operator'] == 1) {
-        $operator = 'is not equal to';
-      }
-      $case_type_id = $this->conditionParams['case_type_id'];
-      if (isset($caseTypes[$case_type_id])) {
-        return "Case Type ".$operator." ".$caseTypes[$case_type_id];
-      }
-    } catch (CiviCRM_API3_Exception $ex) {}
-    return '';
+    $caseTypes = self::getCaseTypes();
+    $friendlyText = "";
+    if ($this->conditionParams['operator'] == 0) {
+      $friendlyText = 'Case Type is one of: ';
+    }
+    if ($this->conditionParams['operator'] == 1) {
+      $friendlyText = 'Case Type is NOT one of: ';
+    }
+    $caseText = array();
+    foreach ($this->conditionParams['case_type_id'] as $caseTypeId) {
+      $caseText[] = $caseTypes[$caseTypeId];
+    }
+    if (!empty($caseText)) {
+      $friendlyText .= implode(", ", $caseText);
+    }
+    return $friendlyText;
   }
 
   public static function getCaseTypes() {

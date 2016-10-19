@@ -9,7 +9,7 @@ return array (
         array (
           'version' => 3,
           'name' => 'case_case_type',
-          'label' => 'Type of the case',
+          'label' => 'Case is (not) one of type(s)',
           'class_name' => 'CRM_CivirulesConditions_Case_CaseType',
           'is_active' => 1
         ),
