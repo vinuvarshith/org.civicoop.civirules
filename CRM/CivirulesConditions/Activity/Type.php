@@ -38,11 +38,20 @@ class CRM_CivirulesConditions_Activity_Type extends CRM_Civirules_Condition {
    * @access public
    */
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
+    $isConditionValid = FALSE;
     $activity = $triggerData->getEntityData('Activity');
-    if ($activity['activity_type_id'] == $this->conditionParams['activity_type_id']) {
-      return true;
+    switch ($this->conditionParams['operator']) {
+      case 0:
+        if (in_array($activity['activity_type_id'], $this->conditionParams['activity_type_id'])) {
+          $isConditionValid = TRUE;
+        }
+        break;
+      case 1:
+        if (!in_array($activity['activity_type_id'], $this->conditionParams['activity_type_id'])) {
+          $isConditionValid = TRUE;
+        }
+        break;
     }
-    return false;
   }
   /**
    * Returns a user friendly text explaining the condition params
@@ -52,12 +61,25 @@ class CRM_CivirulesConditions_Activity_Type extends CRM_Civirules_Condition {
    * @access public
    */
   public function userFriendlyConditionParams() {
-    $activityTypeLabel = CRM_Civirules_Utils::getOptionLabelWithValue(CRM_Civirules_Utils::getOptionGroupIdWithName('activity_type'),
-      $this->conditionParams['activity_type_id']);
-    if (!empty($activityTypeLabel)) {
-      return 'Activity type is '.$activityTypeLabel;
+    $friendlyText = "";
+    if ($this->conditionParams['operator'] == 0) {
+      $friendlyText = 'Activity Type is one of: ';
     }
-    return '';
+    if ($this->conditionParams['operator'] == 1) {
+      $friendlyText = 'Activity Type is NOT one of: ';
+    }
+    $actText = array();
+    foreach ($this->conditionParams['activity_type_id'] as $actTypeId) {
+      $actText[] = civicrm_api3('OptionValue', 'getvalue', array(
+        'option_group_id' => 'activity_type',
+        'value' => $actTypeId,
+        'return' => 'label'
+      ));
+    }
+    if (!empty($actText)) {
+      $friendlyText .= implode(", ", $actText);
+    }
+    return $friendlyText;
   }
 
   /**
@@ -68,7 +90,7 @@ class CRM_CivirulesConditions_Activity_Type extends CRM_Civirules_Condition {
    */
   public function requiredEntities() {
     return array(
-      'Activity'
+      'Activity', 'CaseActivity'
     );
   }
 }

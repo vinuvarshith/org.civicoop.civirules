@@ -72,6 +72,7 @@ class CRM_Civirules_Config
       'Activity',
       'Address',
       'Case',
+      'CaseActivity',
       'Contact',
       'Contribution',
       'ContributionRecur',

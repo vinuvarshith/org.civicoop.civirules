@@ -19,7 +19,9 @@ class CRM_CivirulesConditions_Form_Activity_Type extends CRM_CivirulesConditions
 
     $activityTypeList = array('- select -') + CRM_Civirules_Utils::getActivityTypeList();
     asort($activityTypeList);
-    $this->add('select', 'activity_type_id', 'Activity Type', $activityTypeList, true);
+    $this->add('select', 'activity_type_id', ts('Activity Type(s)'), $activityTypeList, true,
+      array('id' => 'activity_type_ids', 'multiple' => 'multiple','class' => 'crm-select2'));
+    $this->add('select', 'operator', ts('Operator'), array('is one of', 'is NOT one of'), true);
 
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
