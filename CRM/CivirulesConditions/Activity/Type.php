@@ -52,6 +52,7 @@ class CRM_CivirulesConditions_Activity_Type extends CRM_Civirules_Condition {
         }
         break;
     }
+    return $isConditionValid;
   }
   /**
    * Returns a user friendly text explaining the condition params
