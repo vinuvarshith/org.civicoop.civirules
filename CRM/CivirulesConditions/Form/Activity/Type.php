@@ -51,6 +51,7 @@ class CRM_CivirulesConditions_Form_Activity_Type extends CRM_CivirulesConditions
    * @access public
    */
   public function postProcess() {
+    $data['operator'] = $this->_submitValues['operator'];
     $data['activity_type_id'] = $this->_submitValues['activity_type_id'];
     $this->ruleCondition->condition_params = serialize($data);
     $this->ruleCondition->save();
