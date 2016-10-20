@@ -7,7 +7,7 @@ require_once 'CRM/Core/Form.php';
  *
  * @see http://wiki.civicrm.org/confluence/display/CRMDOC43/QuickForm+Reference
  */
-class CRM_CivirulesConditions_Form_Activity_Type extends CRM_CivirulesConditions_Form_Form {
+class CRM_CivirulesConditions_Form_Activity_Status extends CRM_CivirulesConditions_Form_Form {
 
   /**
    * Overridden parent method to build the form
@@ -17,10 +17,10 @@ class CRM_CivirulesConditions_Form_Activity_Type extends CRM_CivirulesConditions
   public function buildQuickForm() {
     $this->add('hidden', 'rule_condition_id');
 
-    $activityTypeList = array('- select -') + CRM_Civirules_Utils::getActivityTypeList();
-    asort($activityTypeList);
-    $this->add('select', 'activity_type_id', ts('Activity Type(s)'), $activityTypeList, true,
-      array('id' => 'activity_type_ids', 'multiple' => 'multiple','class' => 'crm-select2'));
+    $activityStatusList = CRM_Civirules_Utils::getActivityStatusList();
+    asort($activityStatusList);
+      $this->add('select', 'status_id', ts('Activity status(es)'), $activityStatusList, true,
+      array('id' => 'status_ids', 'multiple' => 'multiple','class' => 'crm-select2'));
     $this->add('select', 'operator', ts('Operator'), array('is one of', 'is NOT one of'), true);
 
     $this->addButtons(array(
@@ -39,8 +39,8 @@ class CRM_CivirulesConditions_Form_Activity_Type extends CRM_CivirulesConditions
   public function setDefaultValues() {
     $defaultValues = parent::setDefaultValues();
     $data = unserialize($this->ruleCondition->condition_params);
-    if (!empty($data['activity_type_id'])) {
-      $defaultValues['activity_type_id'] = $data['activity_type_id'];
+    if (!empty($data['status_id'])) {
+      $defaultValues['status_id'] = $data['status_id'];
     }
     if (!empty($data['operator'])) {
       $defaultValues['operator'] = $data['operator'];
@@ -55,7 +55,7 @@ class CRM_CivirulesConditions_Form_Activity_Type extends CRM_CivirulesConditions
    */
   public function postProcess() {
     $data['operator'] = $this->_submitValues['operator'];
-    $data['activity_type_id'] = $this->_submitValues['activity_type_id'];
+    $data['status_id'] = $this->_submitValues['status_id'];
     $this->ruleCondition->condition_params = serialize($data);
     $this->ruleCondition->save();
 
