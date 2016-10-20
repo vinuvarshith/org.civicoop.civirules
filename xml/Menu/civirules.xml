@@ -71,6 +71,13 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/condition/case/casestatus</path>
+    <page_callback>CRM_CivirulesConditions_Form_Case_CaseStatus</page_callback>
+    <title>case status</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/condition/membershiptype</path>
     <page_callback>CRM_CivirulesConditions_Form_Membership_Type</page_callback>
     <title>membership type</title>
@@ -249,6 +256,13 @@
     <path>civicrm/civirule/form/condition/activity_type</path>
     <page_callback>CRM_CivirulesConditions_Form_Activity_Type</page_callback>
     <title>Activity Type</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/activity_status</path>
+    <page_callback>CRM_CivirulesConditions_Form_Activity_Status</page_callback>
+    <title>Activity Status</title>
     <access_arguments>access CiviCRM</access_arguments>
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
