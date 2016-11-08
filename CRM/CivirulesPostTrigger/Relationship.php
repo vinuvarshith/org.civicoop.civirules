@@ -43,8 +43,8 @@ class CRM_CivirulesPostTrigger_Relationship extends CRM_Civirules_Trigger_Post {
       } catch (Exception $e) {
         // Do nothing.
       }
-      return $triggerData;
     }
+    return $triggerData;
   }
 
   /**
