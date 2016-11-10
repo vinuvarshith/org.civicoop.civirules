@@ -240,8 +240,7 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     if ($this->_action != CRM_Core_Action::DELETE) {
       $this->add('text', 'rule_label', ts('Name'), array('size' => CRM_Utils_Type::HUGE), TRUE);
       $this->add('text', 'rule_description', ts('Description'), array('size' => 100, 'maxlength' => 256));
-      $this->add('textarea', 'rule_help_text', ts('Help text with purpose of rule'),
-        array('rows' => 6, 'cols'    => 100), false);
+      $this->addWysiwyg('rule_help_text', ts('Help text with purpose of rule'), array('rows' => 6, 'cols' => 80), FALSE);
       $this->add('checkbox', 'rule_is_active', ts('Enabled'));
       $this->add('text', 'rule_created_date', ts('Created Date'));
       $this->add('text', 'rule_created_contact', ts('Created By'));

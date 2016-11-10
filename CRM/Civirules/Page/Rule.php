@@ -73,6 +73,13 @@ class CRM_Civirules_Page_Rule extends CRM_Core_Page {
    * @access protected
    */
   protected function setPageConfiguration() {
+    $domainVersion = civicrm_api3('Domain', 'getvalue', array('return' => 'version'));
+    $domainVersion = round((float) $domainVersion, 2);
+    if ($domainVersion < 4.6) {
+      $this->assign('earlier_than_46', 1);
+    } else {
+      $this->assign('earlier_than_46', 0);
+    }
     CRM_Utils_System::setTitle(ts('CiviRules'));
     $this->assign('add_url', CRM_Utils_System::url('civicrm/civirule/form/rule', 
       'reset=1&action=add', true));
