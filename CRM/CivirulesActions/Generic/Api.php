@@ -65,6 +65,7 @@ abstract class CRM_CivirulesActions_Generic_Api extends CRM_Civirules_Action {
     try {
       civicrm_api3($entity, $action, $parameters);
     } catch (Exception $e) {
+      echo $e->getMessage(); exit();
       $formattedParams = '';
       foreach($parameters as $key => $param) {
         if (strlen($formattedParams)) {

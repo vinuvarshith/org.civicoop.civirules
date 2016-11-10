@@ -13,6 +13,11 @@
                    cj('#multi_value_parent').removeClass('hiddenElement');
                    cj('#value_parent').addClass('hiddenElement');
                    break;
+               case 'is empty':
+               case 'is not empty':
+                   cj('#multi_value_parent').addClass('hiddenElement');
+                   cj('#value_parent').addClass('hiddenElement');
+                   break;
                default:
                    cj('#multi_value_parent').addClass('hiddenElement');
                    cj('#value_parent').removeClass('hiddenElement');

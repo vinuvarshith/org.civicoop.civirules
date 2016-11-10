@@ -13,7 +13,8 @@ class CRM_Civirules_Delay_Factory {
       new CRM_Civirules_Delay_XDays(),
       new CRM_Civirules_Delay_XWeekDay(),
       new CRM_Civirules_Delay_XWeekDayOfMonth(),
-      new CRM_Civirules_Delay_DayOfMonthBasedOnContribution()
+      new CRM_Civirules_Delay_DayOfMonthBasedOnContribution(),
+      new CRM_Civirules_Delay_DelayBasedOnDateField(),
     );
 
     $hookInvoker = CRM_Civirules_Utils_HookInvoker::singleton();

@@ -15,33 +15,41 @@ abstract class CRM_Civirules_Delay_Delay {
    * Add elements to the form
    *
    * @param \CRM_Core_Form $form
+   * @param prefix - The prefix for the form field name
+   * @oaram CRM_Civirules_BAO_Rule $rule
    * @return mixed
    */
-  abstract public function addElements(CRM_Core_Form &$form);
+  abstract public function addElements(CRM_Core_Form &$form, $prefix, CRM_Civirules_BAO_Rule $rule);
 
   /**
    * Validate the values and set error message in $errors
    *
    * @param array $values
    * @param array $errors
+   * @param prefix - The prefix for the form field name
+   * @param CRM_Civirules_BAO_Rule $rule
    * @return void
    */
-  abstract public function validate($values, &$errors);
+  abstract public function validate($values, &$errors, $prefix, CRM_Civirules_BAO_Rule $rule);
 
   /**
    * Set the values
    *
    * @param array $values
+   * @param prefix - The prefix for the form field name
+   * @param CRM_Civirules_BAO_Rule $rule
    * @return void
    */
-  abstract public function setValues($values);
+  abstract public function setValues($values, $prefix, CRM_Civirules_BAO_Rule $rule);
 
   /**
    * Get the values
    *
+   * @param prefix - The prefix for the form field name
+   * @param CRM_Civirules_BAO_Rule $rule
    * @return array
    */
-  abstract public function getValues();
+  abstract public function getValues($prefix, CRM_Civirules_BAO_Rule $rule);
 
   /**
    * Returns an description of the delay
@@ -63,8 +71,10 @@ abstract class CRM_Civirules_Delay_Delay {
    * Set default values
    *
    * @param $values
+   * @param prefix - The prefix for the form field name
+   * @param CRM_Civirules_BAO_Rule $rule
    */
-  public function setDefaultValues(&$values) {
+  public function setDefaultValues(&$values, $prefix, CRM_Civirules_BAO_Rule $rule) {
 
   }
 

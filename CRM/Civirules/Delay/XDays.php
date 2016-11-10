@@ -14,26 +14,26 @@ class CRM_Civirules_Delay_XDays extends CRM_Civirules_Delay_Delay {
   }
 
   public function getDelayExplanation() {
-    return ts('Delay action by %1 days', array(1 => $this->dayOffset));
+    return ts('Delay by %1 days', array(1 => $this->dayOffset));
   }
 
-  public function addElements(CRM_Core_Form &$form) {
-    $form->add('text', 'xdays_dayOffset', ts('Days'));
+  public function addElements(CRM_Core_Form &$form, $prefix, CRM_Civirules_BAO_Rule $rule) {
+    $form->add('text', $prefix.'xdays_dayOffset', ts('Days'));
   }
 
-  public function validate($values, &$errors) {
-    if (empty($values['xdays_dayOffset']) || !is_numeric($values['xdays_dayOffset'])) {
-      $errors['xdays_dayOffset'] = ts('You need to provide a number of days');
+  public function validate($values, &$errors, $prefix, CRM_Civirules_BAO_Rule $rule) {
+    if (empty($values[$prefix.'xdays_dayOffset']) || !is_numeric($values[$prefix.'xdays_dayOffset'])) {
+      $errors[$prefix.'xdays_dayOffset'] = ts('You need to provide a number of days');
     }
   }
 
-  public function setValues($values) {
-    $this->dayOffset = $values['xdays_dayOffset'];
+  public function setValues($values, $prefix, CRM_Civirules_BAO_Rule $rule) {
+    $this->dayOffset = $values[$prefix.'xdays_dayOffset'];
   }
 
-  public function getValues() {
+  public function getValues($prefix, CRM_Civirules_BAO_Rule $rule) {
     $values = array();
-    $values['xdays_dayOffset'] = $this->dayOffset;
+    $values[$prefix.'xdays_dayOffset'] = $this->dayOffset;
     return $values;
   }
 

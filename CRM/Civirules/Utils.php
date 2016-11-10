@@ -109,6 +109,26 @@ class CRM_Civirules_Utils {
   }
 
   /**
+   * Function to return activity status list
+   *
+   * @return array $activityStatusList
+   * @access public
+   */
+  public static function getActivityStatusList() {
+    $activityStatusList = array();
+    $activityStatusOptionGroupId = self::getOptionGroupIdWithName('activity_status');
+    $params = array(
+      'option_group_id' => $activityStatusOptionGroupId,
+      'is_active' => 1,
+      'options' => array('limit' => 0));
+    $activityStatuses = civicrm_api3('OptionValue', 'Get', $params);
+    foreach ($activityStatuses['values'] as $optionValue) {
+      $activityStatusList[$optionValue['value']] = $optionValue['label'];
+    }
+    return $activityStatusList;
+  }
+
+  /**
    * Function to return activity type list
    *
    * @return array $activityTypeList

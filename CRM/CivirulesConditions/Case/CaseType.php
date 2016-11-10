@@ -27,14 +27,16 @@ class CRM_CivirulesConditions_Case_CaseType extends CRM_Civirules_Condition {
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $isConditionValid = FALSE;
     $case = $triggerData->getEntityData('Case');
+    // Our assumptions is that we have only one case type id per case.
+    $case_type_id = str_replace(CRM_Core_DAO::VALUE_SEPARATOR, "", $case['case_type_id']);
     switch ($this->conditionParams['operator']) {
       case 0:
-        if ($case['case_type_id'] == $this->conditionParams['case_type_id']) {
+        if (in_array($case_type_id, $this->conditionParams['case_type_id'])) {
           $isConditionValid = TRUE;
         }
         break;
       case 1:
-        if ($case['case_type_id'] != $this->conditionParams['case_type_id']) {
+        if (!in_array($case_type_id, $this->conditionParams['case_type_id'])) {
           $isConditionValid = TRUE;
         }
         break;
@@ -65,22 +67,40 @@ class CRM_CivirulesConditions_Case_CaseType extends CRM_Civirules_Condition {
    * @access public
    */
   public function userFriendlyConditionParams() {
-    try {
-      $caseTypes = civicrm_api3('CaseType', 'Get', array('is_active' => 1));
-      $operator = null;
-      if ($this->conditionParams['operator'] == 0) {
-        $operator = 'equals';
-      }
-      if ($this->conditionParams['operator'] == 1) {
-        $operator = 'is not equal to';
-      }
+    $caseTypes = self::getCaseTypes();
+    $friendlyText = "";
+    if ($this->conditionParams['operator'] == 0) {
+      $friendlyText = 'Case Type is one of: ';
+    }
+    if ($this->conditionParams['operator'] == 1) {
+      $friendlyText = 'Case Type is NOT one of: ';
+    }
+    $caseText = array();
+    foreach ($this->conditionParams['case_type_id'] as $caseTypeId) {
+      $caseText[] = $caseTypes[$caseTypeId];
+    }
+    if (!empty($caseText)) {
+      $friendlyText .= implode(", ", $caseText);
+    }
+    return $friendlyText;
+  }
+
+  public static function getCaseTypes() {
+    $return = array();
+    $version = CRM_Core_BAO_Domain::version();
+    if (version_compare($version, '4.5', '<')) {
+      $option_group_id = civicrm_api3('OptionGroup', 'getvalue', array('return' => 'id', 'name' => 'case_type'));
+      $caseTypes = civicrm_api3('OptionValue', 'Get', array('option_group_id' => $option_group_id));
       foreach ($caseTypes['values'] as $caseType) {
-        if ($caseType['id'] == $this->conditionParams['case_type_id']) {
-          return "Case Type ".$operator." ".$caseType['title'];
-        }
+        $return[$caseType['value']] = $caseType['label'];
       }
-    } catch (CiviCRM_API3_Exception $ex) {}
-    return '';
+    } else {
+      $caseTypes = civicrm_api3('CaseType', 'Get', array('is_active' => 1));
+      foreach ($caseTypes['values'] as $caseType) {
+        $return[$caseType['id']] = $caseType['title'];
+      }
+    }
+    return $return;
   }
 
   /**

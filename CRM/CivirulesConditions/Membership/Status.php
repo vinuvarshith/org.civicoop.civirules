@@ -27,7 +27,6 @@ class CRM_CivirulesConditions_Membership_Status extends CRM_Civirules_Condition 
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $isConditionValid = FALSE;
     $membership = $triggerData->getEntityData('Membership');
-    CRM_Core_Error::debug('membership', $membership);
     switch ($this->conditionParams['operator']) {
       case 0:
         if ($membership['status_id'] == $this->conditionParams['membership_status_id']) {

@@ -121,4 +121,68 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     }
     return true;
   }
+
+  /**
+   * Update for changed recurring contribution class names
+   */
+  public function upgrade_1008() {
+    $query = 'UPDATE civirule_condition SET class_name = %1 WHERE class_name = %2';
+    $paramsRecurCount = array(
+      1 => array('CRM_CivirulesConditions_ContributionRecur_Count', 'String'),
+      2 => array('CRM_CivirulesConditions_Contribution_CountRecurring', 'String'));
+    CRM_Core_DAO::executeQuery($query, $paramsRecurCount);
+
+    $paramsRecurIs = array(
+      1 => array('CRM_CivirulesConditions_ContributionRecur_DonorIsRecurring', 'String'),
+      2 => array('CRM_CivirulesConditions_Contribution_DonorIsRecurring', 'String'));
+    CRM_Core_DAO::executeQuery($query, $paramsRecurIs);
+
+    $paramsRecurEnd = array(
+      1 => array('CRM_CivirulesConditions_ContributionRecur_EndDate', 'String'),
+      2 => array('CRM_CivirulesConditions_Contribution_RecurringEndDate', 'String'));
+    CRM_Core_DAO::executeQuery($query, $paramsRecurEnd);
+
+    return true;
+  }
+
+  /**
+   * Update to insert the trigger for Activity Date reached
+   */
+  public function upgrade_1009() {
+    CRM_Core_DAO::executeQuery("
+      INSERT INTO civirule_trigger (name, label, object_name, op, cron, class_name, created_date, created_user_id)
+      VALUES ('activitydate', 'Activity Date reached', null, null, 1, 'CRM_CivirulesCronTrigger_ActivityDate',  CURDATE(), 1);"
+    );
+    return true;
+  }
+
+  /**
+   * Update to insert the trigger for Case Activity changed
+   */
+  public function upgrade_1010() {
+    CRM_Core_DAO::executeQuery("
+      INSERT INTO civirule_trigger (name, label, object_name, op, class_name, created_date, created_user_id)
+      VALUES ('changed_case_activity', 'Case activity is changed', 'Activity', 'edit', 'CRM_CivirulesPostTrigger_CaseActivity', CURDATE(), 1);"
+    );
+    return TRUE;
+  }
+
+  /**
+   * Update to insert the trigger for Custom Data Changed on case.
+   */
+  public function upgrade_1011() {
+    CRM_Core_DAO::executeQuery("
+    INSERT INTO civirule_trigger (name, label, object_name, op, class_name, created_date, created_user_id)
+    VALUES ('changed_case_custom_data', 'Custom data on case changed', null, null, 'CRM_CivirulesPostTrigger_CaseCustomDataChanged', CURDATE(), 1);
+    ");
+    return TRUE;
+  }
+
+  public function upgrade_1012() {
+    CRM_Core_DAO::executeQuery("
+    INSERT INTO civirule_trigger (name, label, object_name, op, class_name, created_date, created_user_id)
+    VALUES ('added_case_activity', 'Case activity is added', 'Activity', 'create', 'CRM_CivirulesPostTrigger_CaseActivity', CURDATE(), 1);
+    ");
+    return TRUE;
+  }
 }

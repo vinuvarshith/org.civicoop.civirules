@@ -83,10 +83,13 @@ VALUES
   ('deleted_relationship', 'Relationship is deleted', 'Relationship', 'delete', 'CRM_CivirulesPostTrigger_Relationship', CURDATE(), 1),
   ('new_tag', 'Tag is added', 'Tag', 'create', null,  CURDATE(), 1),
   ('changed_tag', 'Tag is changed', 'Tag', 'edit', null, CURDATE(), 1),
-  ('deleted_tag', 'Tag is deleted', 'Tag', 'delete', null, CURDATE(), 1);
+  ('deleted_tag', 'Tag is deleted', 'Tag', 'delete', null, CURDATE(), 1),
+  ('changed_case_activity', 'Case activity is changed', 'Activity', 'edit', 'CRM_CivirulesPostTrigger_CaseActivity', CURDATE(), 1),
+  ('added_case_activity', 'Case activity is added', 'Activity', 'create', 'CRM_CivirulesPostTrigger_CaseActivity', CURDATE(), 1),
+  ('changed_case_custom_data', 'Custom data on case changed', null, null, 'CRM_CivirulesPostTrigger_CaseCustomDataChanged', CURDATE(), 1);
 
 INSERT INTO civirule_trigger (name, label, object_name, op, cron, class_name, created_date, created_user_id)
 VALUES
   ('birthday', 'Individual has birthday', null, null, 1, 'CRM_CivirulesCronTrigger_Birthday',  CURDATE(), 1),
-  ('groupmembership', 'Daily trigger for group members', null, null, 1, 'CRM_CivirulesCronTrigger_GroupMembership',  CURDATE(), 1);
-
+  ('groupmembership', 'Daily trigger for group members', null, null, 1, 'CRM_CivirulesCronTrigger_GroupMembership',  CURDATE(), 1),
+  ('activitydate', 'Activity Date reached', null, null, 1, 'CRM_CivirulesCronTrigger_ActivityDate',  CURDATE(), 1);

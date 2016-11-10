@@ -20,13 +20,14 @@ abstract class CRM_CivirulesConditions_Generic_FieldValueChangeComparison extend
    * @access protected
    */
   protected function getOriginalComparisonValue() {
-    switch ($this->getOperator()) {
+    switch ($this->getOriginalOperator()) {
       case '=':
       case '!=':
       case '>':
       case '>=':
       case '<':
       case '<=':
+      case 'contains string':
         $key = 'original_value';
         break;
       case 'is one of':
@@ -60,6 +61,7 @@ abstract class CRM_CivirulesConditions_Generic_FieldValueChangeComparison extend
       case '>=':
       case '<':
       case '<=':
+      case 'contains string':
         $key = 'value';
         break;
       case 'is one of':

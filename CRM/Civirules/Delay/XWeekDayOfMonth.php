@@ -29,7 +29,7 @@ class CRM_Civirules_Delay_XWeekDayOfMonth extends CRM_Civirules_Delay_Delay {
   }
 
   public function getDelayExplanation() {
-    return ts('Delay action to %1 %2 at %3:%4',
+    return ts('Delay to %1 %2 at %3:%4',
       array(
         1 => ts($this->week_offset),
         2 => ts($this->day),
@@ -38,11 +38,11 @@ class CRM_Civirules_Delay_XWeekDayOfMonth extends CRM_Civirules_Delay_Delay {
       ));
   }
 
-  public function addElements(CRM_Core_Form &$form) {
-    $form->add('select', 'XWeekDayOfMonth_week_offset', ts('Offset'), $this->getWeekOffset());
-    $form->add('select', 'XWeekDayOfMonth_day', ts('Days'), $this->getDays());
-    $form->add('text', 'XWeekDayOfMonth_time_hour', ts('Time (hour)'));
-    $form->add('text', 'XWeekDayOfMonth_time_minute', ts('Time (minute)'));
+  public function addElements(CRM_Core_Form &$form, $prefix, CRM_Civirules_BAO_Rule $rule) {
+    $form->add('select', $prefix.'XWeekDayOfMonth_week_offset', ts('Offset'), $this->getWeekOffset());
+    $form->add('select', $prefix.'XWeekDayOfMonth_day', ts('Days'), $this->getDays());
+    $form->add('text', $prefix.'XWeekDayOfMonth_time_hour', ts('Time (hour)'));
+    $form->add('text', $prefix.'XWeekDayOfMonth_time_minute', ts('Time (minute)'));
   }
 
   protected function getDays() {
@@ -68,28 +68,28 @@ class CRM_Civirules_Delay_XWeekDayOfMonth extends CRM_Civirules_Delay_Delay {
     );
   }
 
-  public function validate($values, &$errors) {
-    if (empty($values['XWeekDayOfMonth_time_hour']) || !is_numeric($values['XWeekDayOfMonth_time_hour']) || $values['XWeekDayOfMonth_time_hour'] < 0 || $values['XWeekDayOfMonth_time_hour'] > 23) {
-      $errors['XWeekDayOfMonth_time_hour'] = ts('You need to provide a number between 0 and 23');
+  public function validate($values, &$errors, $prefix, CRM_Civirules_BAO_Rule $rule) {
+    if (empty($values[$prefix.'XWeekDayOfMonth_time_hour']) || !is_numeric($values[$prefix.'XWeekDayOfMonth_time_hour']) || $values[$prefix.'XWeekDayOfMonth_time_hour'] < 0 || $values[$prefix.'XWeekDayOfMonth_time_hour'] > 23) {
+      $errors[$prefix.'XWeekDayOfMonth_time_hour'] = ts('You need to provide a number between 0 and 23');
     }
-    if (empty($values['XWeekDayOfMonth_time_minute']) || !is_numeric($values['XWeekDayOfMonth_time_minute']) || $values['XWeekDayOfMonth_time_minute'] < 0 || $values['XWeekDayOfMonth_time_minute'] > 59) {
-      $errors['XWeekDayOfMonth_time_minute'] = ts('You need to provide a number between 0 and 59');
+    if (empty($values[$prefix.'XWeekDayOfMonth_time_minute']) || !is_numeric($values[$prefix.'XWeekDayOfMonth_time_minute']) || $values[$prefix.'XWeekDayOfMonth_time_minute'] < 0 || $values[$prefix.'XWeekDayOfMonth_time_minute'] > 59) {
+      $errors[$prefix.'XWeekDayOfMonth_time_minute'] = ts('You need to provide a number between 0 and 59');
     }
   }
 
-  public function setValues($values) {
-    $this->week_offset = $values['XWeekDayOfMonth_week_offset'];
-    $this->day = $values['XWeekDayOfMonth_day'];
-    $this->time_hour = $values['XWeekDayOfMonth_time_hour'];
-    $this->time_minute = $values['XWeekDayOfMonth_time_minute'];
+  public function setValues($values,$prefix, CRM_Civirules_BAO_Rule $rule) {
+    $this->week_offset = $values[$prefix.'XWeekDayOfMonth_week_offset'];
+    $this->day = $values[$prefix.'XWeekDayOfMonth_day'];
+    $this->time_hour = $values[$prefix.'XWeekDayOfMonth_time_hour'];
+    $this->time_minute = $values[$prefix.'XWeekDayOfMonth_time_minute'];
   }
 
-  public function getValues() {
-    $values['XWeekDayOfMonth_week_offset'] = $this->week_offset;
-    $values['XWeekDayOfMonth_day'] = $this->day;
-    $values['XWeekDayOfMonth_time_hour'] = $this->time_hour;
-    $values['XWeekDayOfMonth_time_minute'] = $this->time_minute;
+  public function getValues($prefix, CRM_Civirules_BAO_Rule $rule) {
     $values = array();
+    $values[$prefix.'XWeekDayOfMonth_week_offset'] = $this->week_offset;
+    $values[$prefix.'XWeekDayOfMonth_day'] = $this->day;
+    $values[$prefix.'XWeekDayOfMonth_time_hour'] = $this->time_hour;
+    $values[$prefix.'XWeekDayOfMonth_time_minute'] = $this->time_minute;
     return $values;
   }
 
@@ -98,9 +98,9 @@ class CRM_Civirules_Delay_XWeekDayOfMonth extends CRM_Civirules_Delay_Delay {
    *
    * @param $values
    */
-  public function setDefaultValues(&$values) {
-    $values['XWeekDayOfMonth_time_hour'] = '9';
-    $values['XWeekDayOfMonth_time_minute'] = '00';
+  public function setDefaultValues(&$values, $prefix, CRM_Civirules_BAO_Rule $rule) {
+    $values[$prefix.'XWeekDayOfMonth_time_hour'] = '9';
+    $values[$prefix.'XWeekDayOfMonth_time_minute'] = '00';
   }
 
 }
