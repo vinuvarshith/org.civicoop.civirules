@@ -32,7 +32,7 @@
             {foreach from=$columnHeaders item=header}
                 <th scope="col">
                     {if $header.sort}
-                        {if $header.name ne "RuleID" and $header.name ne "Hidden Active"}
+                        {if $header.name ne "RuleID" and $header.name ne "Hidden Active" and $header.name ne "Help Text"}
                             {assign var='key' value=$header.sort}
                             {$sort->_response.$key.link}
                         {/if}
@@ -49,11 +49,17 @@
                 <tr id='rowid{$row.contact_id}' class="{cycle values="odd-row,even-row"}">
                     {foreach from=$columnHeaders item=header}
                         {assign var=fName value=$header.sort}
-                        {if $fName ne 'rule_id' and $fName ne 'rule_is_active'}
+                        {if $fName ne 'rule_id' and $fName ne 'rule_is_active' and $fName ne 'rule_help_text'}
                             {if $fName eq 'rule_created_date'}
                                 <td>{$row.$fName|crmDate}</td>
                             {else}
-                                <td>{$row.$fName}</td>
+                                <td>
+                                    {$row.$fName}
+                                    {if $fName eq 'rule_description'}
+                                        &nbsp;<a href = "#" class="helpicon" onclick="showRuleHelp('{$row.rule_help_text}')"></a>
+                                    {/if}
+                                </td>
+
                             {/if}
                         {/if}
                     {/foreach}
@@ -85,6 +91,20 @@
     </fieldset>
     {* END Actions/Results section *}
 {/if}
+{literal}
+    <script type="text/javascript">
+        function showRuleHelp(helpText) {
+            console.log(helpText);
+            if (helpText) {
+                var myWindow = window.open('', '', 'width=200,height=100');
+                myWindow.document.write("<p>" + helpText + "</p>")
+            } else {
+                CRM.alert('There is no help text defined for this rule. You can set the help text when you edit the rule', 'No Help for CiviRule', 'info');
+            }
+        }
+    </script>
+{/literal}
+
 
 
 

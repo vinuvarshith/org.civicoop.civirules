@@ -83,6 +83,7 @@ class CRM_Civirules_Form_Search_Rules extends CRM_Contact_Form_Search_Custom_Bas
       ts('Created By') => 'rule_created_by',
       // hidden row elements
       ts('RuleID') => 'rule_id',
+      ts('Help Text') => 'rule_help_text',
       ts('Hidden Active') => 'rule_is_active'
     );
     return $columns;
@@ -204,6 +205,14 @@ LEFT JOIN civicrm_contact contact ON crr.created_user_id = contact.id";
       $row['is_active'] = ts("No");
     }
     $row['rule_tags'] = CRM_Civirules_BAO_RuleTag::getTagLabelsForRule($row['rule_id']);
+    if (!empty($row['rule_help_text'])) {
+      $row['rule_help_text'] = trim($row['rule_help_text']);
+      $helpParts = explode(' ', $row['rule_help_text']);
+      foreach ($helpParts as $key => $value) {
+        $helpParts[$key] = htmlentities(htmlspecialchars(stripslashes($value)));
+      }
+      $row['rule_help_text'] = json_encode($helpParts);
+    }
   }
   /**
    * Method to count selected rules
