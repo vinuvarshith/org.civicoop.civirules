@@ -4,12 +4,7 @@
 class CRM_CivirulesConditions_Form_Case_CaseType extends CRM_CivirulesConditions_Form_Form {
 
   protected function getCaseTypes() {
-    $caseTypes = civicrm_api3('CaseType', 'Get', array('is_active' => 1));
-    $return = array();
-    foreach($caseTypes['values'] as $caseType) {
-      $return[$caseType['id']] = $caseType['title'];
-    }
-    return $return;
+    return CRM_CivirulesConditions_Case_CaseType::getCaseTypes();
   }
 
   /**
@@ -20,11 +15,12 @@ class CRM_CivirulesConditions_Form_Case_CaseType extends CRM_CivirulesConditions
   public function buildQuickForm() {
     $this->add('hidden', 'rule_condition_id');
 
-    $membershipTypes = $this->getCaseTypes();
-    $membershipTypes[0] = ts('- select -');
-    asort($membershipTypes);
-    $this->add('select', 'case_type_id', ts('Case Type'), $membershipTypes, true);
-    $this->add('select', 'operator', ts('Operator'), array('equals', 'is not equal to'), true);
+    $caseTypes = $this->getCaseTypes();
+    $caseTypes[0] = ts('- select -');
+    asort($caseTypes);
+    $this->add('select', 'case_type_id', ts('Case Type(s)'), $caseTypes, true,
+      array('id' => 'case_type_ids', 'multiple' => 'multiple','class' => 'crm-select2'));
+    $this->add('select', 'operator', ts('Operator'), array('is one of', 'is NOT one of'), true);
 
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),

@@ -180,5 +180,24 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     );
     return TRUE;
   }
+
+  /**
+   * Update to insert the trigger for Custom Data Changed on case.
+   */
+  public function upgrade_1011() {
+    CRM_Core_DAO::executeQuery("
+    INSERT INTO civirule_trigger (name, label, object_name, op, class_name, created_date, created_user_id)
+    VALUES ('changed_case_custom_data', 'Custom data on case changed', null, null, 'CRM_CivirulesPostTrigger_CaseCustomDataChanged', CURDATE(), 1);
+    ");
+    return TRUE;
+  }
+
+  public function upgrade_1012() {
+    CRM_Core_DAO::executeQuery("
+    INSERT INTO civirule_trigger (name, label, object_name, op, class_name, created_date, created_user_id)
+    VALUES ('added_case_activity', 'Case activity is added', 'Activity', 'create', 'CRM_CivirulesPostTrigger_CaseActivity', CURDATE(), 1);
+    ");
+    return TRUE;
+  }
 }
 >>>>>>> master

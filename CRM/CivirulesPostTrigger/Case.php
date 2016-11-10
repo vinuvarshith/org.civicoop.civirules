@@ -31,6 +31,11 @@ class CRM_CivirulesPostTrigger_Case extends CRM_Civirules_Trigger_Post {
   public function triggerTrigger($op, $objectName, $objectId, $objectRef) {
     $t = $this->getTriggerDataFromPost($op, $objectName, $objectId, $objectRef);
 
+    if ($op == 'create') {
+      $triggerData = clone $t;
+      CRM_Civirules_Engine::triggerRule($this, $triggerData);
+    }
+
     //trigger for each client
     $clients = CRM_Case_BAO_Case::getCaseClients($objectId);
     foreach($clients as $client) {

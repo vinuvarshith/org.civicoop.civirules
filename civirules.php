@@ -137,6 +137,14 @@ function civirules_civicrm_post( $op, $objectName, $objectId, &$objectRef ) {
   CRM_Civirules_Trigger_Post::post($op, $objectName, $objectId, $objectRef);
 }
 
+function civirules_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
+  CRM_CivirulesPostTrigger_CaseCustomDataChanged::validateForm($form);
+}
+
+function civirules_civicrm_custom($op, $groupID, $entityID, &$params) {
+  CRM_CivirulesPostTrigger_CaseCustomDataChanged::custom($op, $groupID, $entityID, $params);
+}
+
 function civirules_civirules_alter_trigger_data(CRM_Civirules_TriggerData_TriggerData &$triggerData) {
   //also add the custom data which is passed to the pre hook (and not the post)
   CRM_Civirules_Utils_CustomDataFromPre::addCustomDataToTriggerData($triggerData);

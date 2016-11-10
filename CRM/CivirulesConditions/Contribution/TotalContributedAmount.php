@@ -34,6 +34,40 @@ class CRM_CivirulesConditions_Contribution_TotalContributedAmount extends CRM_Ci
   }
 
   /**
+   * Returns the value for the data comparison
+   *
+   * @return mixed
+   * @access protected
+   */
+  protected function getComparisonValue() {
+    switch ($this->getOperator()) {
+      case '=':
+      case '!=':
+      case '>':
+      case '>=':
+      case '<':
+      case '<=':
+      case 'contains string':
+        $key = 'value';
+        break;
+      case 'is one of':
+      case 'is not one of':
+      case 'contains one of':
+      case 'not contains one of':
+      case 'contains all of':
+      case 'not contains all of':
+        $key = 'multi_value';
+        break;
+    }
+
+    if (!empty($this->conditionParams[$key])) {
+      return $this->conditionParams[$key];
+    } else {
+      return '';
+    }
+  }
+
+  /**
    * Returns a redirect url to extra data input from the user after adding a condition
    *
    * Return false if you do not need extra data input

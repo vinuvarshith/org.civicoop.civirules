@@ -1,17 +1,15 @@
 <?php
 /**
- * Class for CiviRule Condition FirstContribution
- *
- * @author Erik Hommel (CiviCooP) <erik.hommel@civicoop.org>
+ * @author Jaap Jansma (CiviCooP) <jaap.jansma@civicoop.org>
  * @license http://www.gnu.org/licenses/agpl-3.0.html
  */
 
-class CRM_CivirulesConditions_Activity_Type extends CRM_Civirules_Condition {
+class CRM_CivirulesConditions_Activity_Status extends CRM_Civirules_Condition {
 
   private $conditionParams = array();
 
   public function getExtraDataInputUrl($ruleConditionId) {
-    return CRM_Utils_System::url('civicrm/civirule/form/condition/activity_type/',
+    return CRM_Utils_System::url('civicrm/civirule/form/condition/activity_status/',
       'rule_condition_id='.$ruleConditionId);
   }
 
@@ -42,12 +40,12 @@ class CRM_CivirulesConditions_Activity_Type extends CRM_Civirules_Condition {
     $activity = $triggerData->getEntityData('Activity');
     switch ($this->conditionParams['operator']) {
       case 0:
-        if (in_array($activity['activity_type_id'], $this->conditionParams['activity_type_id'])) {
+        if (in_array($activity['status_id'], $this->conditionParams['status_id'])) {
           $isConditionValid = TRUE;
         }
         break;
       case 1:
-        if (!in_array($activity['activity_type_id'], $this->conditionParams['activity_type_id'])) {
+        if (!in_array($activity['status_id'], $this->conditionParams['status_id'])) {
           $isConditionValid = TRUE;
         }
         break;
@@ -64,16 +62,16 @@ class CRM_CivirulesConditions_Activity_Type extends CRM_Civirules_Condition {
   public function userFriendlyConditionParams() {
     $friendlyText = "";
     if ($this->conditionParams['operator'] == 0) {
-      $friendlyText = 'Activity Type is one of: ';
+      $friendlyText = 'Activity Status is one of: ';
     }
     if ($this->conditionParams['operator'] == 1) {
-      $friendlyText = 'Activity Type is NOT one of: ';
+      $friendlyText = 'Activity Status is NOT one of: ';
     }
     $actText = array();
-    foreach ($this->conditionParams['activity_type_id'] as $actTypeId) {
+    foreach ($this->conditionParams['status_id'] as $actStatusId) {
       $actText[] = civicrm_api3('OptionValue', 'getvalue', array(
-        'option_group_id' => 'activity_type',
-        'value' => $actTypeId,
+        'option_group_id' => 'activity_status',
+        'value' => $actStatusId,
         'return' => 'label'
       ));
     }
@@ -94,4 +92,5 @@ class CRM_CivirulesConditions_Activity_Type extends CRM_Civirules_Condition {
       'Activity',
     );
   }
+
 }
