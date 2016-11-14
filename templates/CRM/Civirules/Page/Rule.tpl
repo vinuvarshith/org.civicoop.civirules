@@ -28,7 +28,15 @@
             <td>{$rule.label}</td>
             <td>{$rule.trigger_label}</td>
             <td>{$rule.is_active}</td>
-            <td>{$rule.description} <a href = "#" class="helpicon" onclick="showRuleHelp({$rule.id},'{$rule.help_text}')"></a></td>
+            <td>{$rule.description}
+              {if (!empty($rule.help_text))}
+                {if $earlier_than_46 eq 0}
+                  <a class="crm-popup medium-popup helpicon" href="{crmURL p='civicrm/civirules/civirulehelptext' q="reset=1&rid=`$rule.id`"}"></a>
+                {else}
+                  <a class="crm-popup medium-popup helpicon" href="{crmURL p='civicrm/civirules/civirulehelptext44' q="reset=1&rid=`$rule.id`"}"></a>
+                {/if}
+              {/if}
+            </td>
             <td>{$rule.created_date|crmDate}</td>
             <td>{$rule.created_contact_name}</td>
             <td>

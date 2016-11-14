@@ -294,4 +294,16 @@
     <access_arguments>access CiviCRM</access_arguments>
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/civirules/civirulehelptext</path>
+    <page_callback>CRM_Civirules_Form_RuleHelpTextWindow</page_callback>
+    <title>RuleHelpTextWindow</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirules/civirulehelptext44</path>
+    <page_callback>CRM_Civirules_Form_RuleHelpText44</page_callback>
+    <title>RuleHelpText44</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
 </menu>
