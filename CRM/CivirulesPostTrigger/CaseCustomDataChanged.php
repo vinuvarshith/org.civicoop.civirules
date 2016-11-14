@@ -55,7 +55,9 @@ class CRM_CivirulesPostTrigger_CaseCustomDataChanged extends CRM_Civirules_Trigg
     }
     $case = civicrm_api3('Case', 'getsingle', array('id' => $entityID));
     foreach($params as $field) {
-      $case['custom_'.$field['custom_field_id']] = $field['value'];
+      if (!empty($field['custom_field_id'])) {
+        $case['custom_' . $field['custom_field_id']] = $field['value'];
+      }
     }
     if (self::$preData !== false) {
       $t = new CRM_Civirules_TriggerData_Edit('Case', $entityID, $case, self::$preData);
