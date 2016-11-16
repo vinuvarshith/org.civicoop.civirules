@@ -28,7 +28,9 @@ class CRM_CivirulesConditions_Case_CaseType extends CRM_Civirules_Condition {
     $isConditionValid = FALSE;
     $case = $triggerData->getEntityData('Case');
     // Our assumptions is that we have only one case type id per case.
-    $case_type_id = str_replace(CRM_Core_DAO::VALUE_SEPARATOR, "", $case['case_type_id']);
+    if (isset($case['case_type_id'])) {
+      $case_type_id = str_replace(CRM_Core_DAO::VALUE_SEPARATOR, "", $case['case_type_id']);
+    }
     switch ($this->conditionParams['operator']) {
       case 0:
         if (in_array($case_type_id, $this->conditionParams['case_type_id'])) {
