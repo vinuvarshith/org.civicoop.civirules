@@ -236,11 +236,16 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
    * @access protected
    */
   protected function createFormElements() {
+    $version = CRM_Core_BAO_Domain::version();
     $this->add('hidden', 'id', ts('RuleId'), array('id' => 'ruleId'));
     if ($this->_action != CRM_Core_Action::DELETE) {
       $this->add('text', 'rule_label', ts('Name'), array('size' => CRM_Utils_Type::HUGE), TRUE);
       $this->add('text', 'rule_description', ts('Description'), array('size' => 100, 'maxlength' => 256));
-      $this->addWysiwyg('rule_help_text', ts('Help text with purpose of rule'), array('rows' => 6, 'cols' => 80), FALSE);
+      if($version >= 4.7) {
+        $this->add('wysiwyg', 'rule_help_text', ts('Help text with purpose of rule'), array('rows' => 6, 'cols' => 80));
+      } else {
+        $this->addWysiwyg('rule_help_text', ts('Help text with purpose of rule'), array('rows' => 6, 'cols' => 80), FALSE);
+      }
       $this->add('checkbox', 'rule_is_active', ts('Enabled'));
       $this->add('text', 'rule_created_date', ts('Created Date'));
       $this->add('text', 'rule_created_contact', ts('Created By'));
