@@ -12,6 +12,11 @@
     <div class="clear"></div>
   </div>
   <div class="crm-section">
+    <div class="label">{$form.rule_tag_id.label}</div>
+    <div class="content select-container">{$form.rule_tag_id.html}</div>
+    <div class="clear"></div>
+  </div>
+  <div class="crm-section">
     <div class="label">{$form.rule_help_text.label}</div>
     <div class="content">{$form.rule_help_text.html}</div>
     <div class="clear"></div>

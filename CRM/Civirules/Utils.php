@@ -309,5 +309,28 @@ class CRM_Civirules_Utils {
     } catch (Exception $ex) {}
     return $isLater;
   }
+
+  /**
+   * Method to determine max key in navigation menu (core solutions do not cater for child keys!)
+   *
+   * @param array $menuItems
+   * @return int $maxKey
+   */
+  public static function getMaxMenuKey($menuItems) {
+    $maxKey = 0;
+    foreach ($menuItems as $menuKey => $menuItem) {
+      if ($menuKey > $maxKey) {
+        $maxKey = $menuKey;
+      }
+      if (isset($menuItem['child'])) {
+        foreach ($menuItem['child'] as $childKey => $child) {
+          if ($childKey > $maxKey) {
+            $maxKey = $childKey;
+          }
+        }
+      }
+    }
+    return $maxKey;
+  }
 }
 

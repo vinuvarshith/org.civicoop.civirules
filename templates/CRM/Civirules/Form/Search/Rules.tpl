@@ -55,9 +55,14 @@
                             {else}
                                 <td>
                                     {$row.$fName}
-                                    {if $fName eq 'rule_description'}
-                                        &nbsp;<a href = "#" class="helpicon" onclick="showRuleHelp('{$row.rule_help_text}')"></a>
-                                    {/if}
+                                    {*
+                                    {if $fName eq 'rule_description' and (!empty($row.rule_help_text))}
+                                        {if $row.earlier_than_46 eq 0}
+                                            <a class="crm-popup medium-popup helpicon" href="{crmURL p='civicrm/civirules/civirulehelptext' q="reset=1&rid=`$row.rule_id`"}"></a>
+                                        {else}
+                                            <a class="crm-popup medium-popup helpicon" href="{crmURL p='civicrm/civirules/civirulehelptext44' q="reset=1&rid=`$row.rule_id`"}"></a>
+                                        {/if}
+                                    {/if} *}
                                 </td>
 
                             {/if}
@@ -91,19 +96,6 @@
     </fieldset>
     {* END Actions/Results section *}
 {/if}
-{literal}
-    <script type="text/javascript">
-        function showRuleHelp(helpText) {
-            console.log(helpText);
-            if (helpText) {
-                var myWindow = window.open('', '', 'width=200,height=100');
-                myWindow.document.write("<p>" + helpText + "</p>")
-            } else {
-                CRM.alert('There is no help text defined for this rule. You can set the help text when you edit the rule', 'No Help for CiviRule', 'info');
-            }
-        }
-    </script>
-{/literal}
 
 
 

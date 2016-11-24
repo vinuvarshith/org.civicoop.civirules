@@ -32,7 +32,7 @@ class CRM_Civirules_BAO_RuleTag extends CRM_Civirules_DAO_RuleTag  {
       if (!empty($row['rule_id']) && !empty($row['rule_tag_id'])) {
         $result[$row['id']] = $row;
       } else {
-        //invalid ruleTag because no there is no linked tag or rule
+        //invalid ruleTag because there is no linked tag or rule
         CRM_Civirules_BAO_RuleTag::deleteWithId($row['id']);
       }
     }
@@ -84,7 +84,7 @@ class CRM_Civirules_BAO_RuleTag extends CRM_Civirules_DAO_RuleTag  {
   }
 
   /**
-   * Function to delete all rule actions with rule id
+   * Function to delete all rule tags with rule id
    *
    * @param int $ruleId
    * @access public
@@ -100,13 +100,14 @@ class CRM_Civirules_BAO_RuleTag extends CRM_Civirules_DAO_RuleTag  {
   }
 
   /**
-   * Function to delete all rule actions with tag id
+   * Function to delete all rule tags with tag id
    *
    * @param int $tagId
    * @access public
    * @static
    */
   public static function deleteWithTagId($tagId) {
+    // todo : call from post trigger on delete of option value
     $ruleTag = new CRM_Civirules_BAO_RuleTag();
     $ruleTag->rule_tag_id = $tagId;
     $ruleTag->find(false);
@@ -116,26 +117,46 @@ class CRM_Civirules_BAO_RuleTag extends CRM_Civirules_DAO_RuleTag  {
   }
 
   /**
-   * Method to get a string with all tag labels for a rule
+   * Method to build select list of all active rule tags
+   *
+   * @return array
+   */
+  public static function getRuleTagsList() {
+    $result = array();
+    $apiRuleTags = civicrm_api3('OptionValue', 'get', array(
+      'option_group_id' => 'civirule_rule_tag',
+      'options' => array('limit' => 0)
+    ));
+    foreach ($apiRuleTags['values'] as $ruleTagId => $ruleTagValues) {
+      $result[$ruleTagValues['value']] = $ruleTagValues['label'];
+    }
+    asort($result);
+    return $result;
+  }
+
+  /**
+   * Method to get civirules tags for a specific rule
    *
    * @param $ruleId
-   * @return string
+   * @return array
    */
   public static function getTagLabelsForRule($ruleId) {
-    $result = NULL;
-    $tagLabels = array();
-    $ruleTags = self::getValues(array('rule_id' => $ruleId));
-    foreach ($ruleTags as $ruleTag) {
-      try {
-        $params = array(
-          'option_group_id' => 'rule_tag',
-          'value' => $ruleTag['rule_tag_id'],
-          'return' => 'label'
-        );
-        $tagLabels[] = civicrm_api3('OptionValue', 'getvalue', $params);
-      } catch (CiviCRM_API3_Exception $ex) {}
-    }
-    $result = implode('; ', $tagLabels);
-    return $result;
+    $ruleTagLabels = array();
+    try {
+      $ruleTags = civicrm_api3('CiviRuleRuleTag', 'get', array(
+        'rule_id' => $ruleId,
+        'options' => array('limit' => 0)));
+      foreach ($ruleTags['values'] as $ruleTagId => $ruleTag) {
+        try {
+          $ruleTagLabels[] = civicrm_api3('OptionValue', 'getvalue', array(
+            'option_group_id' => 'civirule_rule_tag',
+            'value' => $ruleTag['rule_tag_id'],
+            'return' => 'label'
+          ));
+        } catch (CiviCRM_API3_Exception $ex) {
+        }
+      }
+    } catch (CiviCRM_API3_Exception $ex) {}
+    return $ruleTagLabels;
   }
 }

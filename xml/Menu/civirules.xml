@@ -1,13 +1,6 @@
 <?xml version="1.0"?>
 <menu>
   <item>
-    <path>civicrm/civirules/page/rule</path>
-    <page_callback>CRM_Civirules_Page_Rule</page_callback>
-    <title>Rule</title>
-    <access_arguments>access CiviCRM</access_arguments>
-    <access_arguments>administer CiviCRM</access_arguments>
-  </item>
-  <item>
     <path>civicrm/civirule/form/rule</path>
     <page_callback>CRM_Civirules_Form_Rule</page_callback>
     <title>Rule</title>
@@ -293,5 +286,17 @@
     <title>Case - Set date field</title>
     <access_arguments>access CiviCRM</access_arguments>
     <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirules/civirulehelptext</path>
+    <page_callback>CRM_Civirules_Form_RuleHelpTextWindow</page_callback>
+    <title>RuleHelpTextWindow</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirules/civirulehelptext44</path>
+    <page_callback>CRM_Civirules_Form_RuleHelpText44</page_callback>
+    <title>RuleHelpText44</title>
+    <access_arguments>access CiviCRM</access_arguments>
   </item>
 </menu>

@@ -9,7 +9,14 @@
  * @license http://www.gnu.org/licenses/agpl-3.0.html
  */
 class CRM_Civirules_Form_Search_Rules extends CRM_Contact_Form_Search_Custom_Base implements CRM_Contact_Form_Search_Interface {
+
+  private $_domainVersion = NULL;
+
   function __construct(&$formValues) {
+    // keep track of version so we can do ugly backwards compatibility hack in function alterRow
+    $domainVersion = civicrm_api3('Domain', 'getvalue', array('return' => 'version'));
+    $this->_domainVersion = round((float) $domainVersion, 2);
+
     parent::__construct($formValues);
   }
 
@@ -21,12 +28,9 @@ class CRM_Civirules_Form_Search_Rules extends CRM_Contact_Form_Search_Custom_Bas
    */
   function buildForm(&$form) {
     CRM_Utils_System::setTitle(ts('Find CiviRules Rules'));
-
     $form->add('text', 'rule_label', ts('Rule Label contains'), TRUE);
-
-    $form->add('select', 'rule_tag_id', ts('Rule Tag(s)'), $this->getRuleTags(), FALSE,
+    $form->add('select', 'rule_tag_id', ts('Rule Tag(s)'), CRM_Civirules_BAO_RuleTag::getRuleTagsList(), FALSE,
       array('id' => 'rule_tag_id', 'multiple' => 'multiple', 'class' => 'crm-select2'));
-
     $form->add('select', 'rule_trigger_id', ts('Rule Trigger(s)'), $this->getRuleTriggers(), FALSE,
       array('id' => 'rule_trigger_id', 'multiple' => 'multiple', 'class' => 'crm-select2'));
     $onlyActive = array(
@@ -36,10 +40,6 @@ class CRM_Civirules_Form_Search_Rules extends CRM_Contact_Form_Search_Custom_Bas
     $form->addRadio('only_active_rules', ts('Find only active Rules?'), $onlyActive, NULL, '<br />', TRUE);
     $defaults['only_active_rules'] = 1;
     $form->setDefaults($defaults);
-    /**
-     * if you are using the standard template, this array tells the template what elements
-     * are part of the search criteria
-     */
     $form->assign('elements', array('rule_label', 'rule_tag_id', 'rule_trigger_id', 'only_active_rules'));
   }
 
@@ -53,16 +53,6 @@ class CRM_Civirules_Form_Search_Rules extends CRM_Contact_Form_Search_Custom_Bas
     foreach ($triggers as $trigger) {
       $result[$trigger['id']] = $trigger['label'];
     }
-    return $result;
-  }
-  /**
-   * Method to build select list of all active rule tags
-   *
-   * @return array
-   */
-  private function getRuleTags() {
-    $result = CRM_Civirules_Utils_OptionGroup::getActiveValues('rule_tag');
-    asort($result);
     return $result;
   }
 
@@ -199,12 +189,15 @@ LEFT JOIN civicrm_contact contact ON crr.created_user_id = contact.id";
    * @return void
    */
   function alterRow(&$row) {
+    // get all tag labels for rule
+    $ruleTagLabels = CRM_Civirules_BAO_RuleTag::getTagLabelsForRule($row['rule_id']);
+    $row['rule_tags'] = implode ('; ', $ruleTagLabels);
+
     if ($row['rule_is_active'] == 1) {
       $row['is_active'] = ts("Yes");
     } else {
       $row['is_active'] = ts("No");
     }
-    $row['rule_tags'] = CRM_Civirules_BAO_RuleTag::getTagLabelsForRule($row['rule_id']);
     if (!empty($row['rule_help_text'])) {
       $row['rule_help_text'] = trim($row['rule_help_text']);
       $helpParts = explode(' ', $row['rule_help_text']);
@@ -213,6 +206,13 @@ LEFT JOIN civicrm_contact contact ON crr.created_user_id = contact.id";
       }
       $row['rule_help_text'] = json_encode($helpParts);
     }
+    // ugly hack to allow backwards compatibility with CiviCRM versions earlier than 4.6
+    if ($this->_domainVersion < 4.6) {
+      $row['earlier_than_46'] = 1;
+    } else {
+      $row['earlier_than_46'] = 0;
+    }
+
   }
   /**
    * Method to count selected rules

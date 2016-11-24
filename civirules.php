@@ -120,12 +120,69 @@ function civirules_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
  */
 function civirules_civicrm_navigationMenu( &$params ) {
-    $item = array (
-        'name'          =>  ts('CiviRules'),
-        'url'           =>  CRM_Utils_System::url('civicrm/civirules/page/rule', 'reset=1', true),
-        'permission'    => 'administer CiviCRM',
-    );
-    _civirules_civix_insert_navigation_menu($params, 'Administer', $item);
+  $customSearchID = civicrm_api3('OptionValue', 'getvalue', array(
+    'option_group_id' => 'custom_search',
+    'name' => 'CRM_Civirules_Form_Search_Rules',
+    'return' => 'value'
+  ));
+  $ruleTagsOptionGroupId = civicrm_api3('OptionGroup', 'getvalue', array(
+    'name' => 'civirule_rule_tag',
+    'return' => 'id'
+  ));
+  $maxKey = CRM_Civirules_Utils::getMaxMenuKey($params);
+  $menuAdministerId = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Administer', 'id', 'name');
+  $params[$menuAdministerId]['child'][$maxKey+1] =
+    array (
+      'attributes' => array (
+        'label'      => ts('CiviRules'),
+        'name'       => ts('CiviRules'),
+        'url'        => NULL,
+        'permission' => NULL,
+        'operator'   => NULL,
+        'separator'  => NULL,
+        'parentID'   => $menuAdministerId,
+        'navID'      => $maxKey+1,
+        'active'     => 1
+      ),
+      'child' => array(
+        1 => array(
+          'attributes' => array (
+            'label'      => ts('Find CiviRules Rules'),
+            'name'       => ts('Find CiviRules Rules'),
+            'url'        => CRM_Utils_System::url('civicrm/contact/search/custom', 'reset=1&csid='.$customSearchID, true),
+            'permission' => 'administer CiviCRM',
+            'operator'   => NULL,
+            'separator'  => NULL,
+            'parentID'   => $maxKey+1,
+            'navID'      => 1,
+            'active'     => 1
+          ),
+        ),
+        2 => array(
+          'attributes' => array (
+            'label'      => ts('New CiviRules Rule'),
+            'name'       => ts('New CiviRules Rule'),
+            'url'        => CRM_Utils_System::url('civicrm/civirule/form/rule', 'reset=1&action=add', true),
+            'permission' => 'administer CiviCRM',
+            'operator'   => NULL,
+            'separator'  => NULL,
+            'parentID'   => $maxKey+1,
+            'navID'      => 1,
+            'active'     => 1
+          ),
+        ),
+        3 => array(
+          'attributes' => array (
+            'label'      => ts('CiviRules RuleTags'),
+            'name'       => ts('CiviRules RuleTags'),
+            'url'        => CRM_Utils_System::url('civicrm/admin/options', 'reset=1&gid='.$ruleTagsOptionGroupId, true),
+            'permission' => 'administer CiviCRM',
+            'operator'   => NULL,
+            'separator'  => NULL,
+            'parentID'   => $maxKey+1,
+            'navID'      => 2,
+            'active'     => 1
+          ))));
 }
 
 function civirules_civicrm_pre($op, $objectName, $objectId, &$params) {
