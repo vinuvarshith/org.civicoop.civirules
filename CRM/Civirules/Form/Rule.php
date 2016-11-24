@@ -246,6 +246,8 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
       } else {
         $this->addWysiwyg('rule_help_text', ts('Help text with purpose of rule'), array('rows' => 6, 'cols' => 80), FALSE);
       }
+      $this->add('select', 'rule_tag_id', ts('Civirule Tag(s)'), CRM_Civirules_BAO_RuleTag::getRuleTagsList(), FALSE,
+        array('id' => 'rule_tag_id', 'multiple' => 'multiple', 'class' => 'crm-select2'));
       $this->add('checkbox', 'rule_is_active', ts('Enabled'));
       $this->add('text', 'rule_created_date', ts('Created Date'));
       $this->add('text', 'rule_created_contact', ts('Created By'));
@@ -313,6 +315,20 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     $ruleData = CRM_Civirules_BAO_Rule::getValues(array('id' => $this->ruleId));
     if (!empty($ruleData) && !empty($this->ruleId)) {
       $defaults['rule_label'] = $ruleData[$this->ruleId]['label'];
+      // get all tags for rule
+      $defaultRuleTags = array();
+      try {
+        $ruleTags = civicrm_api3('CiviRuleRuleTag', 'get', array(
+          'rule_id' => $this->ruleId,
+          'options' => array('limit' => 0)
+        ));
+        foreach ($ruleTags['values'] as $ruleTagId => $ruleTag) {
+          $defaultRuleTags[] = $ruleTag['rule_tag_id'];
+        }
+      } catch (CiviCRM_API3_Exception $ex) {}
+      if (!empty($defaultRuleTags)) {
+        $defaults['rule_tag_id'] = $defaultRuleTags;
+      }
       if (isset($ruleData[$this->ruleId]['description'])) {
         $defaults['rule_description'] = $ruleData[$this->ruleId]['description'];
       }
@@ -453,6 +469,15 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     $ruleParams['is_active'] = $formValues['rule_is_active'] ? 1 : 0;
     $savedRule = CRM_Civirules_BAO_Rule::add($ruleParams);
     $this->ruleId = $savedRule['id'];
+    // first delete all tags for the rule if required then save new ones
+    CRM_Civirules_BAO_RuleTag::deleteWithRuleId($this->ruleId);
+    foreach ($formValues['rule_tag_id'] as $ruleTagId) {
+      $ruleTagParams = array(
+        'rule_id' => $this->ruleId,
+        'rule_tag_id' => $ruleTagId
+      );
+      CRM_Civirules_BAO_RuleTag::add($ruleTagParams);
+    }
   }
 
   /**

@@ -8,6 +8,10 @@
     </tr>
   </table>
   <div class="crm-submit-buttons">
+<<<<<<< HEAD
     {crmButton p='civicrm/civirules/page/rule' q="reset=1" class='cancel' icon='close'}{ts}Done{/ts}{/crmButton}
+=======
+      {crmButton p='#' q="reset=1" class='cancel' icon='close'}{ts}Done{/ts}{/crmButton}
+>>>>>>> issue98
   </div>
 </div>
