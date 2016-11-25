@@ -7,3 +7,4 @@ DROP TABLE IF EXISTS `civirule_action`;
 DROP TABLE IF EXISTS `civirule_condition`;
 DROP TABLE IF EXISTS `civirule_trigger`;
 DELETE FROM civicrm_managed WHERE module = 'org.civicoop.civirules';
+DELETE FROM civicrm_option_value WHERE name = 'CRM_Civirules_Form_Search_Rules';
