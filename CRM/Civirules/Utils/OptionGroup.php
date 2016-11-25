@@ -69,7 +69,7 @@ class CRM_Civirules_Utils_OptionGroup {
     try {
       return civicrm_api3('OptionGroup', 'getsingle', array('name' => $name));
     } catch (CiviCRM_API3_Exception $ex) {
-        throw new Exception('Could not find a single option group with name '.$name.',  error from API OptionGroup Getsingle: '.$ex->getMessage());
+      return array();
     }
   }
 
