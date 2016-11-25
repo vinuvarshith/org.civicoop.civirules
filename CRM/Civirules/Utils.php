@@ -309,5 +309,38 @@ class CRM_Civirules_Utils {
     } catch (Exception $ex) {}
     return $isLater;
   }
+
+  /**
+   * Method to calculate maximum menu key for navigationMenu hook
+   *
+   * @param $menuArray
+   * @return mixed
+   */
+  public static function getMenuKeyMax($menuArray) {
+    $max = array(max(array_keys($menuArray)));
+    foreach($menuArray as $v) {
+      if (!empty($v['child'])) {
+        $max[] = self::getMenuKeyMax($v['child']);
+      }
+    }
+    return max($max);
+  }
+
+  /**
+   * Method to retrieve the custom search id of the find rules search
+   * @return array|bool
+   */
+  public static function getFindRulesCsId() {
+    // find custom search to find rules
+    try {
+      return civicrm_api3('OptionValue', 'getvalue', array(
+        'option_group_id' => 'custom_search',
+        'name' => 'CRM_Civirules_Form_Search_Rules',
+        'return' => 'value'
+      ));
+    } catch (CiviCRM_API3_Exception $ex) {
+      return FALSE;
+    }
+  }
 }
 

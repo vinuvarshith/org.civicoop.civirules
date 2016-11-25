@@ -20,8 +20,7 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     $this->executeSqlFile('sql/createCiviruleRuleCondition.sql');
     $this->executeSqlFile('sql/createCiviruleRuleLog.sql');
     $this->executeSqlFile('sql/createCiviruleRuleTag.sql');
-    $countOptionGroup = civicrm_api3('OptionGroup', 'getcount', array('name' => 'civirule_rule_tag'));
-    if ($countOptionGroup == 0) {
+    if (empty(CRM_Civirules_Utils_OptionGroup::getSingleWithName('civirule_rule_tag'))) {
       CRM_Civirules_Utils_OptionGroup::create('civirule_rule_tag', 'Tags for CiviRules', 'Tags used to filter CiviRules on the CiviRules page');
     }
   }
@@ -196,11 +195,8 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
    */
   public function upgrade_1020() {
     $this->executeSqlFile('sql/createCiviruleRuleTag.sql');
-    $countOptionGroup = civicrm_api3('OptionGroup', 'getcount', array('name' => 'civirule_rule_tag'));
-    if ($countOptionGroup == 0) {
+    if (empty(CRM_Civirules_Utils_OptionGroup::getSingleWithName('civirule_rule_tag'))) {
       CRM_Civirules_Utils_OptionGroup::create('civirule_rule_tag', 'Tags for CiviRules', 'Tags used to filter CiviRules on the CiviRules page');
     }
-    return true;
   }
-
 }
