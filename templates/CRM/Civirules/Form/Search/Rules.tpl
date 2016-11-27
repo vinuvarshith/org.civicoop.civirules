@@ -2,6 +2,11 @@
 {assign var="showBlock" value="'searchForm'"}
 {assign var="hideBlock" value="'searchForm_show','searchForm_hide'"}
 
+{* dialog for rule help text *}
+<div id="civirule_helptext_dialog-block">
+  <p><label id="civirule_help_text-value"></label></p>
+</div>
+
 {include file="CRM/Civirules/Form/Search/RulesCriteria.tpl"}
 
 {if $rowsEmpty}
@@ -55,14 +60,9 @@
                             {else}
                                 <td>
                                     {$row.$fName}
-                                    {*
                                     {if $fName eq 'rule_description' and (!empty($row.rule_help_text))}
-                                        {if $row.earlier_than_46 eq 0}
-                                            <a class="crm-popup medium-popup helpicon" href="{crmURL p='civicrm/civirules/civirulehelptext' q="reset=1&rid=`$row.rule_id`"}"></a>
-                                        {else}
-                                            <a class="crm-popup medium-popup helpicon" href="{crmURL p='civicrm/civirules/civirulehelptext44' q="reset=1&rid=`$row.rule_id`"}"></a>
-                                        {/if}
-                                    {/if} *}
+                                      <a id="civirule_help_text_icon" class="crm-popup medium-popup helpicon" onclick="showRuleHelp({$row.rule_id})" href="#"></a>
+                                    {/if}
                                 </td>
 
                             {/if}
@@ -96,6 +96,26 @@
     </fieldset>
     {* END Actions/Results section *}
 {/if}
+{literal}
+  <script>
+    function showRuleHelp(ruleId) {
+      CRM.api3('CiviRuleRule', 'getsingle', {"id": ruleId})
+        .done(function(result) {
+        cj("#civirule_helptext_dialog-block").dialog({
+          width: 600,
+          height: 300,
+          title: "Help for Rule " + result.label,
+          buttons: {
+            "Done": function() {
+              cj(this).dialog("close");
+            }
+          }
+        });
+        cj("#civirule_helptext_dialog-block").html(result.help_text);
+      });
+    };
+  </script>
+{/literal}
 
 
 
