@@ -198,5 +198,6 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     if (empty(CRM_Civirules_Utils_OptionGroup::getSingleWithName('civirule_rule_tag'))) {
       CRM_Civirules_Utils_OptionGroup::create('civirule_rule_tag', 'Tags for CiviRules', 'Tags used to filter CiviRules on the CiviRules page');
     }
+    return TRUE;
   }
 }
