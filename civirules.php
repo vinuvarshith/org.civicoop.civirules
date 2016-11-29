@@ -173,13 +173,25 @@ function civirules_civicrm_navigationMenu( &$params ) {
     'child' => null
   );
   $childKey++;
-  // add child menu for rule tags if option group id set
+  // add child menu for rule tags if option group id set with version check because 4.4 has other url pattern
   if (isset($optionGroup['id']) && !empty($optionGroup['id'])) {
+    try {
+      $apiVersion = civicrm_api3('Domain', 'getvalue', array('return' => 'version'));
+      $civiVersion = (float) substr($apiVersion, 0, 3);
+      if ($civiVersion < 4.6) {
+        $ruleTagUrl = CRM_Utils_System::url('civicrm/admin/optionValue', 'reset=1&gid='.$optionGroup['id'], true);
+      } else {
+        $ruleTagUrl = CRM_Utils_System::url('civicrm/admin/options', 'reset=1&gid='.$optionGroup['id'], true);
+      }
+    } catch (CiviCRM_API3_Exception $ex) {
+      $ruleTagUrl = CRM_Utils_System::url('civicrm/admin/options', 'reset=1&gid='.$optionGroup['id'], true);
+    }
+
     $params[$maxKey + 1]['child'][$childKey] = array(
       'attributes' => array (
         'label'      => ts('CiviRule Tags'),
         'name'       => ts('CiviRules Tags'),
-        'url'        => CRM_Utils_System::url('civicrm/admin/options', 'reset=1&gid='.$optionGroup['id'], true),
+        'url'        => $ruleTagUrl,
         'permission' => 'administer CiviRules',
         'operator'   => null,
         'separator'  => 0,
