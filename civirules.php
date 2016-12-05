@@ -162,7 +162,7 @@ function civirules_civicrm_navigationMenu( &$params ) {
     'attributes' => array(
       'label' => ts('New Rule'),
       'name' => ts('New Rule'),
-      'url' => CRM_Utils_System::url('civicrm/civirule/form/rule', 'reset=1&action=add=', true),
+      'url' => CRM_Utils_System::url('civicrm/civirule/form/rule', 'reset=1&action=add', true),
       'permission' => 'administer CiviCRM',
       'operator' => null,
       'separator' => 0,
