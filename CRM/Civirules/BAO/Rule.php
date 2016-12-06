@@ -102,6 +102,7 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
 
     CRM_Civirules_BAO_RuleAction::deleteWithRuleId($ruleId);
     CRM_Civirules_BAO_RuleCondition::deleteWithRuleId($ruleId);
+    CRM_Civirules_BAO_RuleTag::deleteWithRuleId($ruleId);
     $rule = new CRM_Civirules_BAO_Rule();
     $rule->id = $ruleId;
     $rule->delete();
