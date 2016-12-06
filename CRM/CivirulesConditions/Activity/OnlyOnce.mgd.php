@@ -12,7 +12,7 @@ return array (
         array (
           'version' => 3,
           'name' => 'once_for_activity',
-          'label' => 'Activity: execute action only once no matter what the activity contacts',
+          'label' => 'Activity: execute action only once no matter what the activity contacts contain',
           'class_name' => 'CRM_CivirulesConditions_Activity_OnlyOnce',
           'is_active' => 1
         ),
