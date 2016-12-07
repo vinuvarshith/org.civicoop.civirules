@@ -124,6 +124,7 @@ class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
 
   /**
    * @param $fields
+   * @return array|bool
    */
   static function validateConditionEntities($fields) {
     $conditionClass = CRM_Civirules_BAO_Condition::getConditionObjectById($fields['rule_condition_select'], false);
@@ -145,7 +146,6 @@ class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
     foreach($triggerObject->getProvidedEntities() as $entityDef) {
       $availableEntities[] = strtolower($entityDef->entity);
     }
-
     foreach($requiredEntities as $entity) {
       if (!in_array(strtolower($entity), $availableEntities)) {
         $errors['rule_condition_select'] = ts('This condition is not available with trigger %1', array(1 => $trigger->label));

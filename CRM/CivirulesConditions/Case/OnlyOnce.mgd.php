@@ -6,14 +6,14 @@
 return array (
   0 =>
     array (
-      'name' => 'Civirules:Condition.Activity.OnlyOnce',
+      'name' => 'Civirules:Condition.Case.OnlyOnce',
       'entity' => 'CiviRuleCondition',
       'params' =>
         array (
           'version' => 3,
-          'name' => 'once_for_activity',
-          'label' => 'Execute action only once for activity',
-          'class_name' => 'CRM_CivirulesConditions_Activity_OnlyOnce',
+          'name' => 'once_for_case',
+          'label' => 'Execute action only once for case',
+          'class_name' => 'CRM_CivirulesConditions_Case_OnlyOnce',
           'is_active' => 1
         ),
     ),
