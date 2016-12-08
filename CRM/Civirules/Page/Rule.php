@@ -73,7 +73,7 @@ class CRM_Civirules_Page_Rule extends CRM_Core_Page {
    * @access protected
    */
   protected function setPageConfiguration() {
-    $domainVersion = civicrm_api3('Domain', 'getvalue', array('return' => 'version'));
+    $domainVersion = civicrm_api3('Domain', 'getvalue', array('current_domain' => "TRUE", 'return' => 'version'));
     $domainVersion = round((float) $domainVersion, 2);
     if ($domainVersion < 4.6) {
       $this->assign('earlier_than_46', 1);
