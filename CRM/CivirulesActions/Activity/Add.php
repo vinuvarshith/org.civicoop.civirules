@@ -111,12 +111,13 @@ class CRM_CivirulesActions_Activity_Add extends CRM_CivirulesActions_Generic_Api
     }
 
     if (!empty($params['activity_date_time'])) {
-      $delayClass = unserialize(($params['activity_date_time']));
-      if ($delayClass instanceof CRM_Civirules_Delay_Delay) {
-        $return .= '<br>'.ts('Activity date time').': '.$delayClass->getDelayExplanation();
+      if (isset($params['activity_date_time']) && !empty($params['activity_date_time']) {
+        $delayClass = unserialize(($params['activity_date_time']));
+        if ($delayClass instanceof CRM_Civirules_Delay_Delay) {
+          $return .= '<br>'.ts('Activity date time').': '.$delayClass->getDelayExplanation();
+        }
       }
     }
-
     return $return;
   }
 
