@@ -54,7 +54,7 @@ class CRM_CivirulesActions_Activity_Form_Activity extends CRM_CivirulesActions_F
       $this->addEntityRef('assignee_contact_id', ts('Assigned to'), $attributes, false);
     }
 
-    $delayList = array('' => ts(' - Do not set an activity date - ')) + CRM_Civirules_Delay_Factory::getOptionList();
+    $delayList = array('' => ts(' - Use system date (default) - ')) + CRM_Civirules_Delay_Factory::getOptionList();
     $this->add('select', 'activity_date_time', ts('Set activity date'), $delayList);
     foreach(CRM_Civirules_Delay_Factory::getAllDelayClasses() as $delay_class) {
       $delay_class->addElements($this, 'activity_date_time', $this->rule);
@@ -101,14 +101,15 @@ class CRM_CivirulesActions_Activity_Form_Activity extends CRM_CivirulesActions_F
     foreach(CRM_Civirules_Delay_Factory::getAllDelayClasses() as $delay_class) {
       $delay_class->setDefaultValues($defaultValues, 'activity_date_time', $this->rule);
     }
-    $activityDateClass = unserialize($data['activity_date_time']);
-    if ($activityDateClass) {
-      $defaultValues['activity_date_time'] = get_class($activityDateClass);
-      foreach($activityDateClass->getValues('activity_date_time', $this->rule) as $key => $val) {
-        $defaultValues[$key] = $val;
+    if ($data['activity_date_time'] != 'null') {
+      $activityDateClass = unserialize($data['activity_date_time']);
+      if ($activityDateClass) {
+        $defaultValues['activity_date_time'] = get_class($activityDateClass);
+        foreach ($activityDateClass->getValues('activity_date_time', $this->rule) as $key => $val) {
+          $defaultValues[$key] = $val;
+        }
       }
     }
-
     return $defaultValues;
   }
 

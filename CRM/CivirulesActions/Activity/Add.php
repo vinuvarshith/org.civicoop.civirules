@@ -41,16 +41,20 @@ class CRM_CivirulesActions_Activity_Add extends CRM_CivirulesActions_Generic_Api
       }
     }
 
-    if (!empty($action_params['activity_date_time'])) {
-      $delayClass = unserialize(($action_params['activity_date_time']));
-      if ($delayClass instanceof CRM_Civirules_Delay_Delay) {
-        $activityDate = $delayClass->delayTo(new DateTime(), $triggerData);
-        if ($activityDate instanceof DateTime) {
-          $params['activity_date_time'] = $activityDate->format('Ymd His');
+    // issue #127: no activity date time if set to null
+    if ($action_params['activity_date_time'] == 'null') {
+      unset($params['activity_date_time']);
+    } else {
+      if (!empty($action_params['activity_date_time'])) {
+        $delayClass = unserialize($action_params['activity_date_time']);
+        if ($delayClass instanceof CRM_Civirules_Delay_Delay) {
+          $activityDate = $delayClass->delayTo(new DateTime(), $triggerData);
+          if ($activityDate instanceof DateTime) {
+            $params['activity_date_time'] = $activityDate->format('Ymd His');
+          }
         }
       }
     }
-
     return $params;
   }
 
@@ -111,7 +115,7 @@ class CRM_CivirulesActions_Activity_Add extends CRM_CivirulesActions_Generic_Api
     }
 
     if (!empty($params['activity_date_time'])) {
-      if (isset($params['activity_date_time']) && !empty($params['activity_date_time'])) {
+      if ($params['activity_date_time'] != 'null') {
         $delayClass = unserialize(($params['activity_date_time']));
         if ($delayClass instanceof CRM_Civirules_Delay_Delay) {
           $return .= '<br>'.ts('Activity date time').': '.$delayClass->getDelayExplanation();
