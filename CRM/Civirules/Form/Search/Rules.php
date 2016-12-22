@@ -220,7 +220,7 @@ LEFT JOIN civicrm_contact contact ON crr.created_user_id = contact.id";
    * @return string
    */
   function count() {
-    return CRM_Core_DAO::singleValueQuery($this->sql('COUNT(DISTINCT(crr.id)) AS total'), 0, 0, NULL, FALSE, NULL);
+    return CRM_Core_DAO::singleValueQuery($this->sql('COUNT(DISTINCT(crr.id)) AS total'), array(), 0, NULL, FALSE, NULL);
   }
 
   /**

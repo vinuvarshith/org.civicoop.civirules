@@ -471,12 +471,14 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     $this->ruleId = $savedRule['id'];
     // first delete all tags for the rule if required then save new ones
     CRM_Civirules_BAO_RuleTag::deleteWithRuleId($this->ruleId);
-    foreach ($formValues['rule_tag_id'] as $ruleTagId) {
-      $ruleTagParams = array(
-        'rule_id' => $this->ruleId,
-        'rule_tag_id' => $ruleTagId
-      );
-      CRM_Civirules_BAO_RuleTag::add($ruleTagParams);
+    if (isset($formValues['rule_tag_id'])) {
+      foreach ($formValues['rule_tag_id'] as $ruleTagId) {
+        $ruleTagParams = array(
+          'rule_id' => $this->ruleId,
+          'rule_tag_id' => $ruleTagId
+        );
+        CRM_Civirules_BAO_RuleTag::add($ruleTagParams);
+      }
     }
   }
 
