@@ -1,34 +1,74 @@
 <?php
 
-class CRM_CivirulesActions_Case_SetStatus extends CRM_CivirulesActions_Generic_Api {
+class CRM_CivirulesActions_Case_SetStatus extends CRM_Civirules_Action {
 
   /**
-   * Method to get the api action to process in this CiviRule action
+   * Process the action
+   *
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
+   * @access public
    */
-  protected function getApiEntity() {
-    return 'Case';
-  }
-
-
-  /**
-   * Method to get the api action to process in this CiviRule action
-   */
-  protected function getApiAction() {
-    return 'create';
-  }
-
-
-  /**
-   * Returns an array with parameters used for processing an action
-   */
-  protected function alterApiParameters($parameters, CRM_Civirules_TriggerData_TriggerData $triggerData) {
-
+  public function processAction(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $case = $triggerData->getEntityData("Case");
-    $parameters['id'] = $case['id'];
+    $params = $this->getActionParameters();
+    $params['id'] = $case['id'];
+    $caseStatusOptionGroupId = civicrm_api3('OptionGroup', 'getvalue', array('name' => 'case_status', 'return' => 'id'));
+    $grouping = civicrm_api3('OptionValue', 'getvalue', array('value' => $params['status_id'], 'option_group_id' => $caseStatusOptionGroupId, 'return' => 'grouping'));
 
-    return $parameters;
+    // Set case end_date if we're closing the case. Clear end_date if we're (re)opening it.
+    if ($grouping=='Closed') {
+      if (empty($case['end_date'])) {
+        $endDate = new DateTime();
+        $params['end_date'] = $endDate->format('Ymd');
+        // Update the case roles
+        $relQuery = 'UPDATE civicrm_relationship SET end_date=%2 WHERE case_id=%1 AND end_date IS NOT NULL';
+        $relParams = array(
+          1 => array($case['id'], 'Integer'),
+          2 => array($params['end_date'], 'Timestamp'),
+        );
+        CRM_Core_DAO::executeQuery($relQuery, $relParams);
+      }
+    } else {
+      $params['end_date'] = '';
+
+      // Update the case roles
+      $relQuery = 'UPDATE civicrm_relationship SET end_date=NULL WHERE case_id=%1';
+      $relParams = array(
+        1 => array($case['id'], 'Integer'),
+      );
+      CRM_Core_DAO::executeQuery($relQuery, $relParams);
+    }
+
+    //execute the action
+    $this->executeApiAction('Case', 'create', $params);
   }
 
+  /**
+   * Executes the action
+   *
+   * This method could be overridden if needed
+   *
+   * @param $entity
+   * @param $action
+   * @param $parameters
+   * @access protected
+   * @throws Exception on api error
+   */
+  protected function executeApiAction($entity, $action, $parameters) {
+    try {
+      civicrm_api3($entity, $action, $parameters);
+    } catch (Exception $e) {
+      echo $e->getMessage(); exit();
+      $formattedParams = '';
+      foreach($parameters as $key => $param) {
+        if (strlen($formattedParams)) {
+          $formattedParams .= ', ';
+        }
+        $formattedParams .= $key.' = '.$param;
+      }
+      throw new Exception('Civirules api action exception '.$entity.'.'.$action.' ('.$formattedParams.')');
+    }
+  }
 
   /**
    * Returns a redirect url to extra data input from the user after adding a action
