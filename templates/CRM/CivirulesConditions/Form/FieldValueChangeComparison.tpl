@@ -84,6 +84,11 @@
                     cj('#original_multi_value_parent').removeClass('hiddenElement');
                     cj('#original_value_parent').addClass('hiddenElement');
                     break;
+               case 'is empty':
+               case 'is not empty':
+                   cj('#original_multi_value_parent').addClass('hiddenElement');
+                   cj('#original_value_parent').addClass('hiddenElement');
+                   break;
                 default:
                     cj('#original_multi_value_parent').addClass('hiddenElement');
                     cj('#original_value_parent').removeClass('hiddenElement');
