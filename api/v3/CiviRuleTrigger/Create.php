@@ -76,7 +76,7 @@ function _validateParams($params) {
         .')is not a valid operation for a CiviRule Trigger');
     }
   }
-  if (CRM_Civirules_BAO_Trigger::triggerExists($params) == TRUE) {
+  if (!isset($params['id']) && CRM_Civirules_BAO_Trigger::triggerExists($params) == TRUE) {
     return ts('There is already a trigger for this class_name or combination of object_name and op');
   }
 
