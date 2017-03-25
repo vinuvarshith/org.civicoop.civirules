@@ -40,7 +40,8 @@ abstract class CRM_CivirulesConditions_Generic_FieldValueChangeComparison extend
         break;
     }
 
-    if (!empty($this->conditionParams[$key])) {
+    if (isset($key)
+        and !empty($this->conditionParams[$key])) {
       return $this->conditionParams[$key];
     } else {
       return '';
@@ -74,7 +75,8 @@ abstract class CRM_CivirulesConditions_Generic_FieldValueChangeComparison extend
         break;
     }
 
-    if (!empty($this->conditionParams[$key])) {
+    if (isset($key)
+        and !empty($this->conditionParams[$key])) {
       return $this->conditionParams[$key];
     } else {
       return '';
