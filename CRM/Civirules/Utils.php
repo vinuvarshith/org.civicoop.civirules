@@ -260,6 +260,7 @@ class CRM_Civirules_Utils {
     } else {
       $params = array();
     }
+    $params['options'] = array('limit' => 0, 'sort' => "name ASC");
     try {
       $membershipTypes = civicrm_api3("MembershipType", "Get", $params);
       foreach ($membershipTypes['values'] as $membershipType) {

@@ -65,8 +65,12 @@ class CRM_CivirulesConditions_Membership_Type extends CRM_Civirules_Condition {
    * @access public
    */
   public function userFriendlyConditionParams() {
+    $params = array(
+      'is_active' => 1,
+      'options' => array('limit' => 0, 'sort' => "name ASC"),
+    );
     try {
-      $membershipTypes = civicrm_api3('MembershipType', 'Get', array('is_active' => 1));
+      $membershipTypes = civicrm_api3('MembershipType', 'Get', $params);
       $operator = null;
       if ($this->conditionParams['operator'] == 0) {
         $operator = 'equals';
