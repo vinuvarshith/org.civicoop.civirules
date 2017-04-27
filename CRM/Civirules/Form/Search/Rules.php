@@ -14,7 +14,7 @@ class CRM_Civirules_Form_Search_Rules extends CRM_Contact_Form_Search_Custom_Bas
 
   function __construct(&$formValues) {
     // keep track of version so we can do ugly backwards compatibility hack in function alterRow
-    $domainVersion = civicrm_api3('Domain', 'getvalue', array('return' => 'version'));
+    $domainVersion = civicrm_api3('Domain', 'getvalue', array('current_domain' => "TRUE", 'return' => 'version'));
     $this->_domainVersion = round((float) $domainVersion, 2);
 
     parent::__construct($formValues);
