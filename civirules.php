@@ -176,7 +176,7 @@ function civirules_civicrm_navigationMenu( &$params ) {
   // add child menu for rule tags if option group id set with version check because 4.4 has other url pattern
   if (isset($optionGroup['id']) && !empty($optionGroup['id'])) {
     try {
-      $apiVersion = civicrm_api3('Domain', 'getvalue', array('return' => 'version'));
+      $apiVersion = civicrm_api3('Domain', 'getvalue', array('current_domain' => "TRUE", 'return' => 'version'));
       $civiVersion = (float) substr($apiVersion, 0, 3);
       if ($civiVersion < 4.6) {
         $ruleTagUrl = CRM_Utils_System::url('civicrm/admin/optionValue', 'reset=1&gid='.$optionGroup['id'], true);
