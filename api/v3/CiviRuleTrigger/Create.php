@@ -49,6 +49,17 @@ function civicrm_api3_civi_rule_trigger_create($params) {
  */
 function _validateParams($params) {
   $errorMessage = '';
+  // If this create is actually an update, load in the existing values.
+  if (isset($params['id'])) {
+    $result = civicrm_api3('CiviRuleTrigger', 'get', array(
+      'sequential' => 1,
+      'id' => $params['id'],
+    ));
+
+    if ($result['count']) {
+      $params = array_merge($result['values'][0], $params);
+    }
+  }
   if (!isset($params['id']) && empty($params['label'])) {
     return ts('Label can not be empty when adding a new CiviRule Trigger');
   }
