@@ -21,7 +21,7 @@ class CRM_CivirulesConditions_Utils_GroupContact {
     }
 
     $params = array(
-      array('group', 'IN', array($group_id => 1), 0, 0),
+      array('group', 'IN', array($group_id), 0, 0),
       array('contact_id', '=', $contact_id, 0, 0),
     );
     list($contacts, $_) = CRM_Contact_BAO_Query::apiQuery($params, array('contact_id'), null, null, 0, 1, false, false, true);
