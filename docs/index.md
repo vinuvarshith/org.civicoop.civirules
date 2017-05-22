@@ -31,7 +31,7 @@ __Actions__ that specify what is to happen if the trigger occurs and the conditi
 This guide has two parts each aimed at a different audience.
 
 - [Basic examples](basic-example-introduction) shows the CiviCRM administrator how he can configure CiviRules by means of a number of examples.
-- [Create your own]() shows the CiviCRM developer how he can expand the extension by creating own triggers, delays, and actions. 
+- [Create your own](create-your-own-introduction) shows the CiviCRM developer how he can expand the extension by creating own triggers, delays, and actions. 
 
 ## CiviCRM versions
 
