@@ -152,7 +152,7 @@ We are going to implement the methods in such a way that they are calling the lo
 ```
 ### Implement the actual log method
 
-The remaining bit of the class is to implement the `log` method in such a way that the log messages is shown as a popup to the user.
+The remaining bit of the class is to use [hook_civirules_logger](/hooks/hook_civirules_logger) implement the `log` method in such a way that the log messages is shown as a popup to the user.
 
 ```php
 function examplecivirulelogger_civirules_logger(\Psr\Log\LoggerInterface &$logger=null) {
@@ -188,15 +188,6 @@ In case of an error the following extra context parameters are available:
 - exception_message
 - file
 - line
-```
-## Hook hook_civirules_logger
-
-This hook is invoked as soon as CiviRules is looking for a logger class. It has one parameter and that is the current Logger, which probably is `null`. If you want to return a logger you should replace the `$logger` parameter with an instantiated logger object.
-
-```php
-function hook_civirules_logger(\Psr\Log\LoggerInterface &$logger=null) {
-  $logger = new CRM_Examplecivirulelogger_PopupLogger();
-}
 ```
 
 ## Adding a message to the Rule form
