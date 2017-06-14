@@ -28,6 +28,3 @@ Find more detailed information in the tutorials:
 - [Create your own condition](create-your-own-condition)
 - [Create your own action](create-your-own-action)
 - [Add logging](add-logging)
-
-!!! Remark
-    The tutorials are clarified with code fragments. To create nicer formatting in `mkdocs` these start often with a `<?php` that maybe obsolete in real use.

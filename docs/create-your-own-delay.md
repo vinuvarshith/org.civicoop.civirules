@@ -33,8 +33,6 @@ Initially a couple of delays were added:
 It is quite easy to add delays by extending the class `CRM_Civirules_Delay_Delay`. Here is the example of the minutes delay:
 
 ```php
-<?php
- 
 class CRM_Civirules_Delay_XMinutes extends CRM_Civirules_Delay_Delay {
  
   protected $minuteOffset;

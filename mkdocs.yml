@@ -22,14 +22,24 @@ pages:
   - hook_civirules_alter_trigger_data: hooks/hook_civirules_alter_trigger_data.md
   - hook_civirules_logger: hooks/hook_civirules_logger.md
 
+
 markdown_extensions:
   - attr_list
   - admonition
   - def_list
-  - codehilite
-  - toc(permalink=true)
-  - pymdownx.superfences
-  - pymdownx.inlinehilite
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      guess_lang: true
+      extend_pygments_lang:
+        - name: php
+          lang: php
+          options:
+            startinline: true
+  - pymdownx.superfences:
+      css_class: codehilite
+  - pymdownx.inlinehilite:
+      css_class: codehilite
   - pymdownx.tilde
   - pymdownx.betterem
   - pymdownx.mark

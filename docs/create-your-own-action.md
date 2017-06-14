@@ -25,8 +25,6 @@ You need to make sure that there is a record in the civirule_action table for yo
 If you have created your extension with Civix then you can add a file `CRM/CivirulesAction/Contact/SoftDelete.mgd.php`. If you didn't create your extension with civix you should add the `hook_civicrm_managed_entities` to your extension and return the array below. The parameter _class_name_ (linked to the column class_name in the table) should hold the name of the class you are going to create in step 2. So it could be anything you think useful, in the example we will stick to `CRM_CiviRulesActions_Contact_SoftDelete`
 
 ```php
-<?php
- 
 return array (
   0 =>
     array (
@@ -43,6 +41,7 @@ return array (
     ),
 );
 ```
+
 !!! Note
     You can also use the API to add an Action to CiviRules. Entity is `CiviRuleAction`, action is `Create`.
 
@@ -125,8 +124,6 @@ You need to make sure that there is a record in the civirule_action table for yo
 If you have created your extension with Civix then you can add a file `CRM/CivirulesAction/Contact/Subtype.mgd.php`. If you didn't create your extension with civix you should add the `hook_civicrm_managed_entities` to your extension and return the array below. The parameter `class_name` (linked to the column `class_name` in the table) should hold the name of the class you are going to create in step 2. So it could be anything you think useful, in the example we will stick to `CRM_CiviRulesActions_Contact_Subtype`.
 
 ```php
-<?php
- 
 return array (
   0 =>
     array (
@@ -155,7 +152,6 @@ I create a PHP class called  <whatever namespace I like>, so in this example tha
 If you are using an IDE (I use PhpStorm) you might get errors telling you class must be defined abstract or implement methods `processAction`and `getExtraDataInputUrl`. If that is the case, you will get the answers in step 3.
 
 ```php
-<?php
 class CRM_CivirulesActions_Contact_Subtype extends CRM_Civirules_Action {
 ```
 
@@ -168,7 +164,6 @@ class CRM_CivirulesActions_Contact_Subtype extends CRM_Civirules_Action {
 Method `getExtraDataInputUrl` can be used if you have additional forms for your action like in this example. If you do not need it, you can simply return `FALSE`. The method receives the parameter `ruleActionId`. Obviously I will have to generate my form separately, and make sure that the url I include in this method is actually pointing to my form. In code for this example:
 
 ```php
-<?php
 /**
  * Method to return the url for additional form processing for action
  * and return false if none is needed
@@ -184,7 +179,6 @@ public function getExtraDataInputUrl($ruleActionId) {
 Method `processAction` is called in the CiviRules engine to execute whatever your action needs to do. It needs to receive a parameter `triggerData` that will be passed in with the object of the class `CRM_Civirules_TriggerData_TriggerData`. Now you can do all sorts of complictated stuff in your `processAction`, or a simple basic API action. In this example we are setting the contact subtype(s) for a contact, and using the `CRM_Contact_BAO_Contact::add` method to do so. (We could also have used the API but that is no fun for this example).
 
 ```php
-<?php
 /**
  * Method processAction to execute the action
  *
@@ -224,7 +218,6 @@ To show the action paramaters in a reasonably nice format as shown in this scree
 I use the method `userFriendlyCondtionParams`:
 
 ```php
-<?php
 /**
  * Returns a user friendly text explaining the condition params
  * e.g. 'Older than 65'
@@ -298,7 +291,6 @@ I now only need to create the form used to select the contact subtype. I will cr
 and the code like this. Note that I am extending the `CRM_CivirulesActionss_Form_Form` class which already does most of the CiviRules Engine stuff for me.
 
 ```php
-<?php
 /**
  * Class for CiviRules Group Contact Action Form
  *
@@ -430,8 +422,6 @@ In this tutorial I will explain how to use the API when you are adding a CiviRul
 The CiviRules extension has a class `CRM_CiviRulesActions_Generic_Api` which allows you to add a CiviRule action for an API Entity/Action very quickly. The class itself looks like this:
 
 ```php
-<?php
- 
 abstract class CRM_CivirulesActions_Generic_Api extends CRM_Civirules_Action {
  
   /**
@@ -521,7 +511,6 @@ If you in your code extend this class you basically only need to use a couple of
 So this could be enough to construct a valid CiviRule action:
 
 ```php
-<?php
 /**
  * Class for CiviRules Set Thank You Date for Contribution Action
  *
