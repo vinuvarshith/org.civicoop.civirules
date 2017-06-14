@@ -7,25 +7,21 @@ trigger is triggered.
 
 ## Definition
 
-    hook_civirules_alter_trigger_data(CRM_Civirules_TriggerData_TriggerData &$triggerData )
+```php
+hook_civirules_alter_trigger_data(CRM_Civirules_TriggerData_TriggerData &$triggerData)
+```
 
 ## Returns
 
--   null
+-   `NULL`
 
 ## Example
 
+The example below adds custom data to the trigger data object.
 
-
-    /**
-    * Implements hook_civirules_alter_trigger_data
-    *
-    * Adds custom data to the trigger data object
-    */
-    function civirules_civirules_alter_trigger_data(CRM_Civirules_TriggerData_TriggerData &$triggerData) {
-
-      //also add the custom data which is passed to the pre hook (and not the post)
-
-      CRM_Civirules_Utils_CustomDataFromPre::addCustomDataToTriggerData($triggerData);
-
-    }
+```php
+function civirules_civirules_alter_trigger_data(CRM_Civirules_TriggerData_TriggerData &$triggerData) {
+  //also add the custom data which is passed to the pre hook (and not the post)
+  CRM_Civirules_Utils_CustomDataFromPre::addCustomDataToTriggerData($triggerData);
+}
+```
