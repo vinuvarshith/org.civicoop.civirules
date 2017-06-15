@@ -34,7 +34,6 @@ You need to make sure that there is a record in the civirule_condition table for
 If you have created your extension with Civix then you can add a file `CRM/CivirulesConditions/FirstDonation.mgd.php`. If you didn't create your extension with civix you should add the `hook_civicrm_managed_entities` to your extension and return the array below. The parameter _class_name_ (linked to the column class_name in the table) should hold the name of the class you are going to create in step 2. So it could be anything you think useful, in the example we will stick to `CRM_CiviRulesConditions_Contribution_FirstDonation`.   
 
 ```php
-<?php
 return array (
   0 =>
     array (
@@ -62,7 +61,6 @@ I create a PHP class called  <whatever namespace I like>, so in this example tha
 If you are using an IDE (I use PhpStorm) you might get errors telling you class must be defined abstract or implement methods `isConditionValid` and `getExtraDataInputUrl`. If that is the case, you will get the answers in step 3.    
 
 ```php
-<?php
 class CRM_CivirulesConditions_Contribution_FirstDonation extends CRM_Civirules_Condition {
 ```
 
@@ -78,7 +76,6 @@ There are 2 mandatory methods that you need to implement in your class: `getExtr
 Method `getExtraDataInputUrl` is used if you have additional forms for your condition, as is the case now. In this method you pass the url of the form you have created. The CiviRules Engine will pass control to this form when appropriate and make sure that the userContext to return to is in CiviRules. You will have to pass the rule_condition_id to the form url.
 
 ```php
-<?php
 /**
  * Returns a redirect url to extra data input from the user after adding a condition
  *
@@ -104,7 +101,6 @@ So in this example I will get the contact_id of the event with the $triggerData-
     I check if there is more than 1 contribution because the Trigger is triggered in the CiviCRM post hook, so I already have one contribution, which is the first one.
 
 ```php
-<?php
 /**
  * Method is mandatory and checks if the condition is met
  *
@@ -145,7 +141,6 @@ If I use this condition, it only makes sense if I add this condition to Triggers
 The user interface of CiviRules has the ability to check if you tell it what entity you need for your condition. In this example I need data from the entity Contribution, so I add Contribution with the method `requiredEntities` like this:
 
 ```php
-<?php
 /**
  * Returns an array with required entity names
  *
@@ -184,7 +179,6 @@ You need to make sure that there is a record in the civirule_condition table for
 If you have created your extension with Civix then you can add a file `CRM/CivirulesConditions/FirstDonation.mgd.php`. If you didn't create your extension with civix you should add the `hook_civicrm_managed_entities` to your extension and return the array below. The parameter `class_name` (linked to the column class_name in the table) should hold the name of the class you are going to create in step 2. So it could be anything you think useful, in the example we will stick to `CRM_CiviRulesConditions_Membership_Type`.    
 
 ```php
-<?php
  return array (
   0 =>
     array (
@@ -211,7 +205,6 @@ I create a PHP class called  `<whatever namespace I like>`, so in this example t
 If you are using an IDE (I use PhpStorm) you might get errors telling you class must be defined abstract or implement methods `isConditionValid` and `getExtraDataInputUrl`. If that is the case, you will get the answers in step 3.    
 
 ```php
-<?php
 class CRM_CivirulesConditions_Membership_Type extends CRM_Civirules_Condition {
 ```
 
@@ -225,7 +218,6 @@ There are 2 mandatory methods that you need to implement in your class: `getExtr
 Method `getExtraDataInputUrl` is used if you have additional forms for your condition, as is the case now. In this method you pass the url of the form you have created. The CiviRules Engine will pass control to this form when appropriate and make sure that the userContext to return to is in CiviRules. You will have to pass the `rule_condition_id` to the form url.    
 
 ```php
-<?php
 /**
  * Returns a redirect url to extra data input from the user after adding a condition
  *
@@ -249,7 +241,6 @@ The method should return `TRUE` or `FALSE`.
 So in this example I will get the `membership_type_id` of the entity Membership (to which condition will be linked to make any sense) and compare it to the one in the condition parameters, like so:
 
 ```php
-<?php
 /**
  * Method to determine if the condition is valid
  *
@@ -299,7 +290,6 @@ public function requiredEntities() {
 Storing the condition parameters in the database is done with the method `setRuleConditionData` like this:
 
 ```php
-<?php
 /**
  * Method to set the Rule Condition data
  *
@@ -324,7 +314,6 @@ To show the condition paramaters in a reasonably nice format as shown in this sc
 I use the method userFriendlyConditionParams:
 
 ```php
-<?php
 /**
  * Returns a user friendly text explaining the condition params
  * e.g. 'Older than 65'
@@ -378,7 +367,6 @@ I now only need to create the form used to select the membership type. I will cr
 and the code like this. Note that I am extending the CRM_CivirulesConditions_Form_Form class which already does most of the CiviRules Engine stuff for me.
 
 ```php
-<?php
 /**
  * Class for CiviRules Condition Membership Type Form
  *

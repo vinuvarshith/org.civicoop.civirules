@@ -10,9 +10,6 @@ With this in mind we could easily develop an extension which hooks the default C
     Why Not the Standard CiviCRM Logger?
     The reason we are not using the default CiviCRM logger is that in CiviCRM 4.4 there is no PSR3 logger implementation.
 
-!!! Note
-    In the code examples below the `<?php` tag on the start is added on behalf of the pretty formatting   
-
 By default Civirules will only send erros to the logger. Those errors are exceptions which are caught during processing of a CiviRule or during processing of a delayed CiviRule action.
 
 ### Tutorial log messages to screen
@@ -22,7 +19,6 @@ In the tutorial below we will implement a logger which logs the messages to the 
 The first step is achieved by developing an logger which implement the [PSR3 LoggerInterface](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md#3-psrlogloggerinterface).  
 
 ```php
-<?php
 //file CRM/Examplecivirulelogger/PopupLogger
 class CRM_Examplecivirulelogger_PopupLogger implements \Psr\Log\LoggerInterface {
 }
@@ -46,7 +42,6 @@ All methods have the same kind of structure which takes a message as a parameter
 We are going to implement the methods in such a way that they are calling the log method with the appropriate level.
 
 ```php
-<?php 
 /**
   * System is unusable.
   *
@@ -157,10 +152,9 @@ We are going to implement the methods in such a way that they are calling the lo
 ```
 ### Implement the actual log method
 
-The remaining bit of the class is to implement the `log` method in such a way that the log messages is shown as a popup to the user.
+The remaining bit of the class is to use [hook_civirules_logger](/hooks/hook_civirules_logger) implement the `log` method in such a way that the log messages is shown as a popup to the user.
 
 ```php
-<?php
 function examplecivirulelogger_civirules_logger(\Psr\Log\LoggerInterface &$logger=null) {
   $logger = new CRM_Examplecivirulelogger_PopupLogger();
 }
@@ -195,16 +189,6 @@ In case of an error the following extra context parameters are available:
 - file
 - line
 ```
-## Hook hook_civirules_logger
-
-This hook is invoked as soon as CiviRules is looking for a logger class. It has one parameter and that is the current Logger, which probably is `null`. If you want to return a logger you should replace the `$logger` parameter with an instantiated logger object.
-
-```php
-<?php
-function hook_civirules_logger(\Psr\Log\LoggerInterface &$logger=null) {
-  $logger = new CRM_Examplecivirulelogger_PopupLogger();
-}
-```
 
 ## Adding a message to the Rule form
 
@@ -213,7 +197,6 @@ If you want to add contents to the rule form. E.g. enable logging for that parti
 <a href='../img/screenshot_civirules_civirule_form.png'><img alt='my group setup' src='../img/screenshot_civirules_civirule_form.png'/></a>
 
 ```php
-<?php
 function examplecivirulelogger_civicrm_buildForm($formName, &$form) {
   if ($form instanceof CRM_Civirules_Form_Rule) {
     $form->setPostRuleBlock("Logging is enabled");
@@ -226,8 +209,8 @@ function examplecivirulelogger_civicrm_buildForm($formName, &$form) {
 If you have developed a CiviRules action or condition you can send messages to the logger:
 
 __Logging from a CiviRules action__
+
 ```php
-<?php
 public function processAction(CRM_Civirules_TriggerData_TriggerData $triggerData){
   $this->logAction('my log message', $triggerData, \PSR\Log\LogLevel::INFO);
   ...
@@ -235,8 +218,8 @@ public function processAction(CRM_Civirules_TriggerData_TriggerData $triggerData
 ```
 
 __Logging from a CiviRules condition__
+
 ```php
-<?php
 public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData){
   $this->logCondition('my log message', $triggerData, \PSR\Log\LogLevel::INFO);
   ...
