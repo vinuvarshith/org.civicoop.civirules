@@ -267,6 +267,13 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/condition/activity_details</path>
+    <page_callback>CRM_CivirulesConditions_Form_Activity_Details</page_callback>
+    <title>Activity Type</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/condition/activity_status</path>
     <page_callback>CRM_CivirulesConditions_Form_Activity_Status</page_callback>
     <title>Activity Status</title>
@@ -298,6 +305,12 @@
     <path>civicrm/civirule/form/action/case/setdatefield</path>
     <page_callback>CRM_CivirulesActions_Case_Form_SetDateField</page_callback>
     <title>Case - Set date field</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/action/smsconversation/schedule</path>
+    <page_callback>CRM_CivirulesActions_SmsConversation_Form_Schedule</page_callback>
     <access_arguments>access CiviCRM</access_arguments>
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
