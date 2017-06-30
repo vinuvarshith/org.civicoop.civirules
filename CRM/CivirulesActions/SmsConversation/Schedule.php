@@ -40,6 +40,12 @@ class CRM_CivirulesActions_SmsConversation_Schedule extends CRM_CivirulesActions
     $acParams['activity_id'] = $activityData['id'];
     $acParams['record_type_id'] = 3;
     $ac = civicrm_api3('ActivityContact', 'getsingle', $acParams);
+
+    // Do not create conversation if there is already one in progress
+    if(CRM_SmsConversation_BAO_Contact::getCurrentConversation($ac['contact_id'])){
+      return [];
+    }
+
     $parameters['contact_id'] = $ac['contact_id'];
     $parameters['conversation_id'] = $action_params['conversation_id'];
     $parameters['process_now'] = true;
