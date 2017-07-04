@@ -39,15 +39,8 @@ class CRM_CivirulesActions_SmsConversation_Schedule extends CRM_CivirulesActions
     $activityData = $triggerData->getEntityData('Activity');
     $acParams['activity_id'] = $activityData['id'];
     $acParams['record_type_id'] = 3;
-    $ac = civicrm_api3('ActivityContact', 'getsingle', $acParams);
-
-    // Do not create conversation if there is already one in progress
-    $currentConversation = civicrm_api3('SmsConversationContact', 'getcurrent', array('contact_id' => $ac['contact_id']));
-    if (!empty($currentConversation['count'])) {
-      return [];
-    }
-
-    $parameters['contact_id'] = $ac['contact_id'];
+    $this->ac = civicrm_api3('ActivityContact', 'getsingle', $acParams);
+    $parameters['contact_id'] = $this->ac['contact_id'];
     $parameters['conversation_id'] = $action_params['conversation_id'];
     $parameters['process_now'] = true;
     $session = CRM_Core_Session::singleton();
@@ -103,5 +96,15 @@ class CRM_CivirulesActions_SmsConversation_Schedule extends CRM_CivirulesActions
     }
     return false;
   }
+
+  protected function executeApiAction($entity, $action, $parameters) {
+
+    $currentConversation = civicrm_api3('SmsConversationContact', 'getcurrent', array('contact_id' => $this->ac['contact_id']));
+    if (!empty($currentConversation['count'])) {
+      return;
+    }
+    parent::executeApiAction($entity, $action, $parameters);
+  }
+
 
 }
