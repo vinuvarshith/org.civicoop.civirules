@@ -15,7 +15,7 @@
     <email>helpdesk@civicoop.org</email>
   </maintainer>
   <releaseDate>2017-03-26</releaseDate>
-  <version>1.12.sms_conversation.beta</version>
+  <version>1.12</version>
   <develStage>stable</develStage>
   <compatibility>
     <ver>4.4</ver>
