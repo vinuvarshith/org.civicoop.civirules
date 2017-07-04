@@ -32,21 +32,20 @@ class CRM_CivirulesConditions_Activity_Details extends CRM_Civirules_Condition {
    * Method to check if the condition is valid, will check if the contact
    * has an activity of the selected type
    *
-   * @param object CRM_Civirules_TriggerData_TriggerData $triggerData
+   * @param object $triggerData
    * @return bool
-   * @access public
    */
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $isConditionValid = FALSE;
     $activity = $triggerData->getEntityData('Activity');
     switch ($this->conditionParams['operator']) {
-      case 'contains':
-        if (in_array($activity['details'], $this->conditionParams['text'])) {
+      case 'exact_match':
+        if (strtolower($activity['details']) == strtolower($this->conditionParams['text'])) {
           $isConditionValid = TRUE;
         }
         break;
-      case 'exact_match':
-        if (strpos($activity['details'], $this->conditionParams['text']) !== false){
+      case 'contains':
+        if (strpos(strtolower($activity['details']), strtolower($this->conditionParams['text'])) !== false){
           $isConditionValid = TRUE;
         }
         break;
