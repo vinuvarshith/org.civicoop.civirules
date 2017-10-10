@@ -40,7 +40,7 @@ class CRM_CivirulesConditions_Activity_Details extends CRM_Civirules_Condition {
     $activity = $triggerData->getEntityData('Activity');
     switch ($this->conditionParams['operator']) {
       case 'exact_match':
-        if (strtolower($activity['details']) == strtolower($this->conditionParams['text'])) {
+        if (trim(strtolower($activity['details'])) == trim(strtolower($this->conditionParams['text']))) {
           $isConditionValid = TRUE;
         }
         break;
