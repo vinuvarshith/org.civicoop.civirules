@@ -461,12 +461,12 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
         'modified_user_id' => $userId,
         'id' => $formValues['id']);
     }
-    $ruleParams['label'] = $formValues['rule_label'];
-    $ruleParams['description'] = $formValues['rule_description'];
-    $ruleParams['help_text'] = $formValues['rule_help_text'];
-    $ruleParams['label'] = $formValues['rule_label'];
+    $ruleParams['label'] = CRM_Utils_Array::value('rule_label', $formValues);
+    $ruleParams['description'] = CRM_Utils_Array::value('rule_description', $formValues);
+    $ruleParams['help_text'] = CRM_Utils_Array::value('rule_help_text', $formValues);
+    $ruleParams['label'] = CRM_Utils_Array::value('rule_label', $formValues);
     $ruleParams['name'] = CRM_Civirules_Utils::buildNameFromLabel($formValues['rule_label']);
-    $ruleParams['is_active'] = $formValues['rule_is_active'] ? 1 : 0;
+    $ruleParams['is_active'] = CRM_Utils_Array::value('rule_is_active', $formValues, 0);
     $savedRule = CRM_Civirules_BAO_Rule::add($ruleParams);
     $this->ruleId = $savedRule['id'];
     // first delete all tags for the rule if required then save new ones
