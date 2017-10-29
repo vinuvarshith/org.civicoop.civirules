@@ -246,6 +246,13 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/action/contact/privacyoptions</path>
+    <page_callback>CRM_CivirulesActions_Contact_Form_PrivacyOptions</page_callback>
+    <title>Set contact privacy options</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/action/activity</path>
     <page_callback>CRM_CivirulesActions_Activity_Form_Activity</page_callback>
     <title>Activity</title>
