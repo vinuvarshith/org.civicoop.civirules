@@ -3,11 +3,12 @@
  * Class to process action to select settings for privacy options
  *
  * @author Erik Hommel (CiviCooP) <erik.hommel@civicoop.org>
- * @date 29 Oct 2017
+ * @date 10 Nov 2017
  * @license http://www.gnu.org/licenses/agpl-3.0.html
  */
 
-class CRM_CivirulesActions_Contact_Form_PrivacyOptions extends CRM_CivirulesActions_Form_Form {
+class CRM_CivirulesActions_Contact_Form_CommPref extends CRM_CivirulesActions_Form_Form {
+  private $_commPrefs = array();
 
   /**
    * Overridden parent method to build the form
@@ -15,21 +16,35 @@ class CRM_CivirulesActions_Contact_Form_PrivacyOptions extends CRM_CivirulesActi
    * @access public
    */
   public function buildQuickForm() {
+    $this->getCommPrefs();
     $this->add('hidden', 'rule_action_id');
     $this->add('select', 'on_or_off', ts('Switch On or Off'), array('switch ON', 'switch OFF'), TRUE);
-    $privacyOptions = array(
-      'phone' => 'Do not phone',
-      'email' => 'Do not email',
-      'mail' => 'Do not mail',
-      'sms' => 'Do not SMS',
-      'trade' => 'Do not trade',
-    );
-    $this->add('select', 'privacy_options', ts('Privacy Option(s)'), $privacyOptions, FALSE,
-      array('id' => 'privacy_options', 'multiple' => 'multiple', 'class' => 'crm-select2'));
+    $this->add('select', 'comm_pref', ts('Communication Preference(s)'), $this->_commPrefs, FALSE,
+      array('id' => 'comm_pref', 'multiple' => 'multiple', 'class' => 'crm-select2'));
 
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
       array('type' => 'cancel', 'name' => ts('Cancel'))));
+  }
+
+  /**
+   * Method to get the communication preferences from the option group
+   */
+  private function getCommPrefs() {
+    $this->_commPrefs = array();
+    try {
+      $optionValues = civicrm_api3('OptionValue', 'get', array(
+        'option_group_id' => 'preferred_communication_method',
+        'is_active' => 1,
+        'options' => array('limit' => 0),
+      ));
+      foreach($optionValues['values'] as $optionValue) {
+        $this->_commPrefs[$optionValue['value']] = $optionValue['label'];
+      }
+    }
+    catch (CiviCRM_API3_Exception $ex) {
+    }
+    return;
   }
 
   /**
@@ -48,8 +63,8 @@ class CRM_CivirulesActions_Contact_Form_PrivacyOptions extends CRM_CivirulesActi
         $defaultValues['on_or_off'] = 1;
       }
     }
-    if (!empty($data['privacy_options'])) {
-      $defaultValues['privacy_options'] = $data['privacy_options'];
+    if (!empty($data['comm_pref'])) {
+      $defaultValues['comm_pref'] = $data['comm_pref'];
     }
     return $defaultValues;
   }
@@ -68,8 +83,8 @@ class CRM_CivirulesActions_Contact_Form_PrivacyOptions extends CRM_CivirulesActi
         $data['on_or_off'] = 1;
       }
     }
-    if (isset($this->_submitValues['privacy_options'])) {
-      $data['privacy_options'] = $this->_submitValues['privacy_options'];
+    if (isset($this->_submitValues['comm_pref'])) {
+      $data['comm_pref'] = $this->_submitValues['comm_pref'];
     }
     $this->ruleAction->action_params = serialize($data);
     $this->ruleAction->save();

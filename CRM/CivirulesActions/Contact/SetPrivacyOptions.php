@@ -20,16 +20,8 @@ class CRM_CivirulesActions_Contact_SetPrivacyOptions extends CRM_Civirules_Actio
   public function processAction(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $actionParams = $this->getActionParameters();
     $params['id'] = $triggerData->getContactId();
-    if ($actionParams['on_or_off'] == 0) {
-      $targetSwitch = 1;
-    } else {
-      $targetSwitch = 0;
-    }
     foreach ($actionParams['privacy_options'] as $privacyOption) {
-      $params['do_not_'.$privacyOption] = $targetSwitch;
-    }
-    foreach ($params as $paramKey => $paramValue) {
-      CRM_Core_Error::debug_log_message('param is '.$paramKey.' met waarde '.$paramValue);
+      $params['do_not_'.$privacyOption] = $actionParams['on_or_off'];
     }
     try {
       civicrm_api3('Contact', 'create', $params);
@@ -68,14 +60,13 @@ class CRM_CivirulesActions_Contact_SetPrivacyOptions extends CRM_Civirules_Actio
     $actionLabels = array();
     $actionParams = $this->getActionParameters();
     foreach ($actionParams['privacy_options'] as $actionParam) {
-      CRM_Core_Error::debug_log_message('action param is '.$actionParam);
       $actionLabels[] = ts($privacyOptions[$actionParam]);
     }
     $label = ts('Privacy option(s) ').implode(', ', $actionLabels).' '.ts('switched').' ';
     if ($actionParams['on_or_off'] == 1) {
-      $label .= ts('OFF');
+      $label .= ts('ON');
     } else {
-      $label .= 'ON';
+      $label .= 'OFF';
     }
     return $label;
   }

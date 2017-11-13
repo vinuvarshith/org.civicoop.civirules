@@ -253,6 +253,13 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/action/contact/commpref</path>
+    <page_callback>CRM_CivirulesActions_Contact_Form_CommPref</page_callback>
+    <title>Set contact communication preferences</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/action/activity</path>
     <page_callback>CRM_CivirulesActions_Activity_Form_Activity</page_callback>
     <title>Activity</title>
