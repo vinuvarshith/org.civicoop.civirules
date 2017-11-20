@@ -51,7 +51,7 @@ class CRM_Civirules_Page_Rule extends CRM_Core_Page {
     $rowActions = array();
     $updateUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'reset=1&action=update&id='.
       $rule['id']);
-    $deleteUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'reset=1&action=delete&id='.
+    $deleteUrl = CRM_Utils_System::url('civicrm/civirule/form/ruledelete', 'reset=1&action=delete&id='.
       $rule['id']);
     $disableUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'reset=1&action=disable&id='.
       $rule['id']);

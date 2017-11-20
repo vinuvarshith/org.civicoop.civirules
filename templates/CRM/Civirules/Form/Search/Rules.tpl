@@ -77,7 +77,7 @@
                         <td><span><a href="{crmURL p='civicrm/civirule/form/rule' q="reset=1&action=enable&id=`$row.rule_id`"}"
                              class="action-item action-item-first" title="Enable Rule">Enable</a></span></td>
                     {/if}
-                    <td><span><a href="{crmURL p='civicrm/civirule/form/rule' q="reset=1&action=delete&id=`$row.rule_id`"}"
+                    <td><span><a href="{crmURL p='civicrm/civirule/form/ruledelete' q="reset=1&action=delete&id=`$row.rule_id`"}"
                         class="action-item action-item-first" title="Delete Rule">Delete</a></span></td>
                 </tr>
             {/foreach}

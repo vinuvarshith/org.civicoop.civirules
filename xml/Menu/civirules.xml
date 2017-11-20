@@ -329,4 +329,10 @@
     <access_arguments>access CiviCRM</access_arguments>
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/civirule/form/ruledelete</path>
+    <page_callback>CRM_Civirules_Form_RuleDelete</page_callback>
+    <title>RuleDelete</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
 </menu>

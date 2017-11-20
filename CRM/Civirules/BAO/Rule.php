@@ -103,6 +103,13 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
     CRM_Civirules_BAO_RuleAction::deleteWithRuleId($ruleId);
     CRM_Civirules_BAO_RuleCondition::deleteWithRuleId($ruleId);
     CRM_Civirules_BAO_RuleTag::deleteWithRuleId($ruleId);
+
+    // also delete all references to the rule from logging if present
+    if (self::checkTableExists('civirule_rule_log')) {
+      $query = 'DELETE FROM civirule_rule_log WHERE rule_id = %1';
+      CRM_Core_DAO::executeQuery($query, array(1 => array($ruleId, 'Integer')));
+    }
+
     $rule = new CRM_Civirules_BAO_Rule();
     $rule->id = $ruleId;
     $rule->delete();
@@ -312,5 +319,29 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
       $ruleIds[] = $dao->id;
     }
     return $ruleIds;
+  }
+
+  /**
+   * Method to determine if a rule is active on the civicrm queue
+   *
+   * @param $ruleId
+   * @return bool
+   */
+  public static function isRuleOnQueue($ruleId) {
+    $query = "SELECT * FROM civicrm_queue_item WHERE queue_name = %1";
+    $dao = CRM_Core_DAO::executeQuery($query, array(1 => array("org.civicoop.civirules.action", "String")));
+    while ($dao->fetch()) {
+      if (isset($dao->data)) {
+        $queueItemData = unserialize($dao->data);
+        foreach($queueItemData->arguments as $dataArgument) {
+          if (is_subclass_of($dataArgument, 'CRM_Civirules_Action')) {
+            if ($dataArgument->getRuleId() == $ruleId) {
+              return TRUE;
+            }
+          }
+        }
+      }
+    }
+    return FALSE;
   }
 }

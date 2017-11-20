@@ -149,6 +149,7 @@ abstract class CRM_Civirules_Action {
     }
     CRM_Civirules_Utils_LoggerFactory::log($msg, $context, $level);
   }
-
-
+  public function getRuleId() {
+    return $this->ruleAction['rule_id'];
+  }
 }
