@@ -6,9 +6,7 @@ class CRM_Civirules_TriggerData_Post extends CRM_Civirules_TriggerData_TriggerDa
 
   public function __construct($entity, $objectId, $data) {
     parent::__construct();
-
     $this->entity = $entity;
-
     $this->setEntityData($entity, $data);
     if ($entity == 'contact') {
       $this->contact_id = $objectId;

@@ -276,6 +276,7 @@ class CRM_Civirules_Engine {
    * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    */
   protected static function logRule(CRM_Civirules_TriggerData_TriggerData $triggerData) {
+    // todo make sure this also works for entity_id if no contact_id and object EntityTag (if I can still find that)
     $sql = "INSERT INTO `civirule_rule_log` (`rule_id`, `contact_id`, `log_date`) VALUES (%1, %2, NOW())";
     $params[1] = array($triggerData->getTrigger()->getRuleId(), 'Integer');
     $params[2] = array($triggerData->getContactId(), 'Integer');

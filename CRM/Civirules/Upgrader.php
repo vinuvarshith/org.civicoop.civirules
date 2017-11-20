@@ -222,4 +222,26 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     }
     return TRUE;
   }
+
+  /**
+   * Update to update class for entity tag triggers
+   */
+  public function upgrade_1021() {
+    $query = 'UPDATE civirule_trigger SET class_name = %1 WHERE name LiKE %2';
+    CRM_Core_DAO::executeQuery($query, array(
+      1 => array('CRM_CivirulesPostTrigger_EntityTag', 'String'),
+      2 => array('%entity_tag%', 'String'),
+    ));
+    $query = 'UPDATE civirule_trigger SET label = %1 WHERE name LiKE %2';
+    CRM_Core_DAO::executeQuery($query, array(
+      1 => array('Contact is tagged (tag is added to contact)', 'String'),
+      2 => array('new_entity_tag', 'String'),
+    ));
+    $query = 'UPDATE civirule_trigger SET label = %1 WHERE name LiKE %2';
+    CRM_Core_DAO::executeQuery($query, array(
+      1 => array('Contact is un-tagged (tag is removed from contact)', 'String'),
+      2 => array('deleted_entity_tag', 'String'),
+    ));
+    return TRUE;
+  }
 }

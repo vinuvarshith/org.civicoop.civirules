@@ -1,6 +1,6 @@
 <?php
 /**
- * Method to process action set communication preferences for contact
+ * Class to process action set communication preferences for contact
  *
  * @author Erik Hommel (CiviCooP) <erik.hommel@civicoop.org>
  * @date 10 Nov 2017
@@ -19,7 +19,14 @@ class CRM_CivirulesActions_Contact_SetCommPref extends CRM_Civirules_Action {
    */
   public function processAction(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $actionParams = $this->getActionParameters();
-    $params['id'] = $triggerData->getContactId();
+    $contactId = $triggerData->getContactId();
+    if (!$contactId) {
+      $entityTag = $triggerData->getEntityData('EntityTag');
+      // todo if tag used contains civicrm_contact and cater for many entity ids
+      $params['id'] = $entityTag['entity_id'];
+    } else {
+      $params['id'] = $contactId;
+    }
     $params['preferred_communication_method'] = array();
     try {
       //retrieve current settings for contact
@@ -27,7 +34,7 @@ class CRM_CivirulesActions_Contact_SetCommPref extends CRM_Civirules_Action {
         'id' => $params['id'],
         'return' => 'preferred_communication_method'
       ));
-      if ($actionParams['on_or_off'] == 0) {
+      if ($actionParams['on_or_off'] == 0 && isset($actionParams['comm_pref'])) {
         foreach ($currentCommPrefs as $currentKey => $currentValue) {
           if (!in_array($currentValue, $actionParams['comm_pref'])) {
             $params['preferred_communication_method'][] = $currentValue;
@@ -37,7 +44,7 @@ class CRM_CivirulesActions_Contact_SetCommPref extends CRM_Civirules_Action {
         $params['preferred_communication_method'] = $currentCommPrefs;
         if (!empty($actionParams['comm_pref'])) {
           foreach ($actionParams['comm_pref'] as $newKey => $newValue) {
-            if (!in_array($newValue, $params['preferred_communication_method'])) {
+            if (empty($params['preferred_communication_method']) || !in_array($newValue, $params['preferred_communication_method'])) {
               $params['preferred_communication_method'][] = $newValue;
             }
           }
@@ -77,10 +84,12 @@ class CRM_CivirulesActions_Contact_SetCommPref extends CRM_Civirules_Action {
     ));
     $actionLabels = array();
     $actionParams = $this->getActionParameters();
-    foreach ($actionParams['comm_pref'] as $key => $actionParam) {
-      foreach ($commPrefs['values'] as $commPref) {
-        if ($commPref['value'] == $actionParam) {
-          $actionLabels[] = $commPref['label'];
+    if (isset($actionParams['comm_pref'])) {
+      foreach ($actionParams['comm_pref'] as $key => $actionParam) {
+        foreach ($commPrefs['values'] as $commPref) {
+          if ($commPref['value'] == $actionParam) {
+            $actionLabels[] = $commPref['label'];
+          }
         }
       }
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Method to process action set privacy options for contact
+ * Class to process action set privacy options for contact
  *
  * @author Erik Hommel (CiviCooP) <erik.hommel@civicoop.org>
  * @date 29 Oct 2017
