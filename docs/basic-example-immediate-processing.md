@@ -10,11 +10,11 @@ Let's assume you always want to send a new regular donor an email thanking him o
 
 So I now set up a CiviRule to make sure that an email is sent automatically every time a new contact is added AND the contact is added to the group Regular Donors. First step is to acces the CiviRules menu.
 
-If you install the extension the menu item will be added to the Administer menu in CiviCRM:
+If you install the extension a new menu item will be added left of the Services menu:
 
 <a href='../img/CiviRules_cookbook_print02.png'><img src='../img/CiviRules_cookbook_print02.png'/></a>
 
-If you click on the menu item you will get a list of existing CiviRules, with the ability to add one. If you click on Add CiviRule you will see a form with the basic data of your CiviRule:
+The Find Rules  sub menu item you will help you to search for a existing CiviRules. If you click on the New Rule submenu you will see a form with the basic data of your CiviRule:
 
 <a href='../img/CiviRules_cookbook_print03.png'><img src='../img/CiviRules_cookbook_print03.png'/></a>
 
