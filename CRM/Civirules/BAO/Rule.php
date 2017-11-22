@@ -100,9 +100,14 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
 
     CRM_Utils_Hook::pre('delete', 'CiviRuleRule', $ruleId, CRM_Core_DAO::$_nullArray);
 
-    CRM_Civirules_BAO_RuleAction::deleteWithRuleId($ruleId);
-    CRM_Civirules_BAO_RuleCondition::deleteWithRuleId($ruleId);
-    CRM_Civirules_BAO_RuleTag::deleteWithRuleId($ruleId);
+    // catch errors because rule might not have conditions or actions
+    try {
+      CRM_Civirules_BAO_RuleAction::deleteWithRuleId($ruleId);
+      CRM_Civirules_BAO_RuleCondition::deleteWithRuleId($ruleId);
+      CRM_Civirules_BAO_RuleTag::deleteWithRuleId($ruleId);
+    } 
+    catch (Exception $ex) {
+    }
 
     // also delete all references to the rule from logging if present
     if (self::checkTableExists('civirule_rule_log')) {
