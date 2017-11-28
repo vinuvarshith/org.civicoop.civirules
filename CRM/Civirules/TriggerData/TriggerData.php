@@ -83,13 +83,14 @@ abstract class CRM_Civirules_TriggerData_TriggerData {
    * @return array
    */
   public function getEntityData($entity) {
-    //only lookup entities by their lower case name. Entity is now case insensetive
+    $validContacts = array('contact', 'organization', 'individual', 'household');
+    //only lookup entities by their lower case name. Entity is now case insensitive
     if (isset($this->entity_data[strtolower($entity)]) && is_array($this->entity_data[strtolower($entity)])) {
       return $this->entity_data[strtolower($entity)];
     //just for backwards compatibility also check case sensitive entity
     } elseif (isset($this->entity_data[$entity]) && is_array($this->entity_data[$entity])) {
       return $this->entity_data[$entity];
-    } elseif (strtolower($entity) == strtolower('Contact') && $this->getContactId()) {
+    } elseif (in_array(strtolower($entity), $validContacts) && $this->getContactId()) {
       $contactObject = new CRM_Contact_BAO_Contact();
       $contactObject->id = $this->getContactId();
       $contactData = array();
