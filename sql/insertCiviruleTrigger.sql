@@ -32,9 +32,9 @@ VALUES
 
 INSERT INTO civirule_trigger (name, label, object_name, op, class_name, created_date, created_user_id)
 VALUES
-  ('new_contribution', 'Contribution is added', 'Contribution', 'create', null,  CURDATE(), 1),
-  ('changed_contribution', 'Contribution is changed', 'Contribution', 'edit', null, CURDATE(), 1),
-  ('deleted_contribution', 'Contribution is deleted', 'Contribution', 'delete', null, CURDATE(), 1),
+  ('new_contribution', 'Contribution is added', 'Contribution', 'create', 'CRM_CivirulesPostTrigger_Contribution',  CURDATE(), 1),
+  ('changed_contribution', 'Contribution is changed', 'Contribution', 'edit', 'CRM_CivirulesPostTrigger_Contribution', CURDATE(), 1),
+  ('deleted_contribution', 'Contribution is deleted', 'Contribution', 'delete', 'CRM_CivirulesPostTrigger_Contribution', CURDATE(), 1),
   ('new_contribution_recur', 'Recurring Contribution is added', 'ContributionRecur', 'create', null,  CURDATE(), 1),
   ('changed_contribution_recur', 'Recurring Contribution is changed', 'ContributionRecur', 'edit', null, CURDATE(), 1),
   ('deleted_contribution_recur', 'Recurring Contribution is deleted', 'ContributionRecur', 'delete', null, CURDATE(), 1),

@@ -244,4 +244,13 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     ));
     return TRUE;
   }
+	
+	public function upgrade_1022() {
+		CRM_Core_DAO::executeQuery("
+			UPDATE civirule_trigger
+			SET class_name = 'CRM_CivirulesPostTrigger_Contribution'
+			WHERE object_name = 'Contribution'
+		");
+		return TRUE;
+	}
 }
