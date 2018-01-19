@@ -9,7 +9,7 @@ return array (
         array (
           'version' => 3,
           'name' => 'contribution_status_changed',
-          'label' => 'Contribution status changed',
+          'label' => 'Compare old contribution status to new contribution status',
           'class_name' => 'CRM_CivirulesConditions_Contribution_StatusChanged',
           'is_active' => 1
         ),
