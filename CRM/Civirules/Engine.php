@@ -67,7 +67,7 @@ class CRM_Civirules_Engine {
    * @access protected
    * @static
    */
-  protected static function executeAction(CRM_Civirules_TriggerData_TriggerData $triggerData, $ruleAction) {
+  public static function executeAction(CRM_Civirules_TriggerData_TriggerData $triggerData, $ruleAction) {
     $actionEngine = CRM_Civirules_ActionEngine_Factory::getEngine($ruleAction, $triggerData);
 
     //determine if the action should be executed with a delay
@@ -165,7 +165,7 @@ class CRM_Civirules_Engine {
    * @param \DateTime $delayTo
    * @param CRM_Civirules_ActionEngine_AbstractActionEngine $actionEngine
    */
-  protected static function delayAction(DateTime $delayTo, CRM_Civirules_ActionEngine_AbstractActionEngine $actionEngine) {
+  public static function delayAction(DateTime $delayTo, CRM_Civirules_ActionEngine_AbstractActionEngine $actionEngine) {
     $queue = CRM_Queue_Service::singleton()->create(array(
       'type' => 'Civirules',
       'name' => self::QUEUE_NAME,
@@ -198,7 +198,7 @@ class CRM_Civirules_Engine {
    * @param CRM_Civirules_ActionEngine_AbstractActionEngine $actionEngine
    * @return bool|\DateTime
    */
-  protected static function getActionDelay($ruleAction, CRM_Civirules_ActionEngine_AbstractActionEngine $actionEngine) {
+  public static function getActionDelay($ruleAction, CRM_Civirules_ActionEngine_AbstractActionEngine $actionEngine) {
     $delayedTo = new DateTime();
     $now = new DateTime();
     if (!empty($ruleAction['delay'])) {
@@ -228,7 +228,7 @@ class CRM_Civirules_Engine {
    * @access protected
    * @static
    */
-  protected static function areConditionsValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
+  public static function areConditionsValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $isValid = true;
     $firstCondition = true;
 
@@ -269,7 +269,7 @@ class CRM_Civirules_Engine {
    * @access protected
    * @static
    */
-  protected static function checkCondition($ruleCondition, CRM_Civirules_TriggerData_TriggerData $triggerData) {
+  public static function checkCondition($ruleCondition, CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $condition = CRM_Civirules_BAO_Condition::getConditionObjectById($ruleCondition['condition_id'], false);
     if (!$condition) {
       return false;
