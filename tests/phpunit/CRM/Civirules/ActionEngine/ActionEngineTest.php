@@ -40,11 +40,15 @@ class CRM_Civirules_ActionEngine_ActionEngineTest extends \PHPUnit_Framework_Tes
     parent::setUp();
   }
 	
+	public function tearDown() {
+    parent::tearDown();
+  }
+	
 	public function testActionEngineExecutionWithoutAnyDelay() {
 		// Fake the execution of an action AddContactToGroup
 		$action_id = CRM_Core_DAO::singleValueQuery("SELECT id FROM civirule_action WHERE name = 'GroupContactAdd'");
 		$ruleAction = array(
-			'id' => '1',
+			'id' => microtime(), // use time as a unique identifier
 			'action_id' => $action_id,
 			'action_params' => serialize(array('group_id' => $this->groupId)),
 			'delay' => null,

@@ -131,6 +131,7 @@ class CRM_Civirules_Engine {
 			if (count($args) == 2 && $args[1] instanceof CRM_Civirules_ActionEngine_AbstractActionEngine) {
 				$actionEngine = $args[1];
 				$ruleAction = $actionEngine->getRuleAction();
+				$triggerData = $actionEngine->getTriggerData();
 				if (isset($ruleAction['ignore_condition_with_delay']) && $ruleAction['ignore_condition_with_delay']) {
 					$processAction = true;
 				} else {
@@ -141,6 +142,8 @@ class CRM_Civirules_Engine {
       	}
 			} elseif (count($args) == 3 && $args[1] instanceof CRM_Civirules_Action && $args[2] instanceof CRM_Civirules_TriggerData_TriggerData) {
 				// Process the 'old' way
+				$action = $args[1];
+				$triggerData = $args[2];
 	      if ($action->ignoreConditionsOnDelayedProcessing()) {
 	        $processAction = true;
 	      } else {
@@ -150,8 +153,6 @@ class CRM_Civirules_Engine {
 	      if ($processAction) {
 	        $action->processAction($triggerData);
 	      }
-			} else {
-				throw new Exception('Invalid argument count');
 			}
     } catch (Exception $e) {
       CRM_Civirules_Utils_LoggerFactory::logError("Failed to execute delayed action",  $e->getMessage(), $triggerData);
