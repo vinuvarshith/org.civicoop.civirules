@@ -28,11 +28,14 @@ class CRM_Civirules_EngineTest extends CRM_Civirules_Test_TestCase {
    * Test a trigger has a defined class
    */
   public function testAllTriggersHaveAClass() {
-    $this->markTestSkipped("new_address has a empty class_name (maybe there are more) remove when implemented");
+		// There are more triggers with empty class name. An empty class name means they will be triggered by the default post trigger.
+		// So we should check for whether the class exists.
     $bao = new CRM_Civirules_BAO_Trigger();
     $bao->find();
     while ($bao->fetch()) {
-      $this->assertTrue(isset($bao->class_name), "No trigger should have an empty class name");
+    	// Try to get the class:
+    	$class = CRM_Civirules_BAO_Trigger::getPostTriggerObjectByClassName($bao->class_name, false);
+      $this->assertInstanceOf('CRM_Civirules_Trigger', $class, 'Could not instanciated trigger class for '.$bao->class_name);
     }
   }
 
@@ -155,5 +158,76 @@ class CRM_Civirules_EngineTest extends CRM_Civirules_Test_TestCase {
     $this->assertRuleFired("The delete rule must be fired after a delete");
 
   }
+	
+	/**
+	 * Test processing of dealyed actions.
+	 */
+	public function testExecuteDelayedAction() {
+		// Fake the execution of an action AddContactToGroup
+		$action_id = CRM_Core_DAO::singleValueQuery("SELECT id FROM civirule_action WHERE name = 'GroupContactAdd'");
+		$ruleAction = array(
+			'id' => microtime(), // use time as a unique identifier
+			'action_id' => $action_id,
+			'action_params' => serialize(array('group_id' => $this->groupId)),
+			'delay' => null,
+			'ignore_condition_with_delay' => 1,
+			'is_active' => 1,
+		);
+		
+		$contact = civicrm_api3('Contact', 'getsingle', array('id' => $this->contactId));
+		$triggerData = new CRM_Civirules_TriggerData_Post('Individual', $contact['id'], $contact);
+		
+		$actionEngine = CRM_Civirules_ActionEngine_Factory::getEngine($ruleAction, $triggerData);
+		$this->assertInstanceOf('CRM_Civirules_ActionEngine_RuleActionEngine', $actionEngine, 'Could not find valud engine for rule_action');
+		
+		$ctx = new CRM_Queue_TaskContext();
+		CRM_Civirules_Engine::executeDelayedAction($ctx, $actionEngine);
+		
+		// Now test whether the contact is added to the group
+		$groupContactParams = array(
+      'contact_id' => $this->contactId,
+      'group_id' => $this->groupId,
+      'version' => 3,
+    );
+    $groupContact = civicrm_api('group_contact', 'getsingle', $groupContactParams);
+		$this->assertArrayHasKey('group_id', $groupContact, 'There was an error getting the group. Possibly the engine failed and the contact was not added to the group');
+		$this->assertEquals($this->groupId, $groupContact['group_id'], 'There was an error getting the group. Possibly the engine failed and the contact was not added to the group');
+	}
+	
+	/**
+	 * Test processing of dealyed actions with the old parameter style, $ruleAction, $triggerData
+	 * This test exists because in a real installation which has been upgraded the delayed action queue
+	 * might still consists of actions deffined the old way. We do want those to be executed as they always did. 
+	 */
+	public function testExecuteDelayedActionOldStyle() {
+		// Fake the execution of an action AddContactToGroup
+		$action_id = CRM_Core_DAO::singleValueQuery("SELECT id FROM civirule_action WHERE name = 'GroupContactAdd'");
+		$ruleAction = array(
+			'id' => microtime(), // use time as a unique identifier
+			'action_id' => $action_id,
+			'action_params' => serialize(array('group_id' => $this->groupId)),
+			'delay' => null,
+			'ignore_condition_with_delay' => 1,
+			'is_active' => 1,
+		);
+		
+		$action = CRM_Civirules_BAO_Action::getActionObjectById($ruleAction['action_id']);
+		$action->setRuleActionData($ruleAction);
+		$contact = civicrm_api3('Contact', 'getsingle', array('id' => $this->contactId));
+		$triggerData = new CRM_Civirules_TriggerData_Post('Individual', $contact['id'], $contact);
+		
+		$ctx = new CRM_Queue_TaskContext();
+		CRM_Civirules_Engine::executeDelayedAction($ctx, $action, $triggerData);
+		
+		// Now test whether the contact is added to the group
+		$groupContactParams = array(
+      'contact_id' => $this->contactId,
+      'group_id' => $this->groupId,
+      'version' => 3,
+    );
+    $groupContact = civicrm_api('group_contact', 'getsingle', $groupContactParams);
+		$this->assertArrayHasKey('group_id', $groupContact, 'There was an error getting the group. Possibly the engine failed and the contact was not added to the group');
+		$this->assertEquals($this->groupId, $groupContact['group_id'], 'There was an error getting the group. Possibly the engine failed and the contact was not added to the group');
+	}
 
 }
