@@ -89,7 +89,7 @@ class CRM_CivirulesConditions_Relationship_RelationshipType extends CRM_Civirule
 
   public static function getRelationshipTypes() {
     $return = array();
-    $relationshipTypes = civicrm_api3('RelationshipType', 'Get', array('is_active' => 1));
+    $relationshipTypes = civicrm_api3('RelationshipType', 'Get', array('is_active' => 1, 'options' => array('limit' => 0)));
     foreach ($relationshipTypes['values'] as $relationshipType) {
       $return[$relationshipType['id']] = $relationshipType['label_a_b'].' - '.$relationshipType['label_b_a'];
     }
