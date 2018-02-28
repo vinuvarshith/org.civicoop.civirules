@@ -289,13 +289,16 @@ class CRM_Civirules_Engine {
    * @param CRM_Civirules_TriggerData_TriggerData $triggerData
    */
   protected static function logRule(CRM_Civirules_TriggerData_TriggerData $triggerData) {
+    $trigger = $triggerData->getTrigger();
+    $ruleId = $trigger->getRuleId();
+    $contactId = $triggerData->getContactId();
     // todo make sure this also works for entity_id if no contact_id and object EntityTag (if I can still find that)
     $sql = "INSERT INTO `civirule_rule_log` (`rule_id`, `contact_id`, `log_date`) VALUES (%1, %2, NOW())";
-    $params[1] = array($triggerData->getTrigger()->getRuleId(), 'Integer');
-    $params[2] = array($triggerData->getContactId(), 'Integer');
-    if (empty($triggerData->getTrigger()->getRuleId())) {
+    $params[1] = array($ruleId, 'Integer');
+    $params[2] = array($contactId, 'Integer');
+    if (empty($ruleId)) {
       CRM_Civirules_Utils_LoggerFactory::logError("Failed log rule", "RuleId not set", $triggerData);
-    } elseif (empty($triggerData->getContactId())) {
+    } elseif (empty($contactId)) {
       CRM_Civirules_Utils_LoggerFactory::logError("Failed log rule", "contact_id not set", $triggerData);
     } else {
       CRM_Core_DAO::executeQuery($sql, $params);
