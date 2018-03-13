@@ -131,13 +131,13 @@ function civirules_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
 function civirules_civicrm_navigationMenu( &$params ) {
   //  Get the maximum key of $params
   $maxKey = CRM_Civirules_Utils::getMenuKeyMax($params);
-  $childKey = 1;
+  $newNavId = $maxKey + 1;
   // retrieve the custom search id of the find rules search
   $customSearchID = CRM_Civirules_Utils::getFindRulesCsId();
   // retrieve the option group id of the rule tags option group
   $optionGroup = CRM_Civirules_Utils_OptionGroup::getSingleWithName('civirule_rule_tag');
 
-  $params[$maxKey + 1] = array(
+  $params[$newNavId] = array(
     'attributes' => array(
       'label' => 'CiviRules',
       'name' => 'CiviRules',
@@ -146,12 +146,14 @@ function civirules_civicrm_navigationMenu( &$params ) {
       'operator' => null,
       'separator' => null,
       'parentID' => null,
-      'navID' => $maxKey + 1,
+      'navID' => $newNavId,
       'active' => 1
     ));
+	$parentId = $newNavId;
+	$newNavId++;
   // add child menu for find rules if custom search id set
   if (!empty($customSearchID)) {
-    $params[$maxKey + 1]['child'][$childKey] = array(
+    $params[$parentId]['child'][$newNavId] = array(
       'attributes' => array(
         'label' => ts('Find Rules'),
         'name' => ts('Find Rules'),
@@ -159,15 +161,15 @@ function civirules_civicrm_navigationMenu( &$params ) {
         'permission' => 'administer CiviCRM',
         'operator' => null,
         'separator' => 0,
-        'parentID' => $maxKey + 1,
-        'navID' => $childKey,
+        'parentID' => $parentId,
+        'navID' => $newNavId,
         'active' => 1
       ),
       'child' => null
     );
-    $childKey++;
+    $newNavId++;
   }
-  $params[$maxKey + 1]['child'][$childKey] = array(
+  $params[$parentId]['child'][$newNavId] = array(
     'attributes' => array(
       'label' => ts('New Rule'),
       'name' => ts('New Rule'),
@@ -175,13 +177,13 @@ function civirules_civicrm_navigationMenu( &$params ) {
       'permission' => 'administer CiviCRM',
       'operator' => null,
       'separator' => 0,
-      'parentID' => $maxKey + 1,
-      'navID' => $childKey,
+      'parentID' => $parentId,
+      'navID' => $newNavId,
       'active' => 1
     ),
     'child' => null
   );
-  $childKey++;
+  $newNavId++;
   // add child menu for rule tags if option group id set with version check because 4.4 has other url pattern
   if (isset($optionGroup['id']) && !empty($optionGroup['id'])) {
     try {
@@ -196,7 +198,7 @@ function civirules_civicrm_navigationMenu( &$params ) {
       $ruleTagUrl = CRM_Utils_System::url('civicrm/admin/options', 'reset=1&gid='.$optionGroup['id'], true);
     }
 
-    $params[$maxKey + 1]['child'][$childKey] = array(
+    $params[$parentId]['child'][$newNavId] = array(
       'attributes' => array (
         'label'      => ts('CiviRule Tags'),
         'name'       => ts('CiviRules Tags'),
@@ -204,12 +206,13 @@ function civirules_civicrm_navigationMenu( &$params ) {
         'permission' => 'administer CiviCRM',
         'operator'   => null,
         'separator'  => 0,
-        'parentID'   => $maxKey+1,
-        'navID'      => $childKey,
+        'parentID'   => $parentId,
+        'navID'      => $newNavId,
         'active'     => 1
       ),
       'child' => null
     );
+		$newNavId++;
   }
 }
 
