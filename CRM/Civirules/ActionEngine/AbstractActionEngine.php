@@ -52,4 +52,16 @@ abstract class CRM_Civirules_ActionEngine_AbstractActionEngine {
 		return $this->triggerData;
 	}
 	
+	/**
+	 * Sets the trigger data
+	 * 
+	 * @param CRM_Civirules_TriggerData_TriggerData $triggerData
+	 * 
+	 * @return CRM_Civirules_ActionEngine_AbstractActionEngine
+	 */
+	public function setTriggerData(CRM_Civirules_TriggerData_TriggerData $triggerData) {
+		$this->triggerData = $triggerData;
+		return $this;
+	}
+	
 }

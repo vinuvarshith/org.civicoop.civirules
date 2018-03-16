@@ -18,7 +18,9 @@ class CRM_Civirules_ActionEngine_Factory {
 			// This is the place where could add other engine to the system.
 			self::$instances[$id] = new CRM_Civirules_ActionEngine_RuleActionEngine($ruleAction, $triggerData);
 		}
-		return self::$instances[$id];
+		$engine = clone self::$instances[$id];
+		$engine->setTriggerData($triggerData);
+		return $engine;
 	}
 	
 }
