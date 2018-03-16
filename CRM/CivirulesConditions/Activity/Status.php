@@ -37,7 +37,11 @@ class CRM_CivirulesConditions_Activity_Status extends CRM_Civirules_Condition {
    */
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $isConditionValid = FALSE;
-    $activity = $triggerData->getEntityData('Activity');
+    $activityData = $triggerData->getEntityData('Activity');
+    $activity = civicrm_api3('Activity', 'getsingle', array(
+      'return' => array("status_id"),
+      'id' => $activityData['id'],
+    ));
     switch ($this->conditionParams['operator']) {
       case 0:
         if (in_array($activity['status_id'], $this->conditionParams['status_id'])) {

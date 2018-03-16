@@ -37,7 +37,11 @@ class CRM_CivirulesConditions_Activity_Details extends CRM_Civirules_Condition {
    */
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $isConditionValid = FALSE;
-    $activity = $triggerData->getEntityData('Activity');
+    $activityData = $triggerData->getEntityData('Activity');
+    $activity = civicrm_api3('Activity', 'getsingle', array(
+      'return' => array("details"),
+      'id' => $activityData['id'],
+    ));
     switch ($this->conditionParams['operator']) {
       case 'exact_match':
         if (trim(strtolower($activity['details'])) == trim(strtolower($this->conditionParams['text']))) {
