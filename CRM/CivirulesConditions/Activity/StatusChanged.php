@@ -32,7 +32,11 @@ class CRM_CivirulesConditions_Activity_StatusChanged extends CRM_CivirulesCondit
   protected function getFieldValue(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $field = 'status_id';
 
-    $data = $triggerData->getEntityData('Activity');
+    $activityData = $triggerData->getEntityData('Activity');
+    $data = civicrm_api3('Activity', 'getsingle', array(
+      'return' => array($field),
+      'id' => $activityData['id'],
+    ));
     if (isset($data[$field])) {
       return $data[$field];
     }
