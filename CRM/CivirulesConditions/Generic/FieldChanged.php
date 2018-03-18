@@ -43,7 +43,10 @@ abstract class CRM_CivirulesConditions_Generic_FieldChanged extends CRM_Civirule
     if ($entity != $triggerData->getOriginalEntity()) {
       return false;
     }
-
+    // we need to check to see if the data being submitted actually contains the field we are comparing. if not, return false, no change
+    if ( ! array_key_exists($this->getField(), $triggerData->getEntityData($entity)) ) {
+      return false;
+    }
     $fieldData = $this->getFieldData($triggerData);
     $originalData = $this->getOriginalFieldData($triggerData);
 
