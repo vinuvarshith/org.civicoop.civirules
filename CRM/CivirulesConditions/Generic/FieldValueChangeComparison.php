@@ -174,7 +174,7 @@ abstract class CRM_CivirulesConditions_Generic_FieldValueChangeComparison extend
 			if (is_array($originalComparisonValue)) {
 				foreach($originalComparisonValue as $idx => $val) {
 					if (isset($options[$val])) {
-						$originalComparisonValue[$ids] = $options[$val];
+						$originalComparisonValue[$idx] = $options[$val];
 					}
 				}
 			} elseif (isset($options[$originalComparisonValue])) {
@@ -184,7 +184,7 @@ abstract class CRM_CivirulesConditions_Generic_FieldValueChangeComparison extend
 			if (is_array($comparisonValue)) {
 				foreach($comparisonValue as $idx => $val) {
 					if (isset($options[$val])) {
-						$comparisonValue[$ids] = $options[$val];
+						$comparisonValue[$idx] = $options[$val];
 					}
 				}
 			} elseif (isset($options[$comparisonValue])) {
