@@ -3,7 +3,7 @@
 return array (
   0 =>
     array (
-      'name' => 'Civirules:Condition.Address_IsUnique',
+      'name' => 'Civirules:Condition.Address.IsUnique',
       'entity' => 'CiviRuleCondition',
       'params' =>
         array (
