@@ -5,7 +5,7 @@
  * @license http://www.gnu.org/licenses/agpl-3.0.html
  */
 
-class CRM_CivirulesConditions_UniqueAddress extends CRM_Civirules_Condition {
+class CRM_CivirulesConditions_Address_IsUnique extends CRM_Civirules_Condition {
 
   public function getExtraDataInputUrl($ruleConditionId) {
     return FALSE;
