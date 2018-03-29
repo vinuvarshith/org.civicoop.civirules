@@ -38,16 +38,19 @@ abstract class CRM_CivirulesConditions_Generic_FieldChanged extends CRM_Civirule
     if (!$triggerData instanceof CRM_Civirules_TriggerData_Interface_OriginalData) {
       return false;
     }
-
     $entity = $this->getEntity();
-    if ($entity != $triggerData->getOriginalEntity()) {
+    if ( strtolower($entity) != strtolower($triggerData->getOriginalEntity()) ) {
       return false;
     }
     // we need to check to see if the data being submitted actually contains the field we are comparing. if not, return false, no change
-    if ( ! array_key_exists($this->getField(), $triggerData->getEntityData($entity)) ) {
+    $compareField = $this->getField();
+    $compareEntityData = $triggerData->getEntityData($entity);
+    $compareEntityCustomData = $triggerData->getEntityCustomData();
+    if ( array_key_exists($compareField, $compareEntityData) || array_key_exists($compareField, $compareEntityCustomData) ) {
+      $fieldData = $this->getFieldData($triggerData);
+    } else {
       return false;
     }
-    $fieldData = $this->getFieldData($triggerData);
     $originalData = $this->getOriginalFieldData($triggerData);
 
     if (empty($fieldData) && empty($originalData)) {
@@ -97,10 +100,17 @@ abstract class CRM_CivirulesConditions_Generic_FieldChanged extends CRM_Civirule
   protected function getFieldData(CRM_Civirules_TriggerData_TriggerData $triggerData) {
     $entity = $this->getEntity();
     $data = $triggerData->getEntityData($entity);
+
     $field = $this->getField();
     if (isset($data[$field])) {
       return $this->transformFieldData($data[$field]);
     }
+    $customFieldId = str_replace("custom_", '', $field, $customField);
+    if ( $customField ) {
+      $value = $triggerData->getCustomFieldValue($customFieldId);
+      return $this->transformFieldData($value);
+    }
+
     return null;
   }
 
@@ -113,7 +123,7 @@ abstract class CRM_CivirulesConditions_Generic_FieldChanged extends CRM_Civirule
    */
   protected function getOriginalFieldData(CRM_Civirules_TriggerData_Interface_OriginalData $triggerData) {
     $entity = $this->getEntity();
-    if ($triggerData->getOriginalEntity() != $entity) {
+    if ( strtolower($triggerData->getOriginalEntity()) != strtolower($entity) ) {
       return null;
     }
 
