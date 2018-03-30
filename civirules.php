@@ -230,6 +230,7 @@ function civirules_civicrm_validateForm($formName, &$fields, &$files, &$form, &$
   CRM_CivirulesPostTrigger_ContactCustomDataChanged::validateForm($form);
   CRM_CivirulesPostTrigger_IndividualCustomDataChanged::validateForm($form);
   CRM_CivirulesPostTrigger_OrganizationCustomDataChanged::validateForm($form);
+  CRM_CivirulesPostTrigger_HouseholdCustomDataChanged::validateForm($form);
 }
 
 function civirules_civicrm_custom($op, $groupID, $entityID, &$params) {
@@ -237,6 +238,7 @@ function civirules_civicrm_custom($op, $groupID, $entityID, &$params) {
   CRM_CivirulesPostTrigger_ContactCustomDataChanged::custom($op, $groupID, $entityID, $params);
   CRM_CivirulesPostTrigger_IndividualCustomDataChanged::custom($op, $groupID, $entityID, $params);
   CRM_CivirulesPostTrigger_OrganizationCustomDataChanged::custom($op, $groupID, $entityID, $params);
+  CRM_CivirulesPostTrigger_HouseholdCustomDataChanged::custom($op, $groupID, $entityID, $params);
 }
 
 function civirules_civirules_alter_trigger_data(CRM_Civirules_TriggerData_TriggerData &$triggerData) {
