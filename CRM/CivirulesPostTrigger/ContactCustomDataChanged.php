@@ -49,7 +49,7 @@ class CRM_CivirulesPostTrigger_ContactCustomDataChanged extends CRM_Civirules_Tr
     $get_called_class = get_called_class();
     $objectName = $get_called_class::getObjectName();
     if ('Contact' == $objectName) {
-      $entity_extensions = array('Contact', 'Individual', 'Organization');
+      $entity_extensions = array('Contact', 'Individual', 'Organization', 'Household');
     } else {
       $entity_extensions = array($objectName);
     }
