@@ -343,5 +343,30 @@ class CRM_Civirules_Utils {
       return FALSE;
     }
   }
+  
+  /**
+   * Method to get the activity type list
+   *
+   * @return array
+   */
+  public static function getCampaignList() {
+    $campaignList = array();
+    try {
+      $campaigns = civicrm_api3('Campaign', 'get', array(
+        'sequential' => 1,
+        'is_active' => 1,
+        'options' => array('limit' => 0),
+      ));
+      foreach ($campaigns['values'] as $campaign) {
+        $campaignList[$campaign['id']] = $campaign['title'];
+      }
+      asort($campaignList);
+    }
+    catch (CiviCRM_API3_Exception $ex) {
+      $campaignList = array();
+    }
+    return $campaignList;
+  }
+
 }
 

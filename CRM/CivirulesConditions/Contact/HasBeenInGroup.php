@@ -69,7 +69,6 @@ class CRM_CivirulesConditions_Contact_HasBeenInGroup extends CRM_Civirules_Condi
           }
       }
     }
-    CRM_Core_Error::debug_log_message('Return wordt ' . $return);
     return $return;
   }
 
@@ -119,16 +118,6 @@ class CRM_CivirulesConditions_Contact_HasBeenInGroup extends CRM_Civirules_Condi
 
     }
     return $text;
-  }
-
-  /**
-   * Returns an array with required entity names
-   *
-   * @return array
-   * @access public
-   */
-  public function requiredEntities() {
-    return array('Contact');
   }
 
 }

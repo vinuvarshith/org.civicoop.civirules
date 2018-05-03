@@ -57,6 +57,20 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/condition/contact/hasactivityincampaign</path>
+    <page_callback>CRM_CivirulesConditions_Form_Contact_HasActivityInCampaign</page_callback>
+    <title>Has Activity In Campaign</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/activity/campaign</path>
+    <page_callback>CRM_CivirulesConditions_Form_Activity_Campaign</page_callback>
+    <title>Activity is (not) in Campaign(s)</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/condition/entitytag/tagid</path>
     <page_callback>CRM_CivirulesConditions_Form_EntityTag_TagId</page_callback>
     <title>EntityTag Tag Id</title>
