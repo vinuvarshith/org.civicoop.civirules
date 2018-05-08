@@ -358,7 +358,12 @@ class CRM_Civirules_Utils {
         'options' => array('limit' => 0),
       ));
       foreach ($campaigns['values'] as $campaign) {
-        $campaignList[$campaign['id']] = $campaign['title'];
+        if (isset($campaign['title'])) {
+          $campaignList[$campaign['id']] = $campaign['title'];
+        }
+        else {
+          $campaignList[$campaign['id']] = ts('(no title)');
+        }
       }
       asort($campaignList);
     }
