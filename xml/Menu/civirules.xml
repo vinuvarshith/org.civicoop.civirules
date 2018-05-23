@@ -120,6 +120,13 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/condition/contacthasmembership</path>
+    <page_callback>CRM_CivirulesConditions_Form_Membership_ContactHasMembership</page_callback>
+    <title>contact has membership</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/condition/membershipstatus</path>
     <page_callback>CRM_CivirulesConditions_Form_Membership_Status</page_callback>
     <title>membership status</title>
