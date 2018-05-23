@@ -96,7 +96,7 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
         break;
     }
 
-    if ($key && !empty($this->conditionParams[$key])) {
+    if ($key && isset($this->conditionParams[$key])) {
       return $this->conditionParams[$key];
     } else {
       return '';
