@@ -9,9 +9,10 @@ class CRM_Civirules_Utils_CustomDataFromPre {
       return;
     }
     if (isset($params['custom']) && is_array($params['custom'])) {
-      foreach($params['custom'] as $fid => $custom_values) {
+      foreach($params['custom'] as $custom_values) {
         foreach($custom_values as $id => $field) {
           $value = $field['value'];
+          $fid = $field['custom_field_id'];
           self::setCustomData($objectName, $fid, $value, $id);
         }
       }
