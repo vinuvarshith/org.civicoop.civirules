@@ -33,7 +33,7 @@ class CRM_CivirulesConditions_Case_CaseActivity extends CRM_Civirules_Condition 
       $lastActivity = civicrm_api3('Activity', 'get', array(
         'sequential' => 1,
         'return' => array("modified_date"),
-        'case_id' => $case['id'],
+        'case_id' => $case['case_id'],
         'options' => array('sort' => "modified_date desc", 'limit' => 1),
       ))['values'][0];
     }

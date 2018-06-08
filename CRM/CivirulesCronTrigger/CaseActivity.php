@@ -32,7 +32,7 @@ class CRM_CivirulesCronTrigger_CaseActivity extends CRM_Civirules_Trigger_Cron {
    * @return CRM_Civirules_TriggerData_EntityDefinition
    */
   protected function reactOnEntity() {
-    return new CRM_Civirules_TriggerData_EntityDefinition('Case', 'Case', 'CRM_Case_DAO_Case', 'Cases');
+    return new CRM_Civirules_TriggerData_EntityDefinition('Case', 'Case', 'CRM_Case_DAO_Case', 'Case');
   }
 
   /**
@@ -44,7 +44,7 @@ class CRM_CivirulesCronTrigger_CaseActivity extends CRM_Civirules_Trigger_Cron {
 
     $sql = "SELECT c.*
             FROM `civicrm_case` `c`
-            WHERE c.status_id = 1
+            WHERE c.is_deleted = 0
             ";
     $this->dao = CRM_Core_DAO::executeQuery($sql, array(), true, 'CRM_Case_DAO_Case');
 
