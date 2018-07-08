@@ -42,10 +42,12 @@ class CRM_CivirulesConditions_Case_CaseActivity extends CRM_Civirules_Condition 
     }
 
     $lastActivityDate = DateTime::createFromFormat("Y-m-d H:i:s", $lastActivity['modified_date']);
+    $lastActivityDate->modify('midnight');
     $today = new DateTime();
+    $today->modify('midnight');
     $diff = $today->diff($lastActivityDate)->format("%a");
 
-    if($diff >= $daysInactive) {
+    if($diff > $daysInactive) {
       $isConditionValid = TRUE;
     }
 
